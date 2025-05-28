@@ -1,0 +1,91 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { TeamMemberCard } from './components/member-card';
+import { Pagination } from './components/pagination';
+import { profileOptions } from './utils/profile-options';
+
+export default function TeamsPageClient() {
+  const { data, error, isPending } = useSuspenseQuery(profileOptions);
+
+  const [search, setSearch] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const prevPageRef = useRef<number>(1);
+  const pageSize = 20;
+
+  if (error) throw error;
+
+  useEffect(() => {
+    if (search === '') {
+      // Restore page when search is cleared
+      setPage(prevPageRef.current);
+    }
+  }, [search]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+    const value = e.target.value;
+
+    if (value && search === '') {
+      // Save current page
+      prevPageRef.current = page;
+      setPage(1);
+    } else if (!value && search !== '') {
+      // Restore page with useEffect
+    } else if (value) {
+      setPage(1);
+    }
+
+    setSearch(value);
+  };
+
+  const filtered = (data ?? []).filter((profile) => {
+    const searchLower = search.toLowerCase();
+
+    return (
+      profile.display_name?.toLowerCase().includes(searchLower) ||
+      profile.username.toLowerCase().includes(searchLower)
+    );
+  });
+
+  const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
+  const totalPages = Math.ceil(filtered.length / pageSize);
+
+  return (
+    <>
+      {/* <div className="h-16 mb-4" aria-hidden="true"></div>
+      <h1 className="mb-4 text-center text-3xl font-bold md:text-5xl">Meet the Team</h1>
+      <p className="mx-auto mb-6 max-w-2xl text-center text-sm md:text-base">
+        The Changeling VR game and website is created by students and faculty at the Rochester
+        Institute of Technology&apos;s School of Interactive Games and Media, and College of Art and
+        Design.
+      </p> */}
+
+      <div className="mx-auto mb-6 max-w-md">
+        <input
+          value={search}
+          onChange={handleSearch}
+          placeholder="Search for a team member..."
+          className="w-full border-2 border-gray-300 rounded-md p-2"
+        />
+      </div>
+
+      {isPending ? (
+        <div className="text-center text-lg font-semibold">Loading...</div>
+      ) : paginated.length === 0 ? (
+        <div className="text-center text-lg font-semibold">No profiles found</div>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-6 mb-6">
+          {paginated.map((profile) => (
+            <TeamMemberCard key={profile.username} member={profile} imageUrl={profile.avatar_url} />
+          ))}
+        </div>
+      )}
+
+      {paginated.length > 0 && (
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+      )}
+    </>
+  );
+}
