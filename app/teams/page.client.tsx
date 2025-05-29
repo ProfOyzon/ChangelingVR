@@ -54,14 +54,6 @@ export default function TeamsPageClient() {
 
   return (
     <>
-      {/* <div className="h-16 mb-4" aria-hidden="true"></div>
-      <h1 className="mb-4 text-center text-3xl font-bold md:text-5xl">Meet the Team</h1>
-      <p className="mx-auto mb-6 max-w-2xl text-center text-sm md:text-base">
-        The Changeling VR game and website is created by students and faculty at the Rochester
-        Institute of Technology&apos;s School of Interactive Games and Media, and College of Art and
-        Design.
-      </p> */}
-
       <div className="mx-auto mb-6 max-w-md">
         <input
           value={search}

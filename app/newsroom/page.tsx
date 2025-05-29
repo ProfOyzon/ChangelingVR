@@ -1,39 +1,49 @@
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import { NewsContainer } from '@/components/news-container';
-import { getCachedNews } from '@/lib/cache';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { getCachedPosts } from '@/lib/cache';
+import type { Post } from '@/types';
 
-export const metadata: Metadata = {
-  title: 'News',
-  description: 'Changeling VR News',
-};
+export default async function Posts() {
+  const { data } = (await getCachedPosts()) as { data: Post[] };
+  if (!data) return notFound();
 
-export default async function News() {
-  const { data } = await getCachedNews();
-
-  if (!data) {
-    return (
-      <div className="flex h-svh flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold">Unable to fetch news</h1>
-        <p className="mt-2 text-sm">Please try again later.</p>
-      </div>
-    );
-  }
+  // Get the first 3 posts as featured posts
+  const featuredPost = data.slice(0, 3);
+  const otherPosts = data.slice(3);
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      {/* Banner */}
-      <div className="relative mb-4 h-[25svh] w-full md:h-[30svh]">
-        <Image src="/BannerImage.png" alt="Banner" fill className="object-cover brightness-75" />
-        <h1 className="text-light-mustard absolute bottom-4 left-4 text-2xl font-bold uppercase md:text-4xl">
-          News
-        </h1>
+    <div className="max-w-7xl mx-auto p-6 min-h-svh">
+      <div className="h-16" aria-hidden="true"></div>
+      <h1 className="text-3xl font-bold mb-8">Blog</h1>
+
+      {/* Featured row */}
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        {featuredPost.map((post) => (
+          <Link
+            key={post.slug}
+            href={`/newsroom/${post.date.split('-')[0]}/${post.date.split('-')[1]}/${post.slug}`}
+            className="flex-1 bg-gray-600 rounded shadow p-4 min-h-50 flex flex-col justify-between hover:bg-gray-500 transition-colors"
+          >
+            <div>
+              <h2 className="text-xl font-bold mb-2">{post.title}</h2>
+              <p className="text-sm">{post.date}</p>
+            </div>
+            <div className="mt-4">{post?.excerpt || 'No excerpt available'}</div>
+          </Link>
+        ))}
       </div>
 
-      {/* News container */}
-      <div className="container mx-auto mb-4 flex flex-row flex-wrap justify-center gap-6 p-4">
-        {[...data].reverse().map((news) => (
-          <NewsContainer key={news.id} news={news} />
+      {/* List view for the rest */}
+      <div className="space-y-2">
+        {otherPosts.map((post) => (
+          <Link
+            key={post.slug}
+            href={`/newsroom/${post.date.split('-')[0]}/${post.date.split('-')[1]}/${post.slug}`}
+            className="flex items-center gap-2 border-b py-2 hover:bg-gray-100 transition-colors"
+          >
+            <span className="text-gray-400 font-mono w-8">{post.id}</span>
+            <span className="font-medium">{post.title}</span>
+          </Link>
         ))}
       </div>
     </div>

@@ -1,133 +1,96 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { fetchSupabaseImage } from '@/lib/api';
-import { getCachedNews } from '@/lib/cache';
-import { formatDate } from '@/lib/utils';
-import type { NewsItem } from '@/types/news';
+import { findPost } from '@/app/newsroom/find-post';
+import { getCachedPosts } from '@/lib/cache';
+import type { Post } from '@/types';
 
-export const dynamicParams = true;
-
-// Generate static params
 export async function generateStaticParams() {
-  const { data } = await getCachedNews();
-
-  return (
-    data?.map((post) => ({
-      slug: [String(post.year), String(post.month), post.slug],
-    })) ?? []
-  );
+  const { data } = (await getCachedPosts()) as { data: Post[] };
+  // Only prebuild the 20 most recent posts
+  return (data ?? []).slice(0, 20).map((p) => ({
+    year: p.date.split('-')[0],
+    month: p.date.split('-')[1],
+    slug: p.slug,
+  }));
 }
 
-// Generate metadata for the page
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ year: string; month: string; slug: string }>;
 }): Promise<Metadata> {
   const { year, month, slug } = await params;
-  const { data } = await getCachedNews();
+  const { data } = (await getCachedPosts()) as { data: Post[] };
 
-  const post = data?.find(
-    (p) => p.slug === slug && p.year === Number(year) && p.month === Number(month),
-  ) as NewsItem;
-
-  if (!post) return notFound();
+  const post = findPost({ data, year, month, slug });
+  if (!post || Array.isArray(post)) return notFound();
 
   return {
-    title: `${post.title} | Changeling News`,
-    description: post.excerpt,
-    authors: post.authors?.map((a: string) => ({ name: a })) ?? [],
+    title: post.title,
+    description: post?.excerpt,
+    authors: post.author?.map((a: string) => ({ name: a })) ?? [],
     openGraph: {
       title: post.title,
-      description: post.excerpt,
-      images: post.image_url
+      description: post?.excerpt,
+      images: post?.cover_image
         ? [
             {
-              url: fetchSupabaseImage({
-                container: 'news',
-                path: post.image_url,
-              }),
+              url: `https://changeling.com/${post.cover_image}`,
             },
           ]
         : [],
     },
     twitter: {
       title: post.title,
-      description: post.excerpt,
-      images: post.image_url
-        ? [fetchSupabaseImage({ container: 'news', path: post.image_url })]
+      description: post?.excerpt,
+      images: post?.cover_image
+        ? [
+            {
+              url: `https://changeling.com/${post.cover_image}`,
+            },
+          ]
         : [],
     },
   };
 }
 
-export default async function News({
+export default async function Post({
   params,
 }: {
   params: Promise<{ year: string; month: string; slug: string }>;
 }) {
   const { year, month, slug } = await params;
-  const { data } = await getCachedNews();
+  const { data } = (await getCachedPosts()) as { data: Post[] };
 
-  const post = data?.find(
-    (p) => p.slug === slug && p.year === Number(year) && p.month === Number(month),
-  ) as NewsItem;
-
-  if (!post) return notFound();
-
-  const isoDate = new Date(
-    `${post.year}-${String(post.month).padStart(2, '0')}-${String(post.day).padStart(2, '0')}`,
-  ).toISOString();
+  const post = findPost({ data, year, month, slug });
+  if (!post || Array.isArray(post)) return notFound();
+  const { default: Post } = await import(`@/contents/${post.file_path}`);
 
   return (
     <>
-      {/* Hero Section */}
-      <div className="relative h-[35svh] w-full">
+      {post.cover_image ? (
         <Image
-          src={fetchSupabaseImage({
-            container: 'news',
-            path: post.image_url,
-          })}
+          src={`/${post.cover_image}`}
           alt={post.title}
-          fill
-          className="mask-b-from-50% object-cover"
-          priority
+          width={1200}
+          height={400}
+          className="object-cover w-full h-50"
         />
-      </div>
+      ) : (
+        // 16(default) - 8(h1) = 8
+        <div className="h-8" aria-hidden="true"></div>
+      )}
 
-      {/* Content */}
-      <div className="container mx-auto p-4">
-        <article className="bg-steel/25 relative rounded-lg p-6 backdrop-blur-sm">
-          {/* Header */}
-          <header className="space-y-6">
-            {/* Breadcrumb */}
+      <h1>{post.title}</h1>
+      {/* <div className="flex flex-col gap-2 mb-4">
+        <span className="text-sm text-gray-400">{post.date}</span>
+        <span className="text-sm text-gray-400">{post.author?.join(', ')}</span>
+      </div> */}
 
-            {/* Title and date */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-2 text-sm">
-                <span className="bg-deep-orange/20 text-deep-orange rounded-full px-3 py-1 uppercase">
-                  {post.type}
-                </span>
-                <time dateTime={isoDate} className="text-gray-400">
-                  {formatDate(isoDate)}
-                </time>
-              </div>
-
-              <h1 className="text-3xl font-bold text-white md:text-4xl lg:text-5xl">
-                {post.title}
-              </h1>
-
-              {/* Author */}
-              {post.authors && (
-                <div className="text-sm text-gray-400">By {post.authors.join(', ')}</div>
-              )}
-            </div>
-          </header>
-
-          <div className="mt-8 max-w-none">{post.content}</div>
-        </article>
-      </div>
+      <article className="bg-gray-800 p-4 rounded">
+        <Post />
+      </article>
     </>
   );
 }

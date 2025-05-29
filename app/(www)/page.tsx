@@ -6,12 +6,12 @@ import { NewsSkeleton } from '@/app/(www)/news-skeleton';
 import { PromoSection } from '@/app/(www)/promo-section';
 import { Button } from '@/components/button';
 import { NewsContainer } from '@/components/news-container';
-import { getCachedCharacters, getCachedNews } from '@/lib/cache';
+import { getCachedCharacters, getCachedPosts } from '@/lib/cache';
 import aurelia from '@/public/aurelia.png';
 
 // Main page component with optimized structure
 export default async function Home() {
-  const { data: news } = await getCachedNews();
+  const { data: news } = await getCachedPosts();
   const { data: characters } = await getCachedCharacters();
 
   return (

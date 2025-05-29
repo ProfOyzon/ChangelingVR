@@ -2,11 +2,15 @@ import { unstable_cache } from 'next/cache';
 import type { CachedData } from '../types';
 import { createClient } from './supabase/server';
 
-// Cache news data for 1 week since it's rarely updated
-export const getCachedNews = unstable_cache(
+// Cache posts data for 1 week since it's rarely updated
+export const getCachedPosts = unstable_cache(
   async () => {
     const supabase = createClient();
-    const { data, error } = await supabase.from('news').select('*');
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .filter('published', 'eq', true)
+      .order('id', { ascending: false });
 
     return {
       status: error ? 500 : 200,
@@ -14,10 +18,10 @@ export const getCachedNews = unstable_cache(
       cachedAt: new Date().getTime(),
     } as CachedData<typeof data>;
   },
-  ['newsz'],
+  ['posts'],
   {
     revalidate: 60 * 60 * 24 * 7, // 1 week
-    tags: ['newsz'],
+    tags: ['posts'],
   },
 );
 
@@ -33,10 +37,10 @@ export const getCachedCharacters = unstable_cache(
       cachedAt: new Date().getTime(),
     } as CachedData<typeof data>;
   },
-  ['charactersz'],
+  ['characters'],
   {
     revalidate: false, // Never revalidate
-    tags: ['charactersz'],
+    tags: ['characters'],
   },
 );
 
@@ -53,9 +57,9 @@ export const getCachedUser = unstable_cache(
       cachedAt: new Date().getTime(),
     } as CachedData<typeof data>;
   },
-  ['profilesz'],
+  ['profiles'],
   {
     revalidate: 60 * 60 * 1, // 1 hour
-    tags: ['profilesz'],
+    tags: ['profiles'],
   },
 );

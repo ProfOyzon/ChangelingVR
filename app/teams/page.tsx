@@ -1,7 +1,14 @@
+import type { Metadata } from 'next';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import TeamsPageClient from './page.client';
 import { getQueryClient } from './utils/get-query-client';
 import { profileOptions } from './utils/profile-options';
+
+export const metadata: Metadata = {
+  title: 'Meet the Team',
+  description:
+    "Meet the team behind the Changeling VR game and website. We're a group of students and faculty at the Rochester Institute of Technology's School of Interactive Games and Media, and College of Art and Design.",
+};
 
 export default async function TeamsPage() {
   const queryClient = getQueryClient();

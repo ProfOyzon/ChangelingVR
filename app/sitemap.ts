@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/characters`, priority: 0.8, changeFrequency: 'yearly' },
     { url: `${baseUrl}/team`, priority: 0.7, changeFrequency: 'monthly' },
     { url: `${baseUrl}/newsroom`, priority: 0.6, changeFrequency: 'weekly' },
+    { url: `${baseUrl}/download`, priority: 0.7, changeFrequency: 'monthly' },
   ];
 
   const characterPages: MetadataRoute.Sitemap[0][] = characters.map((slug) => ({

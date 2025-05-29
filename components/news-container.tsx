@@ -2,18 +2,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
 import { fetchSupabaseImage } from '../lib/api';
-import { formatDate } from '../lib/utils';
-import { type NewsItem } from '../types';
+import type { Post } from '../types/posts';
 
-export function NewsContainer({ news }: { news: NewsItem }) {
-  const isoDate = new Date(
-    `${news.year}-${String(news.month).padStart(2, '0')}-${String(news.day).padStart(2, '0')}`,
-  ).toISOString();
-
+export function NewsContainer({ news }: { news: Post }) {
   return (
     // Clickable link to the news item
     <Link
-      href={`/newsroom/${news.year}/${news.month}/${news.slug}`}
+      href={`/newsroom/${news.date.split('-')[0]}/${news.date.split('-')[1]}/${news.slug}`}
       className="group bg-steel/25 relative max-w-[400px] min-w-[300px] flex-1 rounded backdrop-blur-sm transition-transform duration-300 hover:scale-102 active:scale-95"
     >
       {/* External link icon */}
@@ -22,11 +17,11 @@ export function NewsContainer({ news }: { news: NewsItem }) {
       </div>
 
       {/* Image */}
-      {news.image_url && (
+      {news.cover_image && (
         <Image
           src={fetchSupabaseImage({
             container: 'news',
-            path: news.image_url,
+            path: news.cover_image,
           })}
           alt={news.title}
           width={400}
@@ -46,7 +41,13 @@ export function NewsContainer({ news }: { news: NewsItem }) {
             {news.type}
           </span>
           <span className="text-gray-400 group-hover:text-gray-300">|</span>
-          <span className="text-gray-400 group-hover:text-gray-300">{formatDate(isoDate)}</span>
+          <span className="text-gray-400 group-hover:text-gray-300">
+            {new Date(news.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
         </div>
       </div>
     </Link>

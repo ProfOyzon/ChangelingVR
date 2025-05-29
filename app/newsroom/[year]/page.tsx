@@ -1,44 +1,21 @@
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import { NewsContainer } from '@/components/news-container';
-import { getCachedNews } from '@/lib/cache';
-import type { NewsItem } from '@/types';
+import { notFound } from 'next/navigation';
+import { findPost } from '@/app/newsroom/find-post';
+import { getCachedPosts } from '@/lib/cache';
+import type { Post } from '@/types';
 
-export const metadata: Metadata = {
-  title: 'News',
-  description: 'News from Changeling',
-};
-
-export default async function News({ params }: { params: Promise<{ year: string }> }) {
+export default async function Posts({ params }: { params: Promise<{ year: string }> }) {
   const { year } = await params;
-  const { data } = await getCachedNews();
+  const { data } = (await getCachedPosts()) as { data: Post[] };
 
-  const post = data?.filter((p) => p.year === Number(year)) as NewsItem[];
-  if (!post || post.length === 0) {
-    return (
-      <div className="flex h-svh flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold">Unable to fetch news</h1>
-        <p className="mt-2 text-sm">Please try again later.</p>
-      </div>
-    );
-  }
+  const posts = findPost({ data, year });
+  if (!posts || !Array.isArray(posts)) return notFound();
+  console.log(posts);
 
+  // TODO: same as posts/page.tsx, but with the posts filtered by year
   return (
-    <div className="flex flex-col items-center justify-center">
-      {/* Banner */}
-      <div className="relative mb-4 h-[25svh] w-full md:h-[30svh]">
-        <Image src="/BannerImage.png" alt="Banner" fill className="object-cover brightness-75" />
-        <h1 className="text-light-mustard absolute bottom-4 left-4 text-2xl font-bold uppercase md:text-4xl">
-          News for {year}
-        </h1>
-      </div>
-
-      {/* News container */}
-      <div className="container mx-auto mb-4 flex flex-row flex-wrap justify-center gap-6 p-4">
-        {[...post].reverse().map((news) => (
-          <NewsContainer key={news.id} news={news} />
-        ))}
-      </div>
+    <div className="max-w-7xl mx-auto p-6 min-h-svh">
+      <div className="h-16" aria-hidden="true"></div>
+      <h1 className="text-3xl font-bold mb-8">Posts for {year}</h1>
     </div>
   );
 }
