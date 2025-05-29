@@ -5,9 +5,9 @@ import { redirect } from 'next/navigation';
 import { encodedRedirect } from '@/lib/redirect';
 import { sendMail } from '@/lib/send-mail';
 import { createClient } from '@/lib/supabase/server';
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { forgotPasswordSchema, loginSchema, registerSchema, updatePasswordSchema } from './schemas';
-import { comparePassword, generateToken, hashPassword, processError } from './utils';
+import { comparePassword, generateToken, hashPassword, hashToken, processError } from './utils';
 
 export async function registerAction(formData: FormData) {
   // Parse the form data
@@ -86,19 +86,21 @@ export async function forgotPasswordAction(formData: FormData) {
     .select('uuid, email')
     .eq('email', email)
     .single();
+
   if (error || !data) {
-    // User not found
-    return encodedRedirect('error', '/auth/forgot-password', 'User not found');
+    // Show success page, avoids user enumeration
+    redirect(`/auth/forgot-password?success=true`);
   }
 
   // Generate a random token
-  const hashToken: string = randomBytes(32).toString('hex');
+  const token = randomUUID();
+  const hashedToken = hashToken(token);
 
   // Add the token to the legacy_members table
   const { error: tokenError } = await supabase.from('reset_tokens').upsert(
     {
       uuid: data.uuid,
-      token: hashToken,
+      token: hashedToken,
       expires_at: new Date(Date.now() + 1000 * 60 * 30), // 30 minutes
     },
     { onConflict: 'uuid' },
@@ -110,8 +112,7 @@ export async function forgotPasswordAction(formData: FormData) {
   }
 
   // Create the reset password link
-  const params = `?email=${encodeURIComponent(data.email)}&uuid=${encodeURIComponent(data.uuid)}&token=${encodeURIComponent(hashToken)}`;
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/update-password${params}`;
+  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/update-password?token=${encodeURIComponent(token)}`;
 
   // Send email with reset link
   const { success } = await sendMail({
@@ -208,8 +209,7 @@ export async function logoutAction() {
 export async function updatePasswordAction(formData: FormData) {
   // Parse the form data
   const result = updatePasswordSchema.safeParse({
-    email: formData.get('email') as string,
-    uuid: formData.get('uuid') as string,
+    token: formData.get('token') as string,
     password: formData.get('password') as string,
   });
 
@@ -220,33 +220,43 @@ export async function updatePasswordAction(formData: FormData) {
 
   // Passed validation
   // Get email, token, and password and create supabase client
-  const { email, uuid, password } = result.data;
+  const { token, password } = result.data;
+  const hashedToken = hashToken(token);
+
+  // Get the reset token from the reset_tokens table
   const supabase = createClient();
-
-  // Hash the password
-  const hashedPassword = await hashPassword(password);
-
-  // Ensure uuid given matches member's uuid
-  const { data: memberData, error: memberError } = await supabase
-    .from('members')
-    .select('uuid')
-    .eq('email', email)
+  const { data: tokenData, error: tokenError } = await supabase
+    .from('reset_tokens')
+    .select('*')
+    .eq('token', hashedToken)
     .single();
 
-  if (memberError || memberData.uuid !== uuid) {
-    return encodedRedirect('error', '/auth/update-password', 'UUID mismatch');
+  // If the token is invalid, return an error
+  if (tokenError || !tokenData) {
+    return encodedRedirect('error', '/auth/update-password', 'Invalid token');
   }
+
+  // If the token has expired, return an error
+  if (tokenData.expires_at < new Date()) {
+    return encodedRedirect('error', '/auth/update-password', 'Token expired');
+  }
+
+  // Get the email and uuid from the token data
+  const hashedPassword = await hashPassword(password);
 
   // Update the user's password
   const { error } = await supabase
     .from('members')
     .update({ password: hashedPassword })
-    .eq('email', email);
+    .eq('uuid', tokenData.uuid);
 
   // If there is an error, return back to the update password page with an error message
   if (error) {
     return encodedRedirect('error', '/auth/update-password', error.message);
   }
+
+  // Delete the token from the reset_tokens table
+  await supabase.from('reset_tokens').delete().eq('uuid', tokenData.uuid);
 
   // Redirect to login page with success message
   redirect('/auth/login?success=Password updated');

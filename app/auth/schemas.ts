@@ -1,8 +1,7 @@
 import { z } from 'zod/v4';
 
-//.endsWith('@rit.edu', { error: 'Email must be a RIT email (@rit.edu)' })
 export const registerSchema = z.strictObject({
-  email: z.email().trim(),
+  email: z.email().trim().endsWith('@rit.edu', { error: 'Email must be a RIT email (@rit.edu)' }),
   password: z
     .string()
     .min(6, { error: 'Password must be at least 6 characters long' })
@@ -26,8 +25,7 @@ export const forgotPasswordSchema = z.strictObject({
 });
 
 export const updatePasswordSchema = z.strictObject({
-  email: z.email().trim(),
-  uuid: z.string().min(1),
+  token: z.string().min(1),
   password: z
     .string()
     .min(6, { error: 'Password must be at least 6 characters long' })

@@ -6,24 +6,26 @@ import { Label } from '@/components/ui/label';
 import { encodedRedirect } from '@/lib/redirect';
 import { createClient } from '@/lib/supabase/server';
 import { updatePasswordAction } from '../actions';
+import { hashToken } from '../utils';
 
 export default async function LegacyResetPasswordPage({
   searchParams,
 }: {
-  searchParams: Promise<{ email: string; uuid: string; token: string; error?: string }>;
+  searchParams: Promise<{ token: string; error?: string }>;
 }) {
-  const supabase = createClient();
-  const { email, uuid, token, error } = await searchParams;
+  const { token, error } = await searchParams;
+  const hashedToken = hashToken(token);
 
   // Get the reset token from the reset_tokens table
+  const supabase = createClient();
   const { data: tokenData, error: tokenError } = await supabase
     .from('reset_tokens')
     .select('*')
-    .eq('uuid', uuid)
+    .eq('token', hashedToken)
     .single();
 
   // Supabase error or no token found
-  if (tokenError || !tokenData.token) {
+  if (tokenError || !tokenData) {
     encodedRedirect(
       'error',
       '/auth/forgot-password',
@@ -40,31 +42,6 @@ export default async function LegacyResetPasswordPage({
     );
   }
 
-  // Check if the token is valid
-  if (tokenData.token !== token) {
-    encodedRedirect(
-      'error',
-      '/auth/forgot-password',
-      'The password reset link is invalid. Please request a new one.',
-    );
-  }
-
-  // Fetch the member's uuid with email
-  const { data: memberData, error: memberError } = await supabase
-    .from('members')
-    .select('uuid')
-    .eq('email', email)
-    .single();
-
-  // Check if the member's uuid matches the token's uuid
-  if (memberError || memberData.uuid !== uuid) {
-    encodedRedirect(
-      'error',
-      '/auth/forgot-password',
-      'The password reset link is invalid. Please request a new one.',
-    );
-  }
-
   return (
     <Card>
       <CardHeader>
@@ -75,8 +52,7 @@ export default async function LegacyResetPasswordPage({
       <CardContent>
         <form action={updatePasswordAction}>
           {/* Hidden inputs to pass to the action */}
-          <input type="hidden" name="email" value={email} />
-          <input type="hidden" name="uuid" value={uuid} />
+          <input type="hidden" name="token" value={token} />
 
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">

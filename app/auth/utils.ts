@@ -1,5 +1,6 @@
 import { compare, hash } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { createHash } from 'node:crypto';
 import { z } from 'zod/v4';
 
 /**
@@ -28,6 +29,10 @@ export const comparePassword = async (password: string, hashedPassword: string) 
  */
 export const generateToken = (data: { uuid: string; email: string; username: string }) => {
   return sign(data, process.env.JWT_ACCESS_SECRET!, { expiresIn: '1d' });
+};
+
+export const hashToken = (token: string) => {
+  return createHash('sha256').update(token).digest('hex');
 };
 
 /**
