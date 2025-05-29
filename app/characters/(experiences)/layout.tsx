@@ -1,6 +1,4 @@
-import { type ReactNode } from 'react';
-
-export default function ExperiencesLayout({ children }: { children: ReactNode }) {
+export default function ExperiencesLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="h-16"></div>

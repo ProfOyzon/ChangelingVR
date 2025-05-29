@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import "./username.css"
+import './username.css';
 
 export async function generateMetadata({
   params,
@@ -31,13 +31,9 @@ export default async function UserPage({ params }: { params: Promise<{ username:
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <p>Hey,</p>
       <p>{username}</p>
-      <div className='container'>
-        <div className='user-info'>
-
-        </div>
-
+      <div className="container">
+        <div className="user-info"></div>
       </div>
-
     </div>
   );
 }

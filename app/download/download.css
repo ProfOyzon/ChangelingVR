@@ -1,8 +1,8 @@
 .buttonGroup {
   display: flex;
-  justify-content: center; 
-  gap: 1rem;               
-  margin-top: 2rem;        
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .buttonGroup button {
@@ -12,6 +12,6 @@
 }
 
 .header {
-    color: #ffcc66;
-    font-size: 100px;
+  color: #ffcc66;
+  font-size: 100px;
 }
