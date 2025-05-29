@@ -1,0 +1,11 @@
+.container{
+    width: 50%;
+    height: 60%;
+    background-color: rgb(255, 255, 255);
+}
+
+.user-info{
+    width: 50%;
+    height: 20%;
+    background-color: rgb(196, 156, 156);
+}
