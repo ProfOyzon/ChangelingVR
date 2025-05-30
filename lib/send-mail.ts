@@ -1,26 +1,27 @@
+import { render } from '@react-email/components';
 import { transporter } from './nodemailer';
 
 /**
  * Send an email
  */
 export async function sendMail({
-  to,
+  reciever,
   subject,
-  text,
-  html,
+  plainText,
+  email,
 }: {
-  to: string;
+  reciever: string;
   subject: string;
-  text: string;
-  html: string;
+  plainText: string;
+  email: React.ReactNode;
 }): Promise<{ success: boolean; message: string }> {
   try {
     await transporter.sendMail({
       from: 'support@changelingvr.com',
-      to,
+      to: reciever,
       subject,
-      text,
-      html,
+      text: plainText,
+      html: await render(email),
     });
 
     return { success: true, message: 'Email sent successfully' };

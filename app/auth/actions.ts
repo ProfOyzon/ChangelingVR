@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { PasswordResetEmail, WelcomeEmail } from '@/components/email';
 import { encodedRedirect } from '@/lib/redirect';
 import { sendMail } from '@/lib/send-mail';
 import { createClient } from '@/lib/supabase/server';
@@ -52,15 +53,24 @@ export async function registerAction(formData: FormData) {
   }
 
   // Create a new profile
+  const username = email.split('@')[0].toLowerCase() + '-' + randomBytes(4).toString('hex');
   const { error: newProfileError } = await supabase.from('profiles').insert({
     uuid: newMember.uuid,
-    username: email.split('@')[0].toLowerCase() + '-' + randomBytes(4).toString('hex'),
+    username,
     terms: [new Date().getFullYear()],
   });
 
   if (newProfileError) {
     return encodedRedirect('error', '/auth/register', 'Failed to create profile');
   }
+
+  // Send welcome email
+  await sendMail({
+    reciever: email,
+    subject: 'Welcome to Changeling VR',
+    plainText: "Welcome to Changeling VR! We're excited to have you on board.",
+    email: WelcomeEmail({ name: username }),
+  });
 
   return encodedRedirect('success', '/auth/login', 'Registration successful, login to continue');
 }
@@ -80,7 +90,7 @@ export async function forgotPasswordAction(formData: FormData) {
   const { email } = result.data;
   const supabase = createClient();
 
-  // Get id and email from legacy_members table with the given email
+  // Get uuid and email from members table with the given email
   const { data, error } = await supabase
     .from('members')
     .select('uuid, email')
@@ -88,6 +98,18 @@ export async function forgotPasswordAction(formData: FormData) {
     .single();
 
   if (error || !data) {
+    // Show success page, avoids user enumeration
+    redirect(`/auth/forgot-password?success=true`);
+  }
+
+  // Get the display name from the profiles table
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('display_name')
+    .eq('uuid', data.uuid)
+    .single();
+
+  if (profileError || !profileData) {
     // Show success page, avoids user enumeration
     redirect(`/auth/forgot-password?success=true`);
   }
@@ -111,15 +133,13 @@ export async function forgotPasswordAction(formData: FormData) {
     return encodedRedirect('error', '/auth/forgot-password', tokenError.message);
   }
 
-  // Create the reset password link
+  // Create the reset password link and send email
   const url = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/update-password?token=${encodeURIComponent(token)}`;
-
-  // Send email with reset link
   const { success } = await sendMail({
-    to: data.email,
+    reciever: data.email,
     subject: 'Changeling VR Password Reset',
-    text: `Click the link to reset your password: ${url}`,
-    html: `<p>Click the link to reset your password</p><a href="${url}">Reset Password</a>`,
+    plainText: `Click the link to reset your password: ${url}`,
+    email: PasswordResetEmail({ username: profileData.display_name, url }),
   });
 
   // Email failed to send
@@ -241,10 +261,8 @@ export async function updatePasswordAction(formData: FormData) {
     return encodedRedirect('error', '/auth/update-password', 'Token expired');
   }
 
-  // Get the email and uuid from the token data
+  // Hash the password and update the user's password
   const hashedPassword = await hashPassword(password);
-
-  // Update the user's password
   const { error } = await supabase
     .from('members')
     .update({ password: hashedPassword })
