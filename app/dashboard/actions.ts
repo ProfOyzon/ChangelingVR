@@ -26,7 +26,7 @@ export async function updateProfileAction(formData: FormData) {
   // Get the cookie store
   const cookieStore = await cookies();
   // Get the auth token from the cookie store
-  const token = cookieStore.get('auth_token');
+  const token = cookieStore.get('cvr_auth');
 
   // Ensure token is present
   if (!token) {

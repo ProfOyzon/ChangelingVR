@@ -9,9 +9,9 @@ import { loginAction } from '../actions';
 export default async function Login({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ success?: string; error?: string }>;
 }) {
-  const { error } = await searchParams;
+  const { success, error } = await searchParams;
 
   return (
     <Card>
@@ -48,6 +48,7 @@ export default async function Login({
             </div>
 
             {error && <FormMessage type="error" message={error} />}
+            {success && <FormMessage type="success" message={success} />}
 
             <SubmitButton className="w-full" pendingText="Logging in...">
               Login
