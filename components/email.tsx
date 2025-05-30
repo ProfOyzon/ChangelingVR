@@ -53,7 +53,7 @@ export const WelcomeEmail = ({ name }: { name: string }) => {
         Hello <strong>{name}</strong>,
       </Text>
       <Text className="text-black text-base">
-        Welcome to Changeling VR! We're excited to have you on board.
+        Welcome to Changeling VR! We&apos;re excited to have you on board.
       </Text>
       <Text className="text-black text-base">
         To get started, visit your{' '}
@@ -70,7 +70,7 @@ export const WelcomeEmail = ({ name }: { name: string }) => {
         <Link href="mailto:support@changelingvr.com">support@changelingvr.com</Link>.
       </Text>
       <Text className="text-black text-base">
-        We're glad to have you join our family of talented changelings!
+        We&apos;re glad to have you join our family of talented changelings!
       </Text>
     </EmailLayout>
   );
