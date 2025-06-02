@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Menu } from 'lucide-react';
-import { X } from 'lucide-react';
+import { FaBars, FaX } from 'react-icons/fa6';
 import { Button } from './button';
 
 export function MobileMenu() {
@@ -17,7 +16,7 @@ export function MobileMenu() {
         onClick={toggleMenu}
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
       >
-        {isOpen ? <X /> : <Menu />}
+        {isOpen ? <FaX /> : <FaBars />}
       </button>
 
       {isOpen && (

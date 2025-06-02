@@ -1,3 +1,4 @@
+import { FaLinkedin, FaXTwitter } from 'react-icons/fa6';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -5,8 +6,6 @@ import { findPost } from '@/app/newsroom/find-post';
 import { CopyLink } from '@/components/copy-link';
 import { getCachedPosts } from '@/lib/cache';
 import type { Post } from '@/types';
-import { SiX } from '@icons-pack/react-simple-icons';
-import { Linkedin } from 'lucide-react';
 
 export async function generateStaticParams() {
   const { data } = (await getCachedPosts()) as { data: Post[] };
@@ -90,13 +89,13 @@ export default async function Post({
             className="p-2 rounded border border-gray-500 hover:bg-gray-700"
             href={`https://twitter.com/intent/tweet?text=Check out this post on Changeling VR:&url=${encodeURIComponent(postUrl)}`}
           >
-            <SiX className="size-4" />
+            <FaXTwitter className="size-4" />
           </a>
           <a
             className="p-2 rounded border border-gray-500 hover:bg-gray-700"
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
           >
-            <Linkedin className="size-4" />
+            <FaLinkedin className="size-4" />
           </a>
         </div>
       </div>

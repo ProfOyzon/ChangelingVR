@@ -1,5 +1,7 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { PageLoading } from './components/page-loading';
 import TeamsPageClient from './page.client';
 import { getQueryClient } from './utils/get-query-client';
 import { profileOptions } from './utils/profile-options';
@@ -26,7 +28,9 @@ export default async function TeamsPage() {
       </p>
 
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <TeamsPageClient />
+        <Suspense fallback={<PageLoading />}>
+          <TeamsPageClient />
+        </Suspense>
       </HydrationBoundary>
     </div>
   );

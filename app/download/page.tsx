@@ -1,33 +1,14 @@
 import type { Metadata } from 'next';
-import { Button } from '@/components/button';
-import './download.css';
 
 export const metadata: Metadata = {
   title: 'Play Now',
+  description: 'Download Changeling VR',
 };
 
-export default function Download() {
+export default function DownloadPage() {
   return (
-    <>
-      <div className="flex h-screen w-screen flex-col items-center justify-center">
-        <h1 className="header">Play Now</h1>
-
-        <div className="buttonGroup">
-          <Button href="" variant="primary" className="vrGame">
-            Local Download
-          </Button>
-          <Button href="" variant="primary" className="vrGame">
-            Steam (Coming Soon)
-          </Button>
-          <Button
-            href="https://changelingvrteam.itch.io/changelingvr"
-            variant="primary"
-            className="vrGame"
-          >
-            ITCH.io
-          </Button>
-        </div>
-      </div>
-    </>
+    <div className="min-h-[calc(100svh-4rem)] flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#1e293b] via-[#334155] to-[#0f172a]">
+      <span>download here</span>
+    </div>
   );
 }

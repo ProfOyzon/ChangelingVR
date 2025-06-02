@@ -53,7 +53,7 @@ export default async function Characters() {
 
   if (!data?.length) {
     return (
-      <div className="flex h-svh items-center justify-center">
+      <div className="flex min-h-svh items-center justify-center">
         <div className="text-center">
           <h1 className="mb-4 text-2xl font-bold">No Characters Found</h1>
           <p className="text-gray-600">We couldn&apos;t find any characters at the moment.</p>

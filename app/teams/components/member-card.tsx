@@ -1,14 +1,13 @@
+import { FaGithub, FaGlobe, FaLinkedin, FaRegEnvelope } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Profile } from '@/types';
-import { SiGithub } from '@icons-pack/react-simple-icons';
-import { Globe, Linkedin, Mail } from 'lucide-react';
 
 const LinkIcon = {
-  email: <Mail className="size-4" />,
-  website: <Globe className="size-4" />,
-  github: <SiGithub className="size-4" />,
-  linkedin: <Linkedin className="size-4" />,
+  email: <FaRegEnvelope className="size-4" />,
+  website: <FaGlobe className="size-4" />,
+  github: <FaGithub className="size-4" />,
+  linkedin: <FaLinkedin className="size-4" />,
 };
 
 export function TeamMemberCard({ member }: { member: Profile }) {

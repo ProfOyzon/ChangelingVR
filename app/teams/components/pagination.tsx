@@ -1,7 +1,7 @@
 'use client';
 
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
 interface PaginationProps {
   page: number;
@@ -45,7 +45,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
             aria-label="Previous"
             type="button"
           >
-            <ChevronLeftIcon />
+            <FaChevronLeft />
             <span className="hidden sm:block">Previous</span>
           </button>
         </li>
@@ -75,7 +75,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
             type="button"
           >
             <span className="hidden sm:block">Next</span>
-            <ChevronRightIcon />
+            <FaChevronRight />
           </button>
         </li>
       </ul>

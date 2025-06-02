@@ -1,12 +1,11 @@
+import type { Metadata } from 'next';
 import { BackButton } from '@/components/back-button';
 
-export function generateMetadata() {
-  return {
-    title: '404 - Not Found',
-    description: 'The page you are looking for is restricted or unavailable.',
-    robots: 'noindex',
-  };
-}
+export const metadata: Metadata = {
+  title: '404 - Not Found',
+  description: 'The page you are looking for is restricted or unavailable.',
+  robots: 'noindex',
+};
 
 export default function NotFound() {
   return (

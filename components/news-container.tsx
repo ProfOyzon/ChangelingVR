@@ -1,6 +1,6 @@
+import { FaShare } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ExternalLink } from 'lucide-react';
 import { fetchSupabaseImage } from '../lib/api';
 import type { Post } from '../types/posts';
 
@@ -13,7 +13,7 @@ export function NewsContainer({ news }: { news: Post }) {
     >
       {/* External link icon */}
       <div className="bg-midnight/90 absolute top-2 right-2 z-20 flex items-center justify-center rounded-full p-2 shadow-lg backdrop-blur-sm">
-        <ExternalLink className="h-4 w-4 text-gray-300" />
+        <FaShare className="h-4 w-4 text-gray-300" />
       </div>
 
       {/* Image */}

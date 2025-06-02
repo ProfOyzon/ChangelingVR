@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { FaUserPen } from 'react-icons/fa6';
 import Image from 'next/image';
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from '@/components/supabase/dropzone';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { useSupabaseUpload } from '@/hooks/use-supabase-upload';
-import { UserPen } from 'lucide-react';
 
 interface EditProfileDialogProps {
   currentImage: string;
@@ -46,12 +46,12 @@ export function EditProfileDialog({ currentImage, userId }: EditProfileDialogPro
 
           {/* Small edit button */}
           <div className="bg-midnight/80 absolute top-2 right-2 rounded-full p-1 transition-opacity group-hover:opacity-0">
-            <UserPen className="size-4 text-white" />
+            <FaUserPen className="size-4 text-white" />
           </div>
 
           {/* Full overlay edit button */}
           <div className="bg-midnight/80 absolute inset-0 flex items-center justify-center rounded opacity-0 transition-opacity group-hover:opacity-100">
-            <UserPen className="size-6 text-white" />
+            <FaUserPen className="size-6 text-white" />
           </div>
         </div>
       </DialogTrigger>

@@ -24,6 +24,7 @@ export default function TeamsPageClient() {
   }, [search]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     e.stopPropagation();
     const value = e.target.value;
 

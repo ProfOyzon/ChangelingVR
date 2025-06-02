@@ -1,9 +1,6 @@
 import { cloneElement } from 'react';
+import { FaDiscord, FaInstagram, FaItchIo, FaSteam, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import Link from 'next/link';
-import { SiX } from '@icons-pack/react-simple-icons';
-import { SiYoutube } from '@icons-pack/react-simple-icons';
-import { SiDiscord } from '@icons-pack/react-simple-icons';
-import { SiInstagram } from '@icons-pack/react-simple-icons';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,23 +8,33 @@ export function Footer() {
   const socialLinks = [
     {
       href: 'x.com/ChangelingVR',
-      icon: <SiX />,
+      icon: <FaXTwitter />,
       alt: 'X formerly Twitter Logo',
     },
     {
       href: 'www.instagram.com/changelingvr',
-      icon: <SiInstagram />,
+      icon: <FaInstagram />,
       alt: 'Instagram Logo',
     },
     {
       href: 'www.youtube.com/@ChangelingVRStudio',
-      icon: <SiYoutube />,
+      icon: <FaYoutube />,
       alt: 'YouTube Logo',
     },
     {
       href: 'www.discord.gg/btEUjqazvP',
-      icon: <SiDiscord />,
+      icon: <FaDiscord />,
       alt: 'Discord Server Logo',
+    },
+    {
+      href: 'steamcommunity.com/app/2410100',
+      icon: <FaSteam />,
+      alt: 'Steam Logo',
+    },
+    {
+      href: 'www.itch.io/changelingvr',
+      icon: <FaItchIo />,
+      alt: 'Itch.io Logo',
     },
   ];
 
