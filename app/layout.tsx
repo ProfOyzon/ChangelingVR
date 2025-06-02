@@ -32,10 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${latoSans.className} bg-midnight min-w-svw text-gray-100 antialiased`}>
+    <html lang="en" className={`${latoSans.className} min-w-svw antialiased`}>
+      <body className="bg-midnight text-gray-100">
         <Header />
-        <main>{children}</main>
+        <div className="h-16" aria-hidden="true"></div>
+        <main className="min-h-[calc(100svh-4rem)] items-center">{children}</main>
         <Footer />
 
         <Analytics />

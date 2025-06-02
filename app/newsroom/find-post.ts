@@ -8,21 +8,13 @@ export function findPost({
 }: {
   data: Post[];
   year: string;
-  month?: string;
-  slug?: string;
-}): Post | Post[] | undefined {
-  const matches =
-    data?.filter((p) => {
+  month: string;
+  slug: string;
+}): Post | undefined {
+  return (
+    data?.find((p) => {
       const [postYear, postMonth] = p.date.split('-');
-      if (postYear !== year) return false;
-      if (month && postMonth !== month.padStart(2, '0')) return false;
-      if (slug && p.slug !== slug) return false;
-      return true;
-    }) ?? [];
-
-  if (slug) {
-    return matches[0] ?? undefined;
-  } else {
-    return matches.length > 0 ? matches : undefined;
-  }
+      return postYear === year && postMonth === month.padStart(2, '0') && p.slug === slug;
+    }) ?? undefined
+  );
 }

@@ -70,7 +70,7 @@ export default function TeamsPageClient() {
       ) : (
         <div className="flex flex-wrap justify-center gap-6 mb-6">
           {paginated.map((profile) => (
-            <TeamMemberCard key={profile.username} member={profile} imageUrl={profile.avatar_url} />
+            <TeamMemberCard key={profile.username} member={profile} />
           ))}
         </div>
       )}

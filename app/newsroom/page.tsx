@@ -13,8 +13,7 @@ export default async function Posts() {
 
   return (
     <div className="max-w-7xl mx-auto p-6 min-h-svh">
-      <div className="h-16" aria-hidden="true"></div>
-      <h1 className="text-3xl font-bold mb-8">Blog</h1>
+      <h1 className="text-4xl font-bold my-8">Newsroom</h1>
 
       {/* Featured row */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">

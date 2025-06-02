@@ -69,8 +69,8 @@ export default function manifest(): MetadataRoute.Manifest {
     shortcuts: [
       {
         name: 'Play Now',
-        description: 'Play Changeling VR on itch.io',
-        url: 'https://changelingvrteam.itch.io/changelingvr',
+        description: 'Download the game',
+        url: '/download',
       },
       {
         name: 'Characters',

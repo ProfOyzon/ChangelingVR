@@ -2,4 +2,5 @@
 
 export * from './character';
 export * from './posts';
+export * from './member';
 export * from './common';

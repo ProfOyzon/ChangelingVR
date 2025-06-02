@@ -32,8 +32,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="min-h-svh w-full flex flex-col px-6 items-center">
-      <div className="h-16"></div>
+    <div className="w-full flex flex-col px-6 items-center">
       <DashboardNav username={decoded.username} />
 
       <Card className="w-full max-w-5xl h-full mb-6">

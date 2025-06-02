@@ -17,10 +17,10 @@ export default async function Home() {
   return (
     <>
       {/* Hero Section - Above the fold content */}
-      <div className="relative flex h-[95svh] w-full items-center justify-center text-center">
+      <div className="relative flex h-[88svh] w-full items-center justify-center text-center">
         <video
           className="absolute h-full w-full object-cover brightness-50"
-          poster="/background/outside_blurred.jpg"
+          poster="/background/outside_blurred.webp"
           autoPlay
           loop
           muted
@@ -28,10 +28,7 @@ export default async function Home() {
           preload="metadata"
           aria-hidden="true"
         >
-          <source
-            src="/media/video/ChangelingTrailer2024_WebCut_BrightnessFix.mp4"
-            type="video/mp4"
-          />
+          <source src="/media/video/ChangelingTrailer2024.mp4" type="video/mp4" />
         </video>
 
         <div className="relative z-5 mx-auto max-w-2xl px-4">
