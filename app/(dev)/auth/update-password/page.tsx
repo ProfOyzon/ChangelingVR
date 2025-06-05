@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import { updatePasswordAction } from '../actions';
 import { hashToken } from '../utils';
 
-export default async function LegacyResetPasswordPage({
+export default async function UpdatePasswordPage({
   searchParams,
 }: {
   searchParams: Promise<{ token: string; error?: string }>;

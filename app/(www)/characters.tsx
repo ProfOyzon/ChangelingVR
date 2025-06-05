@@ -3,7 +3,6 @@
 import { memo, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { useCharacterRotation } from '@/hooks/useCharacterRotation';
-import { fetchSupabaseImage } from '@/lib/api';
 import { cn } from '@/lib/utils';
 import type { Character, CharacterItemProps } from '@/types';
 
@@ -29,10 +28,7 @@ const CharacterItem = memo(function CharacterItem({
       )}
     >
       <Image
-        src={fetchSupabaseImage({
-          container: 'characters',
-          path: character.icon_url,
-        })}
+        src={character.icon_url}
         alt={character.name}
         width={48}
         height={48}

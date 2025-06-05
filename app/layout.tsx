@@ -32,7 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${latoSans.className} min-w-svw antialiased`}>
+    <html
+      lang="en"
+      className={`${latoSans.className} min-w-svw antialiased`}
+      suppressHydrationWarning
+    >
       <body className="bg-midnight text-gray-100">
         <Header />
         <div className="h-16" aria-hidden="true"></div>

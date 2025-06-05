@@ -19,6 +19,8 @@ const eslintConfig = [
       // Ignore next/image rules
       // Justify each use with a comment
       '@next/next/no-img-element': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   }),
   ...pluginQuery.configs['flat/recommended'],

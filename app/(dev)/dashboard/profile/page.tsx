@@ -1,5 +1,4 @@
-import { cookies } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { FormMessage } from '@/components/form-message';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
@@ -8,9 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
-import { createClient } from '@/lib/supabase/server';
-import { verify } from 'jsonwebtoken';
-import { updateProfileAction } from '../../actions';
+import { getUserProfile } from '@/lib/db/queries';
+import type { Profile } from '@/types';
+import { updateProfileAction } from '../actions';
 
 const TEAM_VALUES = [
   'Development',
@@ -39,44 +38,16 @@ const ROLE_VALUES = [
   'Lead',
 ] as const;
 
-type JwtUserPayload = {
-  id: string;
-  username: string;
-  email: string;
-  iat: number;
-  exp: number;
-};
-
 export default async function ProfilePage({
-  params,
   searchParams,
 }: {
-  params: Promise<{ username: string }>;
   searchParams: Promise<{ error?: string }>;
 }) {
-  const { username } = await params;
   const { error } = await searchParams;
 
-  // Get the auth token and verify it
-  const cookieStore = await cookies();
-  const token = cookieStore.get('cvr_auth')!;
-  const decoded = verify(token.value, process.env.JWT_ACCESS_SECRET!) as JwtUserPayload;
-
-  // Username mismatch, redirect to login
-  if (decoded.username !== username) {
-    redirect('/auth/login');
-  }
-
-  // Get the user data from the database
-  const supabase = createClient();
-  const { data: userData } = await supabase
-    .from('profiles')
-    .select('username, display_name, avatar_url, bio, terms, teams, roles, links')
-    .eq('username', username)
-    .single();
-
   // If the user data is not found, show a 404 page
-  if (!userData) notFound();
+  const userData = (await getUserProfile()) as Profile;
+  if (!userData) redirect('/auth/login');
 
   return (
     <CardContent>
@@ -123,7 +94,7 @@ export default async function ProfilePage({
                           id={`term-${year}`}
                           name="terms"
                           value={year.toString()}
-                          defaultChecked={userData.terms.includes(year)}
+                          defaultChecked={userData.terms?.includes(year)}
                         />
                         <Label htmlFor={`term-${year}`} className="text-sm font-normal">
                           {year}

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { forgotPasswordAction } from '../actions';
 
-export default async function ForgotPassword({
+export default async function ForgotPasswordPage({
   searchParams,
 }: {
   searchParams: Promise<{ success?: string; error?: string }>;

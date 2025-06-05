@@ -8,32 +8,32 @@ export function Footer() {
   const socialLinks = [
     {
       href: 'x.com/ChangelingVR',
-      icon: <FaXTwitter />,
+      icon: <FaXTwitter size={20} />,
       alt: 'X formerly Twitter Logo',
     },
     {
       href: 'www.instagram.com/changelingvr',
-      icon: <FaInstagram />,
+      icon: <FaInstagram size={20} />,
       alt: 'Instagram Logo',
     },
     {
       href: 'www.youtube.com/@ChangelingVRStudio',
-      icon: <FaYoutube />,
+      icon: <FaYoutube size={20} />,
       alt: 'YouTube Logo',
     },
     {
       href: 'www.discord.gg/btEUjqazvP',
-      icon: <FaDiscord />,
+      icon: <FaDiscord size={20} />,
       alt: 'Discord Server Logo',
     },
     {
       href: 'steamcommunity.com/app/2410100',
-      icon: <FaSteam />,
+      icon: <FaSteam size={20} />,
       alt: 'Steam Logo',
     },
     {
       href: 'www.itch.io/changelingvr',
-      icon: <FaItchIo />,
+      icon: <FaItchIo size={20} />,
       alt: 'Itch.io Logo',
     },
   ];
