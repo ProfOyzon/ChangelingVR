@@ -1,3 +1,5 @@
+'use client';
+
 import { useActionState } from 'react';
 import { FormMessage } from '@/components/form-message';
 import { Button } from '@/components/ui/button';
