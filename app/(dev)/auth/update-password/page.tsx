@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { verifyToken } from '@/lib/auth/session';
+import { getResetToken } from '@/lib/db/queries';
 import UpdatePasswordPageClient from './page.client';
 
 function UpdatePasswordSkeleton() {
@@ -41,6 +42,8 @@ export default async function UpdatePasswordPage({
   if (new Date(tokenData.expires) < new Date()) return notFound();
 
   // db check uuid
+  const resetToken = await getResetToken(tokenData.user.id);
+  if (!resetToken || resetToken.length === 0) return notFound();
 
   return (
     <Card>

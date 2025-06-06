@@ -7,12 +7,13 @@ import { AppSidebar } from '../_components/app-sidebar';
 import { ModeToggle } from '../_components/mode-toggle';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  // Root check for user
   const user = (await getUserProfile()) as Profile;
   if (!user) redirect('/auth/login');
 
   return (
     <SidebarProvider>
-      <AppSidebar email={user.username} user={user} />
+      <AppSidebar />
       <SidebarInset>
         <header className="flex justify-between h-16 shrink-0 items-center gap-2 pr-4">
           <div className="flex items-center gap-2 px-4">

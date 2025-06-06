@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -12,139 +13,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import type { Profile } from '@/lib/db/schema';
-import { Home, LifeBuoy, Settings, User } from 'lucide-react';
-import { NavUser } from './user-nav';
+import { Activity, Eye, Home, LogOut, Settings, User } from 'lucide-react';
 
-// const item = [
-//   {
-//     title: 'Getting Started',
-//     url: '#',
-//     items: [
-//       {
-//         title: 'Installation',
-//         url: '#',
-//       },
-//       {
-//         title: 'Project Structure',
-//         url: '#',
-//       },
-//     ],
-//   },
-//   {
-//     title: 'Building Your Application',
-//     url: '#',
-//     items: [
-//       {
-//         title: 'Routing',
-//         url: '#',
-//       },
-//       {
-//         title: 'Data Fetching',
-//         url: '#',
-//         isActive: true,
-//       },
-//       {
-//         title: 'Rendering',
-//         url: '#',
-//       },
-//       {
-//         title: 'Caching',
-//         url: '#',
-//       },
-//       {
-//         title: 'Styling',
-//         url: '#',
-//       },
-//       {
-//         title: 'Optimizing',
-//         url: '#',
-//       },
-//       {
-//         title: 'Configuring',
-//         url: '#',
-//       },
-//       {
-//         title: 'Testing',
-//         url: '#',
-//       },
-//       {
-//         title: 'Authentication',
-//         url: '#',
-//       },
-//       {
-//         title: 'Deploying',
-//         url: '#',
-//       },
-//       {
-//         title: 'Upgrading',
-//         url: '#',
-//       },
-//       {
-//         title: 'Examples',
-//         url: '#',
-//       },
-//     ],
-//   },
-//   {
-//     title: 'API Reference',
-//     url: '#',
-//     items: [
-//       {
-//         title: 'Components',
-//         url: '#',
-//       },
-//       {
-//         title: 'File Conventions',
-//         url: '#',
-//       },
-//       {
-//         title: 'Functions',
-//         url: '#',
-//       },
-//       {
-//         title: 'next.config.js Options',
-//         url: '#',
-//       },
-//       {
-//         title: 'CLI',
-//         url: '#',
-//       },
-//       {
-//         title: 'Edge Runtime',
-//         url: '#',
-//       },
-//     ],
-//   },
-//   {
-//     title: 'Architecture',
-//     url: '#',
-//     items: [
-//       {
-//         title: 'Accessibility',
-//         url: '#',
-//       },
-//       {
-//         title: 'Fast Refresh',
-//         url: '#',
-//       },
-//       {
-//         title: 'Next.js Compiler',
-//         url: '#',
-//       },
-//       {
-//         title: 'Supported Browsers',
-//         url: '#',
-//       },
-//       {
-//         title: 'Turbopack',
-//         url: '#',
-//       },
-//     ],
-//   },
-// ];
-
-export function AppSidebar({ email, user }: { email: string; user: Profile }) {
+export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader className="border-sidebar-border h-16 border-b">
@@ -185,30 +56,23 @@ export function AppSidebar({ email, user }: { email: string; user: Profile }) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Activity" asChild>
+                  <Link href="/dashboard/activity">
+                    <Activity />
+                    <span>Activity</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Preview" asChild>
+                  <Link href="/dashboard/preview">
+                    <Eye />
+                    <span>Preview</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Settings" asChild>
-                  <Link href="/dashboard/settings">
-                    <Settings />
-                    <span>Settings</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarGroup className="mt-auto">
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton size="sm" asChild>
-                  <Link href="/dashboard/profile">
-                    <LifeBuoy />
-                    <span>Help</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton size="sm" asChild>
                   <Link href="/dashboard/settings">
                     <Settings />
                     <span>Settings</span>
@@ -221,11 +85,16 @@ export function AppSidebar({ email, user }: { email: string; user: Profile }) {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser
-          name={user.display_name || user.username}
-          email={email}
-          avatar={user.avatar_url || ''}
-        />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton tooltip="Profile" asChild>
+              <Button type="submit">
+                <LogOut />
+                Log out
+              </Button>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   );
