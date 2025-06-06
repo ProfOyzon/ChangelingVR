@@ -72,11 +72,11 @@ export default async function ActivityPage() {
                     <Icon className="w-5 h-5 text-orange-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium">
                       {formattedAction}
                       {log.ip_address && ` from IP ${log.ip_address}`}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       {getRelativeTime(new Date(log.timestamp))}
                     </p>
                   </div>
