@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { register } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
-import { register } from '../action';
 
 export default function RegisterPageClient({ ip }: { ip: string }) {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(register, {
@@ -23,7 +23,14 @@ export default function RegisterPageClient({ ip }: { ip: string }) {
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" name="email" type="email" autoComplete="email" required />
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              defaultValue={state.email}
+              required
+            />
           </div>
 
           <div className="grid gap-2">
@@ -33,13 +40,20 @@ export default function RegisterPageClient({ ip }: { ip: string }) {
               name="password"
               type="password"
               autoComplete="new-password"
+              defaultValue={state.password}
               required
             />
           </div>
 
           <div className="grid gap-2">
             <Label htmlFor="accessCode">Access Code</Label>
-            <Input id="accessCode" name="accessCode" type="password" required />
+            <Input
+              id="accessCode"
+              name="accessCode"
+              type="password"
+              defaultValue={state.accessCode}
+              required
+            />
           </div>
 
           {state.error && <FormMessage type="error" message={state.error} />}

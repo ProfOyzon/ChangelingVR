@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import type { Member } from '@/types';
+import type { Member } from '@/lib/db/schema';
 import { compare, hash } from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
 

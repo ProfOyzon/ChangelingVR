@@ -1,46 +1,46 @@
-import { FormMessage } from '@/components/form-message';
-import { SubmitButton } from '@/components/submit-button';
+import { Suspense } from 'react';
+import { headers } from 'next/headers';
+import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { encodedRedirect } from '@/lib/redirect';
-import { createClient } from '@/lib/supabase/server';
-import { updatePasswordAction } from '../actions';
-import { hashToken } from '../utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import { verifyToken } from '@/lib/auth/session';
+import UpdatePasswordPageClient from './page.client';
+
+function UpdatePasswordSkeleton() {
+  return (
+    <CardContent className="flex flex-col gap-6">
+      <div className="grid gap-2">
+        <Skeleton className="h-4 w-12" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+
+      <Skeleton className="h-10 w-full" />
+    </CardContent>
+  );
+}
 
 export default async function UpdatePasswordPage({
   searchParams,
 }: {
-  searchParams: Promise<{ token: string; error?: string }>;
+  searchParams: Promise<{ token: string }>;
 }) {
-  const { token, error } = await searchParams;
-  const hashedToken = hashToken(token);
+  const header = await headers();
+  const ip = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
 
-  // Get the reset token from the reset_tokens table
-  const supabase = createClient();
-  const { data: tokenData, error: tokenError } = await supabase
-    .from('reset_tokens')
-    .select('*')
-    .eq('token', hashedToken)
-    .single();
+  // If the token is not provided, return not found
+  const { token } = await searchParams;
+  if (!token) return notFound();
 
-  // Supabase error or no token found
-  if (tokenError || !tokenData) {
-    encodedRedirect(
-      'error',
-      '/auth/forgot-password',
-      'The password reset link is invalid. Please request a new one.',
-    );
+  // If the token is invalid, return not found
+  const tokenData = await verifyToken(token);
+  if (!tokenData || !tokenData.user || typeof tokenData.user.id !== 'string') {
+    return notFound();
   }
 
-  // Check if the token is expired
-  if (tokenData.expires_at < new Date()) {
-    encodedRedirect(
-      'error',
-      '/auth/forgot-password',
-      'The password reset link has expired. Please request a new one.',
-    );
-  }
+  // If the token has expired, return not found
+  if (new Date(tokenData.expires) < new Date()) return notFound();
+
+  // db check uuid
 
   return (
     <Card>
@@ -49,32 +49,9 @@ export default async function UpdatePasswordPage({
         <CardDescription>Please enter your new password below.</CardDescription>
       </CardHeader>
 
-      <CardContent>
-        <form action={updatePasswordAction}>
-          {/* Hidden inputs to pass to the action */}
-          <input type="hidden" name="token" value={token} />
-
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-2">
-              <Label htmlFor="password">New password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="New password"
-                minLength={6}
-                required
-              />
-            </div>
-
-            {error && <FormMessage type="error" message={error} />}
-
-            <SubmitButton pendingText="Saving..." className="w-full">
-              Save new password
-            </SubmitButton>
-          </div>
-        </form>
-      </CardContent>
+      <Suspense fallback={<UpdatePasswordSkeleton />}>
+        <UpdatePasswordPageClient ip={ip} token={token} />
+      </Suspense>
     </Card>
   );
 }

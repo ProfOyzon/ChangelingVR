@@ -1,6 +1,5 @@
 'use client';
 
-import { logout } from '@/app/(dev)/auth/action';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -17,6 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { logout } from '@/lib/auth/actions';
 import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut } from 'lucide-react';
 
 export function NavUser({ name, email, avatar }: { name: string; email: string; avatar: string }) {

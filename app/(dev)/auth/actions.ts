@@ -3,11 +3,16 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { PasswordResetEmail, WelcomeEmail } from '@/components/email';
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+  updatePasswordSchema,
+} from '@/lib/auth/validator';
+import { createClient } from '@/lib/db/supabase/server';
+import { sendMail } from '@/lib/nodemailer';
 import { encodedRedirect } from '@/lib/redirect';
-import { sendMail } from '@/lib/send-mail';
-import { createClient } from '@/lib/supabase/server';
 import { randomBytes, randomUUID } from 'node:crypto';
-import { forgotPasswordSchema, loginSchema, registerSchema, updatePasswordSchema } from './schemas';
 import { comparePassword, generateToken, hashPassword, hashToken, processError } from './utils';
 
 export async function registerAction(formData: FormData) {

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { getUserProfile } from '@/lib/db/queries';
-import type { Profile } from '@/types';
+import type { Profile } from '@/lib/db/schema';
 import { updateProfileAction } from '../actions';
 
 const TEAM_VALUES = [
@@ -61,7 +61,7 @@ export default async function ProfilePage({
             <Input
               id="display_name"
               name="display_name"
-              defaultValue={userData.display_name}
+              defaultValue={userData.display_name ?? ''}
               maxLength={50}
               placeholder="Your display name"
             />
@@ -72,7 +72,7 @@ export default async function ProfilePage({
             <Textarea
               id="bio"
               name="bio"
-              defaultValue={userData.bio}
+              defaultValue={userData.bio ?? ''}
               maxLength={500}
               placeholder="Tell us about yourself... (500 characters max)"
               className="h-20 resize-none"
@@ -155,7 +155,7 @@ export default async function ProfilePage({
         </div>
 
         {/* Social Links */}
-        <div className="flex flex-col gap-4 md:flex-row">
+        {/* <div className="flex flex-col gap-4 md:flex-row">
           <div className="flex flex-1 flex-col gap-4">
             <div className="flex flex-col gap-1">
               <Label htmlFor="link_email">Email Link</Label>
@@ -203,7 +203,7 @@ export default async function ProfilePage({
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {error && <FormMessage type="error" message={error} />}
 

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/button';
 import { fetchSupabaseImage } from '@/lib/api';
-import type { Character } from '@/types';
+import type { Character } from '@/lib/db/schema';
 import { motion } from 'motion/react';
 
 const CHARACTER_ATTRIBUTES = [
@@ -34,7 +34,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
             <Image
               src={fetchSupabaseImage({
                 container: 'characters',
-                path: character.icon_url,
+                path: character.icon_url ?? '',
               })}
               alt={`${character.name}'s portrait`}
               width={320}
@@ -50,7 +50,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
                   <Image
                     src={fetchSupabaseImage({
                       container: 'characters',
-                      path: prop,
+                      path: prop ?? '',
                     })}
                     alt={prop}
                     width={72}

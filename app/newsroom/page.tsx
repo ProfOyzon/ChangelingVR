@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getCachedPosts } from '@/lib/cache';
-import type { Post } from '@/types';
 
 export default async function Posts() {
-  const { data } = (await getCachedPosts()) as { data: Post[] };
+  const { data } = await getCachedPosts();
   if (!data) return notFound();
 
   // Get the first 3 posts as featured posts

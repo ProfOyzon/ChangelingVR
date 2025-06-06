@@ -3,8 +3,15 @@
 import { memo, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { useCharacterRotation } from '@/hooks/useCharacterRotation';
+import type { Character } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
-import type { Character, CharacterItemProps } from '@/types';
+
+type CharacterItemProps = {
+  character: Character;
+  index: number;
+  isSelected: boolean;
+  onSelect: (index: number) => void;
+};
 
 // Components
 const CharacterItem = memo(function CharacterItem({
@@ -28,7 +35,7 @@ const CharacterItem = memo(function CharacterItem({
       )}
     >
       <Image
-        src={character.icon_url}
+        src={character.icon_url ?? ''}
         alt={character.name}
         width={48}
         height={48}

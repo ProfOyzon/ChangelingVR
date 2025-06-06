@@ -12,7 +12,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import type { Profile } from '@/types';
+import type { Profile } from '@/lib/db/schema';
 import { Home, LifeBuoy, Settings, User } from 'lucide-react';
 import { NavUser } from './user-nav';
 

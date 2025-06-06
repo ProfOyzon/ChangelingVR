@@ -1,17 +1,14 @@
-'use client';
-
 import { useActionState } from 'react';
-import Link from 'next/link';
 import { FormMessage } from '@/components/form-message';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { forgotPassword } from '@/lib/auth/actions';
+import { updatePassword } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
 
-export default function ForgotPasswordPageClient({ ip }: { ip: string }) {
-  const [state, formAction, isPending] = useActionState<ActionState, FormData>(forgotPassword, {
+export default function UpdatePasswordPageClient({ ip, token }: { ip: string; token: string }) {
+  const [state, formAction, isPending] = useActionState<ActionState, FormData>(updatePassword, {
     error: '',
   });
 
@@ -19,16 +16,17 @@ export default function ForgotPasswordPageClient({ ip }: { ip: string }) {
     <CardContent>
       <form action={formAction}>
         <input type="hidden" name="ip" value={ip} />
+        <input type="hidden" name="token" value={token} />
 
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="password">New password</Label>
             <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              defaultValue={state.email}
+              id="password"
+              name="password"
+              type="password"
+              defaultValue={state.password}
+              minLength={6}
               required
             />
           </div>
@@ -36,15 +34,8 @@ export default function ForgotPasswordPageClient({ ip }: { ip: string }) {
           {state?.error && <FormMessage type="error" message={state.error} />}
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Sending...' : 'Send reset email'}
+            {isPending ? 'Saving...' : 'Save new password'}
           </Button>
-        </div>
-
-        <div className="mt-4 text-center text-sm">
-          Return to{' '}
-          <Link href="/auth/login" className="underline underline-offset-4">
-            Login
-          </Link>
         </div>
       </form>
     </CardContent>

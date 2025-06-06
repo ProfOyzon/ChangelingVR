@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { getUserProfile } from '@/lib/db/queries';
-import type { Profile } from '@/types';
+import type { Profile } from '@/lib/db/schema';
 import { AppSidebar } from '../_components/app-sidebar';
 import { ModeToggle } from '../_components/mode-toggle';
 

@@ -2,57 +2,59 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { WelcomeEmail } from '@/components/email';
+import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
+import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
   forgotPasswordSchema,
   loginSchema,
   registerSchema,
   updatePasswordSchema,
-} from '@/app/(dev)/auth/schemas';
-import { WelcomeEmail } from '@/components/email';
-import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
-import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
+} from '@/lib/auth/validator';
+import { db } from '@/lib/db';
 import { getUserProfile } from '@/lib/db/queries';
-import { ActivityType } from '@/lib/db/schema';
-import { sendMail } from '@/lib/send-mail';
-import { createClient } from '@/lib/supabase/server';
-import type { Member } from '@/types';
+import {
+  ActivityType,
+  type NewActivityLog,
+  type NewMember,
+  type NewProfile,
+  type Profile,
+  activityLogs,
+  members,
+  profiles,
+} from '@/lib/db/schema';
+import { sendMail } from '@/lib/nodemailer';
+import { eq } from 'drizzle-orm';
 
 async function logActivity(userId: string, type: ActivityType, ipAddress?: string) {
   if (!userId) return;
   if (ipAddress === '::1') return;
 
-  const newActivity = {
+  const newActivity: NewActivityLog = {
     uuid: userId,
     action: type,
     ip_address: ipAddress || '',
   };
 
-  const supabase = createClient();
-  await supabase.from('activity_logs').insert(newActivity);
+  await db.insert(activityLogs).values(newActivity);
 }
 
 export const login = validatedAction(loginSchema, async (data, formData) => {
   const { email, password, ip } = data;
 
   // Fetch member by email
-  const supabase = createClient();
-  const { data: member, error: memberError } = await supabase
-    .from('members')
-    .select('*')
-    .eq('email', email)
-    .single();
-
-  if (!member || memberError) {
+  const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
+  if (!member || member.length === 0) {
     return { error: 'Invalid email or password.', email, password };
   }
 
   // Compare password
-  const isPasswordValid = await comparePassword(password, member.password);
+  const isPasswordValid = await comparePassword(password, member[0].password);
   if (!isPasswordValid) {
     return { error: 'Invalid email or password.', email, password };
   }
 
-  await Promise.all([setSession(member), logActivity(member.uuid, ActivityType.SIGN_IN, ip)]);
+  await Promise.all([setSession(member[0]), logActivity(member[0].uuid, ActivityType.SIGN_IN, ip)]);
 
   // Redirect to dashboard
   redirect('/dashboard');
@@ -60,50 +62,36 @@ export const login = validatedAction(loginSchema, async (data, formData) => {
 
 export const register = validatedAction(registerSchema, async (data, formData) => {
   const { email, password, ip } = data;
-  const supabase = createClient();
 
-  // Check if user already exists
-  const { data: member, error: memberError } = await supabase
-    .from('members')
-    .select('uuid')
-    .eq('email', email)
-    .single();
-
-  if (member || memberError) {
+  const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
+  if (member.length > 0) {
     return { error: 'Failed to create user.', email, password };
   }
 
   // Create new member
   const hashedPassword = await hashPassword(password);
-  const newMember = {
+  const newMember: NewMember = {
     email,
     password: hashedPassword,
+    created_at: new Date(),
   };
 
   // Create new member in database
-  const { data: newMemberData, error: newMemberError } = await supabase
-    .from('members')
-    .insert(newMember)
-    .select();
-
-  if (!newMemberData || !newMemberData[0] || newMemberError) {
+  const newMemberData = await db.insert(members).values(newMember).returning();
+  if (!newMemberData || newMemberData.length === 0) {
     return { error: 'Failed to create user.', email, password };
   }
 
   // Create new profile
-  const newProfile = {
+  const newProfile: NewProfile = {
     uuid: newMemberData[0].uuid,
     username: email.split('@')[0] + '-' + newMemberData[0].uuid.slice(0, 4),
     terms: [new Date().getFullYear()],
   };
 
   // Create new profile in database
-  const { data: newProfileData, error: newProfileError } = await supabase
-    .from('profiles')
-    .insert(newProfile)
-    .select();
-
-  if (!newProfileData || newProfileError) {
+  const newProfileData = await db.insert(profiles).values(newProfile).returning();
+  if (!newProfileData || newProfileData.length === 0) {
     return { error: 'Failed to create profile.', email, password };
   }
 
@@ -123,7 +111,7 @@ export const register = validatedAction(registerSchema, async (data, formData) =
 });
 
 export async function logout() {
-  const user = (await getUserProfile()) as Member;
+  const user = (await getUserProfile()) as Profile;
   await logActivity(user.uuid, ActivityType.SIGN_OUT);
   (await cookies()).delete('session');
 }

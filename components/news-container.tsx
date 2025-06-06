@@ -2,7 +2,7 @@ import { FaShare } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
 import { fetchSupabaseImage } from '../lib/api';
-import type { Post } from '../types/posts';
+import type { Post } from '../lib/db/schema';
 
 export function NewsContainer({ news }: { news: Post }) {
   return (

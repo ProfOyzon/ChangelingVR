@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { db } from '@/lib/db';
+import { cron } from '@/lib/db/schema';
 
 // This route is used to ping Supabase from Vercel
 // Supabase free tier requires activity every week
@@ -13,16 +14,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const supabase = createClient();
-
   try {
     // Ping Supabase to check if the connection is working
     // cron table contains 1 row of dummy data
-    const { data, error } = await supabase.from('cron').select('*');
-
-    if (error) {
-      return NextResponse.json({ error: 'Failed to fetch cron' }, { status: 500 });
-    }
+    const data = await db.select().from(cron);
 
     return NextResponse.json(data, { status: 200 });
   } catch {

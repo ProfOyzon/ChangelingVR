@@ -1,6 +1,6 @@
 import { getUserProfile } from '@/lib/db/queries';
-import type { Member } from '@/types';
 import { z } from 'zod/v4';
+import type { Profile } from '../db/schema';
 
 function processError(error: z.ZodError) {
   return z
@@ -38,7 +38,7 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
 type ValidatedActionWithUserFunction<S extends z.ZodType<any, any>, T> = (
   data: z.infer<S>,
   formData: FormData,
-  user: Member,
+  user: Profile,
 ) => Promise<T>;
 
 export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(

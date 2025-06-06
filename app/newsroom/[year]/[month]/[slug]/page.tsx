@@ -5,10 +5,10 @@ import { notFound } from 'next/navigation';
 import { findPost } from '@/app/newsroom/find-post';
 import { CopyLink } from '@/components/copy-link';
 import { getCachedPosts } from '@/lib/cache';
-import type { Post } from '@/types';
+import type { Post } from '@/lib/db/schema';
 
 export async function generateStaticParams() {
-  const { data } = (await getCachedPosts()) as { data: Post[] };
+  const { data } = await getCachedPosts();
   // Only prebuild the 20 most recent posts
   return (data ?? []).slice(0, 20).map((p) => ({
     year: p.date.split('-')[0],
@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ year: string; month: string; slug: string }>;
 }): Promise<Metadata> {
   const { year, month, slug } = await params;
-  const { data } = (await getCachedPosts()) as { data: Post[] };
+  const { data } = await getCachedPosts();
 
   const post = findPost({ data, year, month, slug });
   if (!post) return notFound();
@@ -34,7 +34,7 @@ export async function generateMetadata({
     authors: post.author?.map((a: string) => ({ name: a })) ?? [],
     openGraph: {
       title: post.title,
-      description: post?.excerpt,
+      description: post?.excerpt ?? '',
       images: post?.cover_image
         ? [
             {
@@ -45,7 +45,7 @@ export async function generateMetadata({
     },
     twitter: {
       title: post.title,
-      description: post?.excerpt,
+      description: post?.excerpt ?? '',
       images: post?.cover_image
         ? [
             {
@@ -63,8 +63,7 @@ export default async function Post({
   params: Promise<{ year: string; month: string; slug: string }>;
 }) {
   const { year, month, slug } = await params;
-  const { data } = (await getCachedPosts()) as { data: Post[] };
-
+  const { data } = await getCachedPosts();
   // Get post and import the MDX file
   const post = findPost({ data, year, month, slug });
   if (!post) return notFound();

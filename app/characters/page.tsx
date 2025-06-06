@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { fetchSupabaseImage } from '@/lib/api';
 import { getCachedCharacters } from '@/lib/cache';
+import type { Character } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
-import type { Character } from '@/types';
 import { CharacterClientPage } from './page.client';
 
 // Metadata
@@ -32,7 +32,7 @@ function CharacterNavigation({ characters }: { characters: Character[] }) {
           <Image
             src={fetchSupabaseImage({
               container: 'characters',
-              path: character.icon_url,
+              path: character.icon_url ?? '',
             })}
             alt={`${character.name}'s icon`}
             width={40}

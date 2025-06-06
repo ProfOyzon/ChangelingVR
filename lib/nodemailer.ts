@@ -1,7 +1,8 @@
+import { render } from '@react-email/components';
 import { createTransport } from 'nodemailer';
 
 // Create a transporter for the email service
-export const transporter = createTransport({
+const transporter = createTransport({
   host: 'smtp.dreamhost.com',
   port: 465,
   secure: true,
@@ -10,3 +11,29 @@ export const transporter = createTransport({
     pass: process.env.NODEMAILER_PASSWORD,
   },
 });
+
+export async function sendMail({
+  reciever,
+  subject,
+  plainText,
+  email,
+}: {
+  reciever: string;
+  subject: string;
+  plainText: string;
+  email: React.ReactNode;
+}): Promise<{ success: boolean; message: string }> {
+  try {
+    await transporter.sendMail({
+      from: 'support@changelingvr.com',
+      to: reciever,
+      subject,
+      text: plainText,
+      html: await render(email),
+    });
+
+    return { success: true, message: 'Email sent successfully' };
+  } catch {
+    return { success: false, message: 'Failed to send email' };
+  }
+}

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getUserProfile } from '@/lib/db/queries';
-import type { Profile } from '@/types';
+import type { Profile } from '@/lib/db/schema';
 
 export default async function AuthLayout({
   children,

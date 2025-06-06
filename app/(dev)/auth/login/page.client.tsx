@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { login } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
-import { login } from '../action';
 
 export default function LoginPageClient({ ip }: { ip: string }) {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(login, { error: '' });

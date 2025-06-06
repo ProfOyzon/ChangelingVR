@@ -2,8 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/db/supabase/server';
 import { encodedRedirect } from '@/lib/redirect';
-import { createClient } from '@/lib/supabase/server';
 import { verify } from 'jsonwebtoken';
 import { legacyUserSchema } from './schemas';
 

@@ -1,74 +1,38 @@
-import Link from 'next/link';
-import { FormMessage } from '@/components/form-message';
-import { SubmitButton } from '@/components/submit-button';
+import { Suspense } from 'react';
+import { headers } from 'next/headers';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { forgotPasswordAction } from '../actions';
+import { Skeleton } from '@/components/ui/skeleton';
+import ForgotPasswordPageClient from './page.client';
 
-export default async function ForgotPasswordPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ success?: string; error?: string }>;
-}) {
-  const { success, error } = await searchParams;
+function ForgotPasswordSkeleton() {
+  return (
+    <CardContent className="flex flex-col gap-6">
+      <div className="grid gap-2">
+        <Skeleton className="h-4 w-12" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+
+      <Skeleton className="h-10 w-full" />
+    </CardContent>
+  );
+}
+
+export default async function ForgotPasswordPage() {
+  const header = await headers();
+  const ip = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
 
   return (
     <Card>
-      {success ? (
-        <>
-          <CardHeader>
-            <CardTitle className="text-2xl">Check Your Email</CardTitle>
-            <CardDescription>Password reset instructions sent</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              If you registered using your email and password, you will receive a password reset
-              email.
-            </p>
-          </CardContent>
-        </>
-      ) : (
-        <>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-            <CardDescription>
-              Type in your email and we&apos;ll send you a link to reset your password
-            </CardDescription>
-          </CardHeader>
+      <CardHeader>
+        <CardTitle className="text-2xl">Reset Your Password</CardTitle>
+        <CardDescription>
+          Type in your email and we&apos;ll send you a link to reset your password
+        </CardDescription>
+      </CardHeader>
 
-          <CardContent>
-            <form action={forgotPasswordAction}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="abc1234@rit.edu"
-                    required
-                  />
-                </div>
-
-                {error && <FormMessage type="error" message={error} />}
-
-                <SubmitButton pendingText="Sending..." className="w-full">
-                  Send reset email
-                </SubmitButton>
-              </div>
-
-              <div className="mt-4 text-center text-sm">
-                Return to{' '}
-                <Link href="/auth/login" className="underline underline-offset-4">
-                  Login
-                </Link>
-              </div>
-            </form>
-          </CardContent>
-        </>
-      )}
+      <Suspense fallback={<ForgotPasswordSkeleton />}>
+        <ForgotPasswordPageClient ip={ip} />
+      </Suspense>
     </Card>
   );
 }
