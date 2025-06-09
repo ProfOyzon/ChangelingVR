@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { LogoutButton } from '@/app/(client)/_components/logout-button';
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Activity, Eye, Home, LogOut, Settings, User } from 'lucide-react';
+import { Activity, Eye, Home, Settings, User } from 'lucide-react';
 
 export function AppSidebar() {
   return (
@@ -88,10 +88,7 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton tooltip="Profile" asChild>
-              <Button type="submit">
-                <LogOut />
-                <span>Log out</span>
-              </Button>
+              <LogoutButton />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
