@@ -62,18 +62,13 @@ export async function getUserProfile() {
   return profile[0];
 }
 
-export async function getUserProfileWithLinks() {
-  const profile = await getUserProfile();
-  if (!profile) {
-    return null;
+export async function getProfileLinks() {
+  const user = await getUserProfile();
+  if (!user) {
+    throw new Error('User not authenticated');
   }
 
-  const links = await db.select().from(profileLinks).where(eq(profileLinks.uuid, profile.uuid));
-
-  return {
-    ...profile,
-    links,
-  };
+  return await db.select().from(profileLinks).where(eq(profileLinks.uuid, user.uuid));
 }
 
 export async function getActivityLogs() {
@@ -98,4 +93,8 @@ export async function getActivityLogs() {
 
 export async function getResetToken(uuid: string) {
   return await db.select().from(resetTokens).where(eq(resetTokens.uuid, uuid)).limit(1);
+}
+
+export async function getProfileByUsername(username: string) {
+  return await db.select().from(profiles).where(eq(profiles.username, username)).limit(1);
 }

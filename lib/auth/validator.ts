@@ -1,7 +1,6 @@
 import { z } from 'zod/v4';
 
 export const registerSchema = z.strictObject({
-  ip: z.string(),
   email: z.email().trim().endsWith('@rit.edu', { error: 'Email must be a RIT email (@rit.edu)' }),
   password: z
     .string()
@@ -16,7 +15,6 @@ export const registerSchema = z.strictObject({
 });
 
 export const loginSchema = z.object({
-  ip: z.string(),
   email: z.email().trim(),
   password: z.string(),
 });

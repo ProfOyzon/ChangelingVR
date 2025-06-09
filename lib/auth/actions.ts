@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { WelcomeEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
@@ -26,7 +27,11 @@ import {
 import { sendMail } from '@/lib/nodemailer';
 import { eq } from 'drizzle-orm';
 
-async function logActivity(userId: string, type: ActivityType, ipAddress?: string) {
+async function logActivity(userId: string, type: ActivityType) {
+  const header = await headers();
+  const ipAddress = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
+  const userAgent = header.get('user-agent') ?? 'unknown';
+
   if (!userId) return;
   if (ipAddress === '::1') return;
 
@@ -34,13 +39,14 @@ async function logActivity(userId: string, type: ActivityType, ipAddress?: strin
     uuid: userId,
     action: type,
     ip_address: ipAddress || '',
+    user_agent: userAgent,
   };
 
   await db.insert(activityLogs).values(newActivity);
 }
 
 export const login = validatedAction(loginSchema, async (data, formData) => {
-  const { email, password, ip } = data;
+  const { email, password } = data;
 
   // Fetch member by email
   const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
@@ -54,14 +60,14 @@ export const login = validatedAction(loginSchema, async (data, formData) => {
     return { error: 'Invalid email or password.', email, password };
   }
 
-  await Promise.all([setSession(member[0]), logActivity(member[0].uuid, ActivityType.SIGN_IN, ip)]);
+  await Promise.all([setSession(member[0]), logActivity(member[0].uuid, ActivityType.SIGN_IN)]);
 
   // Redirect to dashboard
   redirect('/dashboard');
 });
 
 export const register = validatedAction(registerSchema, async (data, formData) => {
-  const { email, password, ip } = data;
+  const { email, password } = data;
 
   const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
   if (member.length > 0) {
@@ -97,7 +103,7 @@ export const register = validatedAction(registerSchema, async (data, formData) =
 
   await Promise.all([
     setSession(newMemberData[0]),
-    logActivity(newMemberData[0].uuid, ActivityType.SIGN_UP, ip),
+    logActivity(newMemberData[0].uuid, ActivityType.SIGN_UP),
     sendMail({
       reciever: email,
       subject: 'Welcome to Changeling VR',

@@ -21,6 +21,7 @@ export const activityLogs = pgTable('activity_logs', {
   action: text('action').notNull(),
   timestamp: timestamp('timestamp', { withTimezone: true }).notNull().defaultNow(),
   ip_address: text('ip_address'),
+  user_agent: text('user_agent'),
 });
 
 export const characters = pgTable('characters', {

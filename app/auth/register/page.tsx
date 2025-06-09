@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import RegisterPageClient from './page.client';
@@ -28,9 +27,6 @@ function RegisterSkeleton() {
 }
 
 export default async function RegisterPage() {
-  const header = await headers();
-  const ip = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
-
   return (
     <Card>
       <CardHeader>
@@ -38,7 +34,7 @@ export default async function RegisterPage() {
         <CardDescription>Create a new account</CardDescription>
       </CardHeader>
       <Suspense fallback={<RegisterSkeleton />}>
-        <RegisterPageClient ip={ip} />
+        <RegisterPageClient />
       </Suspense>
     </Card>
   );

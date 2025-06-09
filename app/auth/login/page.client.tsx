@@ -7,19 +7,15 @@ import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { register } from '@/lib/auth/actions';
+import { login } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
 
-export default function RegisterPageClient({ ip }: { ip: string }) {
-  const [state, formAction, pending] = useActionState<ActionState, FormData>(register, {
-    error: '',
-  });
+export default function LoginPageClient() {
+  const [state, formAction, pending] = useActionState<ActionState, FormData>(login, { error: '' });
 
   return (
     <CardContent>
       <form action={formAction}>
-        <input type="hidden" name="ip" value={ip} />
-
         <div className="flex flex-col gap-6">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
@@ -34,39 +30,36 @@ export default function RegisterPageClient({ ip }: { ip: string }) {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex items-center">
+              <Label htmlFor="password">Password</Label>
+              <Link
+                href="/auth/forgot-password"
+                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+              >
+                Forgot your password?
+              </Link>
+            </div>
             <Input
               id="password"
               name="password"
               type="password"
-              autoComplete="new-password"
+              autoComplete="current-password"
               defaultValue={state.password}
               required
             />
           </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="accessCode">Access Code</Label>
-            <Input
-              id="accessCode"
-              name="accessCode"
-              type="password"
-              defaultValue={state.accessCode}
-              required
-            />
-          </div>
-
-          {state.error && <FormMessage type="error" message={state.error} />}
+          {state?.error && <FormMessage type="error" message={state.error} />}
 
           <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? 'Creating an account...' : 'Sign up'}
+            {pending ? 'Logging in...' : 'Login'}
           </Button>
         </div>
 
         <div className="mt-4 text-center text-sm">
-          Already have an account?{' '}
-          <Link href="/auth/login" className="underline underline-offset-4">
-            Login
+          Don&apos;t have an account?{' '}
+          <Link href="/auth/register" className="underline underline-offset-4">
+            Sign up
           </Link>
         </div>
       </form>

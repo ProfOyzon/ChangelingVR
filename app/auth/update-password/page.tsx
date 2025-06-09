@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -25,9 +24,6 @@ export default async function UpdatePasswordPage({
 }: {
   searchParams: Promise<{ token: string }>;
 }) {
-  const header = await headers();
-  const ip = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
-
   // If the token is not provided, return not found
   const { token } = await searchParams;
   if (!token) return notFound();
@@ -53,7 +49,7 @@ export default async function UpdatePasswordPage({
       </CardHeader>
 
       <Suspense fallback={<UpdatePasswordSkeleton />}>
-        <UpdatePasswordPageClient ip={ip} token={token} />
+        <UpdatePasswordPageClient token={token} />
       </Suspense>
     </Card>
   );
