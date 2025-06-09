@@ -2,8 +2,7 @@
 
 import Image from 'next/image';
 import { Button } from '@/components/button';
-import { fetchSupabaseImage } from '@/lib/api';
-import type { Character } from '@/lib/db/schema';
+import type { Character } from '@/types';
 import { motion } from 'motion/react';
 
 const CHARACTER_ATTRIBUTES = [
@@ -11,7 +10,7 @@ const CHARACTER_ATTRIBUTES = [
   { key: 'height', label: 'Height' },
   { key: 'nationality', label: 'Nationality' },
   { key: 'personality', label: 'Personality' },
-  { key: 'hobbies', label: 'Hobbies' },
+  { key: 'hobby', label: 'Hobbies' },
 ] as const;
 
 export function CharacterClientPage({ characters }: { characters: Character[] }) {
@@ -19,8 +18,8 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
     <>
       {characters.map((character) => (
         <section
-          id={character.id}
-          key={character.id}
+          id={character.role.toLowerCase()}
+          key={character.name}
           className="flex h-svh w-full snap-center flex-col items-center justify-end p-6 md:flex-row md:justify-center"
         >
           {/* Portrait */}
@@ -32,10 +31,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
             viewport={{ once: false, amount: 0.3 }}
           >
             <Image
-              src={fetchSupabaseImage({
-                container: 'characters',
-                path: character.icon_url ?? '',
-              })}
+              src={`/media/characters/${character.image}`}
               alt={`${character.name}'s portrait`}
               width={320}
               height={320}
@@ -43,15 +39,12 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
             />
           </motion.div>
 
-          {Array.isArray(character.props) && character.props.length > 0 && (
+          {Array.isArray(character.prop) && character.prop.length > 0 && (
             <div className="flex w-full items-center justify-center md:hidden">
-              {character.props.map((prop) => (
+              {character.prop.map((prop: string) => (
                 <motion.div key={prop} className="flex items-center justify-center">
                   <Image
-                    src={fetchSupabaseImage({
-                      container: 'characters',
-                      path: prop ?? '',
-                    })}
+                    src={`/media/characters/${prop}`}
                     alt={prop}
                     width={72}
                     height={72}
@@ -83,11 +76,11 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
               </ul>
 
               <p className="mb-6 text-sm leading-relaxed text-gray-200 md:text-base">
-                {character.detail}
+                {character.bio}
               </p>
 
               <Button
-                href={`/characters/${character.id}`}
+                href={`/characters/${character.name}`}
                 aria-label={`Enter ${character.name}'s experience`}
                 className="mt-2 w-full"
               >

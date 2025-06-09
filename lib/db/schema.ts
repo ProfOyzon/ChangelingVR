@@ -31,20 +31,6 @@ export const activityLogs = pgTable('activity_logs', {
   zip: text('zip'),
 });
 
-export const characters = pgTable('characters', {
-  id: text('id').notNull(),
-  name: text('name').notNull(),
-  role: text('role'),
-  age: text('age'),
-  height: text('height'),
-  nationality: text('nationality'),
-  detail: text('detail'),
-  icon_url: text('icon_url'),
-  personality: text('personality').array().default([]),
-  hobbies: text('hobbies').array().default([]),
-  props: text('props').array().default([]),
-});
-
 export const cron = pgTable('cron', {
   id: bigint('id', { mode: 'number' }).notNull(),
   created_at: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -139,7 +125,6 @@ export const profileLinkRelations = relations(profileLinks, ({ one }) => ({
 
 export type Post = typeof posts.$inferSelect;
 export type Cron = typeof cron.$inferSelect;
-export type Character = typeof characters.$inferSelect;
 
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;

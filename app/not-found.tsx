@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { BackButton } from '@/components/back-button';
+import { Button } from '@/components/button';
 
 export const metadata: Metadata = {
   title: '404 - Not Found',
@@ -18,7 +18,7 @@ export default function NotFound() {
         </p>
 
         <div className="flex items-center justify-center">
-          <BackButton />
+          <Button href="/">Return to home</Button>
         </div>
       </section>
     </div>

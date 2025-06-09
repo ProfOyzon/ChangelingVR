@@ -6,13 +6,12 @@ import { NewsSkeleton } from '@/app/(www)/news-skeleton';
 import { PromoSection } from '@/app/(www)/promo-section';
 import { Button } from '@/components/button';
 import { NewsContainer } from '@/components/news-container';
-import { getCachedCharacters, getCachedPosts } from '@/lib/cache';
+import { getCachedPosts } from '@/lib/cache';
 import aurelia from '@/public/aurelia.png';
 
 // Main page component with optimized structure
 export default async function Home() {
   const { data: news } = await getCachedPosts();
-  const { data: characters } = await getCachedCharacters();
 
   return (
     <>
@@ -140,7 +139,7 @@ export default async function Home() {
             <h3 className="text-2xl font-semibold uppercase md:text-3xl">The Cast</h3>
 
             <Suspense fallback={<CharacterSkeleton />}>
-              <Characters characters={characters ?? []} />
+              <Characters />
             </Suspense>
 
             <Button

@@ -1,0 +1,20 @@
+[
+  {
+    "title": "The Touch of Memory",
+    "description": "Explore the Summers-Monelo household and reveal their secrets with a touch. All their memories, hopes, fears, and dreams will be yours to discover.",
+    "image": "/media/press/memory_touch.png",
+    "alt": "The Touch of Memory screenshot"
+  },
+  {
+    "title": "A Mother's Fear",
+    "description": "If those we love can disappear, what will you give to hold onto them? And with the presence of magic, nothing is certain.",
+    "image": "/media/press/angela_fear.png",
+    "alt": "A Mother's Fear screenshot"
+  },
+  {
+    "title": "Dougie's Drawings",
+    "description": "One page to the next, the drawings come alive.",
+    "image": "/media/press/dougie_doodle.png",
+    "alt": "Dougie's Drawings screenshot"
+  }
+]

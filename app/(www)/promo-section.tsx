@@ -1,28 +1,8 @@
 import Image from 'next/image';
+import promosData from '@/lib/data/promos.json';
+import type { Promo } from '@/types';
 
-// Promo items
-const promoItems = [
-  {
-    title: 'The Touch of Memory',
-    description:
-      'Explore the Summers-Monelo household and reveal their secrets with a touch. All their memories, hopes, fears, and dreams will be yours to discover.',
-    image: '/media/press/memory_touch.png',
-    alt: 'The Touch of Memory screenshot',
-  },
-  {
-    title: "A Mother's Fear",
-    description:
-      'If those we love can disappear, what will you give to hold onto them? And with the presence of magic, nothing is certain.',
-    image: '/media/press/angela_fear.png',
-    alt: "A Mother's Fear screenshot",
-  },
-  {
-    title: "Dougie's Drawings",
-    description: 'One page to the next, the drawings come alive.',
-    image: '/media/press/dougie_doodle.png',
-    alt: "Dougie's Drawings screenshot",
-  },
-];
+const promos = promosData as Promo[];
 
 export const PromoSection = () => {
   return (
@@ -35,7 +15,7 @@ export const PromoSection = () => {
 
         {/* Promo items */}
         <div className="motion-safe:animate-fade-in flex flex-col justify-evenly gap-6 md:flex-row">
-          {promoItems.map((item) => (
+          {promos.map((item) => (
             <div key={item.title} className="flex flex-1 flex-col items-center rounded">
               <div className="w-full mask-b-from-50%">
                 <Image

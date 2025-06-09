@@ -1,10 +1,12 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import { useCharacterRotation } from '@/hooks/useCharacterRotation';
-import type { Character } from '@/lib/db/schema';
+import charactersData from '@/lib/data/characters.json';
 import { cn } from '@/lib/utils';
+import type { Character } from '@/types';
+
+const characters = charactersData as Character[];
 
 type CharacterItemProps = {
   character: Character;
@@ -13,20 +15,10 @@ type CharacterItemProps = {
   onSelect: (index: number) => void;
 };
 
-// Components
-const CharacterItem = memo(function CharacterItem({
-  character,
-  index,
-  isSelected,
-  onSelect,
-}: CharacterItemProps) {
-  const handleClick = useCallback(() => {
-    onSelect(index);
-  }, [index, onSelect]);
-
+function CharacterItem({ character, index, isSelected, onSelect }: CharacterItemProps) {
   return (
     <div
-      onClick={handleClick}
+      onClick={() => onSelect(index)}
       role="button"
       aria-label={`Select ${character.name}`}
       className={cn(
@@ -35,7 +27,7 @@ const CharacterItem = memo(function CharacterItem({
       )}
     >
       <Image
-        src={character.icon_url ?? ''}
+        src={`/media/characters/${character.image}`}
         alt={character.name}
         width={48}
         height={48}
@@ -43,45 +35,29 @@ const CharacterItem = memo(function CharacterItem({
       />
     </div>
   );
-});
+}
 
-// Main Component
-export const Characters = memo(function Characters({ characters }: { characters: Character[] }) {
+export function Characters() {
   const { selectedCharacter, setSelectedCharacter } = useCharacterRotation(characters);
+  const character = characters[selectedCharacter];
 
-  // Memoized Values
-  const characterList = useMemo(
-    () =>
-      characters.map((character, index) => (
-        <CharacterItem
-          key={character.name}
-          character={character}
-          index={index}
-          isSelected={selectedCharacter === index}
-          onSelect={setSelectedCharacter}
-        />
-      )),
-    [characters, selectedCharacter, setSelectedCharacter],
-  );
-
-  const selectedCharacterDetails = useMemo(() => {
-    const character = characters[selectedCharacter];
-    if (!character) return { name: 'Loading...', detail: 'No details available' };
-
-    return {
-      name: character.name,
-      detail: character.detail ? character.detail : 'No details available',
-    };
-  }, [characters, selectedCharacter]);
-
-  // Render
   return (
     <div className="mb-4">
-      <div className="my-4 flex flex-row flex-wrap gap-3 md:gap-4">{characterList}</div>
+      <div className="my-4 flex flex-row flex-wrap gap-3 md:gap-4">
+        {characters.map((character, index) => (
+          <CharacterItem
+            key={character.name}
+            character={character}
+            index={index}
+            isSelected={selectedCharacter === index}
+            onSelect={setSelectedCharacter}
+          />
+        ))}
+      </div>
       <div className="transition-opacity duration-300">
-        <h3 className="mb-2 text-2xl font-bold">{selectedCharacterDetails.name}</h3>
-        <p className="line-clamp-2 text-base">{selectedCharacterDetails.detail}</p>
+        <h3 className="mb-2 text-2xl font-bold">{character?.name || 'Loading...'}</h3>
+        <p className="line-clamp-2 text-base">{character?.bio || 'No details available'}</p>
       </div>
     </div>
   );
-});
+}

@@ -59,7 +59,7 @@ async function logActivity(userId: string, type: ActivityType) {
     const [member, profile, activity] = await Promise.all([
       db.select({ email: members.email }).from(members).where(eq(members.uuid, userId)),
       db.select({ username: profiles.username }).from(profiles).where(eq(profiles.uuid, userId)),
-      db.select().from(activityLogs).where(eq(activityLogs.uuid, userId)),
+      db.select().from(activityLogs).where(eq(activityLogs.uuid, userId)).limit(10),
     ]);
 
     // Check if this is a new location

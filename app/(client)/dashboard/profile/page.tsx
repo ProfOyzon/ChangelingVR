@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { FormMessage } from '@/components/form-message';
 import { Button } from '@/components/ui/button';
-import { CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -50,112 +49,112 @@ export default async function ProfilePage({
   if (!userData) redirect('/auth/login');
 
   return (
-    <CardContent>
-      <form action={updateProfileAction} className="space-y-6">
-        <input type="hidden" name="id" value={userData.username} />
+    <form action={updateProfileAction} className="space-y-6">
+      <input type="hidden" name="id" value={userData.username} />
 
-        {/* Profile Header */}
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="display_name">Display Name</Label>
-            <Input
-              id="display_name"
-              name="display_name"
-              defaultValue={userData.display_name ?? ''}
-              maxLength={50}
-              placeholder="Your display name"
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <Label htmlFor="bio">About Me</Label>
-            <Textarea
-              id="bio"
-              name="bio"
-              defaultValue={userData.bio ?? ''}
-              maxLength={500}
-              placeholder="Tell us about yourself... (500 characters max)"
-              className="h-20 resize-none"
-            />
-          </div>
+      {/* Profile Header */}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="display_name">Display Name</Label>
+          <Input
+            id="display_name"
+            name="display_name"
+            defaultValue={userData.display_name ?? ''}
+            maxLength={50}
+            placeholder="Your display name"
+          />
         </div>
 
-        {/* Terms, Teams & Roles */}
-        <div className="flex flex-col gap-6 md:flex-row">
-          <div className="flex-1 space-y-1">
-            <Label>Terms</Label>
-            <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
-              <div className="grid grid-cols-1 gap-1">
-                {Array.from({ length: new Date().getFullYear() - 2019 }, (_, i) => 2020 + i).map(
-                  (year) => {
-                    return (
-                      <div key={year} className="flex items-center space-x-2">
-                        <Checkbox
-                          id={`term-${year}`}
-                          name="terms"
-                          value={year.toString()}
-                          defaultChecked={userData.terms?.includes(year)}
-                        />
-                        <Label htmlFor={`term-${year}`} className="text-sm font-normal">
-                          {year}
-                        </Label>
-                      </div>
-                    );
-                  },
-                )}
-              </div>
-            </ScrollArea>
-          </div>
+        <div className="flex flex-col gap-1">
+          <Label htmlFor="bio">About Me</Label>
+          <Textarea
+            id="bio"
+            name="bio"
+            defaultValue={userData.bio ?? ''}
+            maxLength={500}
+            placeholder="Tell us about yourself... (500 characters max)"
+            className="h-20 resize-none"
+          />
+        </div>
+      </div>
 
-          <div className="flex-1 space-y-1">
-            <Label>Teams</Label>
-            <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
-              <div className="grid grid-cols-1 gap-1">
-                {TEAM_VALUES.map((team) => {
+      {/* Terms, Teams & Roles */}
+      <div className="flex flex-col gap-6 md:flex-row">
+        <div className="flex-1 space-y-1">
+          <Label>Terms</Label>
+          <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
+            <div className="grid grid-cols-1 gap-1">
+              {Array.from({ length: new Date().getFullYear() - 2019 }, (_, i) => 2020 + i).map(
+                (year) => {
                   return (
-                    <div key={team} className="flex items-center space-x-2">
+                    <div key={year} className="flex items-center space-x-2">
                       <Checkbox
-                        id={`team-${team}`}
-                        name="teams"
-                        value={team}
-                        defaultChecked={userData.teams?.includes(team.toLowerCase())}
+                        id={`term-${year}`}
+                        name="terms"
+                        value={year.toString()}
+                        defaultChecked={userData.terms?.includes(year)}
                       />
-                      <Label htmlFor={`team-${team}`} className="text-sm font-normal capitalize">
-                        {team}
+                      <Label htmlFor={`term-${year}`} className="text-sm font-normal">
+                        {year}
                       </Label>
                     </div>
                   );
-                })}
-              </div>
-            </ScrollArea>
-          </div>
-
-          <div className="flex-1 space-y-1">
-            <Label>Roles</Label>
-            <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
-              <div className="grid grid-cols-1 gap-1">
-                {ROLE_VALUES.map((role) => {
-                  return (
-                    <div key={role} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`role-${role}`}
-                        name="roles"
-                        value={role}
-                        defaultChecked={userData.roles?.includes(role.toLowerCase())}
-                      />
-                      <Label htmlFor={`role-${role}`} className="text-sm font-normal capitalize">
-                        {role}
-                      </Label>
-                    </div>
-                  );
-                })}
-              </div>
-            </ScrollArea>
-          </div>
+                },
+              )}
+            </div>
+          </ScrollArea>
         </div>
 
-        {/* Social Links */}
-        {/* <div className="flex flex-col gap-4 md:flex-row">
+        <div className="flex-1 space-y-1">
+          <Label>Teams</Label>
+          <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
+            <div className="grid grid-cols-1 gap-1">
+              {TEAM_VALUES.map((team) => {
+                return (
+                  <div key={team} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`team-${team}`}
+                      name="teams"
+                      value={team}
+                      defaultChecked={userData.teams?.includes(team.toLowerCase())}
+                    />
+                    <Label htmlFor={`team-${team}`} className="text-sm font-normal capitalize">
+                      {team}
+                    </Label>
+                  </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="flex-1 space-y-1">
+          <Label>Roles</Label>
+          <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
+            <div className="grid grid-cols-1 gap-1">
+              {ROLE_VALUES.map((role) => {
+                return (
+                  <div key={role} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`role-${role}`}
+                      name="roles"
+                      value={role}
+                      defaultChecked={userData.roles?.includes(role.toLowerCase())}
+                    />
+                    <Label htmlFor={`role-${role}`} className="text-sm font-normal capitalize">
+                      {role}
+                    </Label>
+                  </div>
+                );
+              })}
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
+
+      {/* Social Links */}
+
+      {/* <div className="flex flex-col gap-4 md:flex-row">
           <div className="flex flex-1 flex-col gap-4">
             <div className="flex flex-col gap-1">
               <Label htmlFor="link_email">Email Link</Label>
@@ -205,12 +204,11 @@ export default async function ProfilePage({
           </div>
         </div> */}
 
-        {error && <FormMessage type="error" message={error} />}
+      {error && <FormMessage type="error" message={error} />}
 
-        <div className="flex justify-end">
-          <Button type="submit">Save Changes</Button>
-        </div>
-      </form>
-    </CardContent>
+      <div className="flex justify-end">
+        <Button type="submit">Save Changes</Button>
+      </div>
+    </form>
   );
 }

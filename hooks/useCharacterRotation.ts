@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { Character } from '@/lib/db/schema';
+import type { Character } from '@/types';
 
 export function useCharacterRotation(characters: Character[], interval = 5000) {
   const [selectedCharacter, setSelectedCharacterState] = useState(0);
