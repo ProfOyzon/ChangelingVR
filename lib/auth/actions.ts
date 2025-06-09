@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { WelcomeEmail } from '@/components/email';
+import { LoginEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
 import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
@@ -27,6 +28,18 @@ import {
 import { sendMail } from '@/lib/nodemailer';
 import { eq } from 'drizzle-orm';
 
+type GeoLocationData = {
+  country: string;
+  countryCode: string;
+  region: string;
+  regionName: string;
+  city: string;
+  zip: string;
+  lat: number;
+  lon: number;
+  query: string;
+};
+
 async function logActivity(userId: string, type: ActivityType) {
   const header = await headers();
   const ipAddress = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
@@ -35,11 +48,47 @@ async function logActivity(userId: string, type: ActivityType) {
   if (!userId) return;
   if (ipAddress === '::1') return;
 
+  // Get geolocation data
+  let geolocationData: GeoLocationData | null = null;
+  try {
+    const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
+    geolocationData = await response.json();
+  } catch {}
+
+  if (type === ActivityType.SIGN_IN && geolocationData) {
+    const [member, profile, activity] = await Promise.all([
+      db.select({ email: members.email }).from(members).where(eq(members.uuid, userId)),
+      db.select({ username: profiles.username }).from(profiles).where(eq(profiles.uuid, userId)),
+      db.select().from(activityLogs).where(eq(activityLogs.uuid, userId)),
+    ]);
+
+    // Check if this is a new location
+    const isNewLocation = !activity.some((log) => log.zip === geolocationData.zip);
+    if (isNewLocation) {
+      sendMail({
+        reciever: member[0].email,
+        subject: 'New sign-in detected on your Changeling VR account',
+        plainText: `A new login was detected from ${geolocationData.city}, ${geolocationData.regionName}, ${geolocationData.country}`,
+        email: LoginEmail({
+          name: profile[0].username,
+          data: geolocationData,
+        }),
+      });
+    }
+  }
+
   const newActivity: NewActivityLog = {
     uuid: userId,
     action: type,
     ip_address: ipAddress || '',
     user_agent: userAgent,
+    country: geolocationData?.country || null,
+    country_code: geolocationData?.countryCode || null,
+    region: geolocationData?.regionName || null,
+    city: geolocationData?.city || null,
+    latitude: geolocationData?.lat?.toString() || null,
+    longitude: geolocationData?.lon?.toString() || null,
+    zip: geolocationData?.zip || null,
   };
 
   await db.insert(activityLogs).values(newActivity);

@@ -22,6 +22,13 @@ export const activityLogs = pgTable('activity_logs', {
   timestamp: timestamp('timestamp', { withTimezone: true }).notNull().defaultNow(),
   ip_address: text('ip_address'),
   user_agent: text('user_agent'),
+  country: text('country'),
+  country_code: text('country_code'),
+  region: text('region'),
+  city: text('city'),
+  latitude: text('latitude'),
+  longitude: text('longitude'),
+  zip: text('zip'),
 });
 
 export const characters = pgTable('characters', {

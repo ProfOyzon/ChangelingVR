@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { updatePassword } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
+import { Loader2 } from 'lucide-react';
 
 export default function UpdatePasswordPageClient({ token }: { token: string }) {
   const [state, formAction, isPending] = useActionState<ActionState, FormData>(updatePassword, {
@@ -35,7 +36,13 @@ export default function UpdatePasswordPageClient({ token }: { token: string }) {
           {state?.error && <FormMessage type="error" message={state.error} />}
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? 'Saving...' : 'Save new password'}
+            {isPending ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="animate-spin" /> Saving...
+              </span>
+            ) : (
+              'Save new password'
+            )}
           </Button>
         </div>
       </form>

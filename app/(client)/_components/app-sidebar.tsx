@@ -90,7 +90,7 @@ export function AppSidebar() {
             <SidebarMenuButton tooltip="Profile" asChild>
               <Button type="submit">
                 <LogOut />
-                Log out
+                <span>Log out</span>
               </Button>
             </SidebarMenuButton>
           </SidebarMenuItem>

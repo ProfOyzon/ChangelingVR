@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { register } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
+import { Loader2 } from 'lucide-react';
 
 export default function RegisterPageClient() {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(register, {
@@ -57,7 +58,13 @@ export default function RegisterPageClient() {
           {state.error && <FormMessage type="error" message={state.error} />}
 
           <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? 'Creating an account...' : 'Sign up'}
+            {pending ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="animate-spin" /> Creating an account...
+              </span>
+            ) : (
+              'Sign up'
+            )}
           </Button>
         </div>
 

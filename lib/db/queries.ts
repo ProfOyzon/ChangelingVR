@@ -83,6 +83,14 @@ export async function getActivityLogs() {
       action: activityLogs.action,
       timestamp: activityLogs.timestamp,
       ip_address: activityLogs.ip_address,
+      user_agent: activityLogs.user_agent,
+      country: activityLogs.country,
+      country_code: activityLogs.country_code,
+      region: activityLogs.region,
+      city: activityLogs.city,
+      latitude: activityLogs.latitude,
+      longitude: activityLogs.longitude,
+      zip: activityLogs.zip,
     })
     .from(activityLogs)
     .leftJoin(members, eq(activityLogs.uuid, members.uuid))
@@ -96,5 +104,19 @@ export async function getResetToken(uuid: string) {
 }
 
 export async function getProfileByUsername(username: string) {
-  return await db.select().from(profiles).where(eq(profiles.username, username)).limit(1);
+  // To secure profile from username fetches, we do not return the UUID
+  return await db
+    .select({
+      display_name: profiles.display_name,
+      username: profiles.username,
+      avatar_url: profiles.avatar_url,
+      bio: profiles.bio,
+      terms: profiles.terms,
+      teams: profiles.teams,
+      roles: profiles.roles,
+      bg_color: profiles.bg_color,
+    })
+    .from(profiles)
+    .where(eq(profiles.username, username))
+    .limit(1);
 }

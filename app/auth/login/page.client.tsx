@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { login } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
+import { Loader2 } from 'lucide-react';
 
 export default function LoginPageClient() {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(login, { error: '' });
@@ -52,7 +53,13 @@ export default function LoginPageClient() {
           {state?.error && <FormMessage type="error" message={state.error} />}
 
           <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? 'Logging in...' : 'Login'}
+            {pending ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="animate-spin" /> Logging in...
+              </span>
+            ) : (
+              'Login'
+            )}
           </Button>
         </div>
 

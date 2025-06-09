@@ -1,6 +1,7 @@
 import {
   Body,
   Button,
+  Column,
   Container,
   Head,
   Hr,
@@ -8,10 +9,23 @@ import {
   Img,
   Link,
   Preview,
+  Row,
   Section,
   Tailwind,
   Text,
 } from '@react-email/components';
+
+type GeoLocationData = {
+  country: string;
+  countryCode: string;
+  region: string;
+  regionName: string;
+  city: string;
+  zip: string;
+  lat: number;
+  lon: number;
+  query: string;
+};
 
 const EmailLayout = ({ preview, children }: { preview: string; children: React.ReactNode }) => {
   return (
@@ -71,6 +85,53 @@ export const WelcomeEmail = ({ name }: { name: string }) => {
       </Text>
       <Text className="text-black text-base">
         We&apos;re glad to have you join our family of talented changelings!
+      </Text>
+    </EmailLayout>
+  );
+};
+
+export const LoginEmail = ({ name, data }: { name: string; data: GeoLocationData }) => {
+  return (
+    <EmailLayout
+      preview={`A new login was detected from ${data.city}, ${data.regionName}, ${data.country}`}
+    >
+      <Text className="text-black text-base">
+        Hello <strong>{name}</strong>,
+      </Text>
+
+      <Text className="text-black text-base">
+        Your Changeling VR account was recently signed-in from a new location, device, or browser.
+      </Text>
+
+      <Section>
+        <Row>
+          <Column className="font-semibold">Location</Column>
+          <Column>
+            {data.city}, {data.regionName}, {data.country}
+          </Column>
+        </Row>
+        <Row>
+          <Column className="font-semibold">Time</Column>
+          <Column>{new Date().toLocaleString()}</Column>
+        </Row>
+        <Row>
+          <Column className="font-semibold">IP</Column>
+          <Column>{data.query}</Column>
+        </Row>
+      </Section>
+
+      <Text className="text-black text-base">Don&apos;t recognize this activity?</Text>
+
+      <Text className="text-black text-base">
+        Review your{' '}
+        <Link href="https://changelingvr.vercel.app/dashboard/settings">recent activity</Link> and{' '}
+        <Link href="https://changelingvr.vercel.app/dashboard/settings">settings</Link> now.
+      </Text>
+
+      <Text className="text-black text-base">
+        We are sending this email because we were unable to determine if you have signed-in from
+        this location or browser before. This may be because you are traveling, using a VPN, a new
+        or updated browser, or another person is using your account.
       </Text>
     </EmailLayout>
   );
