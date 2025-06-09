@@ -2,9 +2,9 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { verify } from 'jsonwebtoken';
 import { createClient } from '@/lib/db/supabase/server';
 import { encodedRedirect } from '@/lib/redirect';
-import { verify } from 'jsonwebtoken';
 import { legacyUserSchema } from './schemas';
 
 export async function updateProfileAction(formData: FormData) {

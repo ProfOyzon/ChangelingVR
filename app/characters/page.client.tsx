@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+import { motion } from 'motion/react';
 import { Button } from '@/components/button';
 import type { Character } from '@/types';
-import { motion } from 'motion/react';
 
 const CHARACTER_ATTRIBUTES = [
   { key: 'age', label: 'Age' },

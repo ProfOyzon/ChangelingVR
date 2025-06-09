@@ -1,5 +1,3 @@
-import { getActivityLogs } from '@/lib/db/queries';
-import { ActivityType } from '@/lib/db/schema';
 import {
   AlertCircle,
   Lock,
@@ -10,6 +8,8 @@ import {
   UserMinus,
   UserPlus,
 } from 'lucide-react';
+import { getActivityLogs } from '@/lib/db/queries';
+import { ActivityType } from '@/lib/db/schema';
 
 const iconMap: Record<ActivityType, LucideIcon> = {
   [ActivityType.SIGN_UP]: UserPlus,
@@ -63,14 +63,14 @@ export default async function ActivityPage() {
 
             return (
               <li key={log.id} className="flex items-center space-x-4">
-                <div className="bg-orange-100 rounded-full p-2">
-                  <Icon className="w-5 h-5 text-orange-600" />
+                <div className="rounded-full bg-orange-100 p-2">
+                  <Icon className="h-5 w-5 text-orange-600" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium">
                     {formattedAction} {log.ip_address && ` from ${log.city}, ${log.region}`}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-muted-foreground text-xs">
                     {getRelativeTime(new Date(log.timestamp))}
                   </p>
                 </div>
@@ -79,10 +79,10 @@ export default async function ActivityPage() {
           })}
         </ul>
       ) : (
-        <div className="flex flex-col items-center justify-center text-center py-12">
-          <AlertCircle className="h-12 w-12 text-light-mustard mb-4" />
-          <h3 className="text-lg font-semibold mb-2">No activity yet</h3>
-          <p className="text-sm text-muted-foreground max-w-sm">
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <AlertCircle className="text-light-mustard mb-4 h-12 w-12" />
+          <h3 className="mb-2 text-lg font-semibold">No activity yet</h3>
+          <p className="text-muted-foreground max-w-sm text-sm">
             When you perform actions like signing in or updating your account, they&apos;ll appear
             here.
           </p>

@@ -39,7 +39,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
       <ul className="flex flex-row items-center gap-1">
         <li>
           <button
-            className="px-2.5 sm:pl-2.5 flex flex-row items-center hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex flex-row items-center px-2.5 hover:underline disabled:cursor-not-allowed disabled:opacity-50 sm:pl-2.5"
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
             aria-label="Previous"
@@ -55,7 +55,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
             <button
               className={cn(
                 'px-2 py-1',
-                p === page ? 'underline font-semibold' : 'hover:underline',
+                p === page ? 'font-semibold underline' : 'hover:underline',
               )}
               onClick={() => onPageChange(p)}
               aria-current={p === page ? 'page' : undefined}
@@ -68,7 +68,7 @@ export function Pagination({ page, totalPages, onPageChange }: PaginationProps) 
 
         <li>
           <button
-            className="flex flex-row items-center hover:underline disabled:opacity-50 disabled:cursor-not-allowed px-2.5 sm:pr-2.5"
+            className="flex flex-row items-center px-2.5 hover:underline disabled:cursor-not-allowed disabled:opacity-50 sm:pr-2.5"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
             aria-label="Next"

@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { randomBytes, randomUUID } from 'node:crypto';
 import { PasswordResetEmail, WelcomeEmail } from '@/components/email';
 import {
   forgotPasswordSchema,
@@ -12,7 +13,6 @@ import {
 import { createClient } from '@/lib/db/supabase/server';
 import { sendMail } from '@/lib/nodemailer';
 import { encodedRedirect } from '@/lib/redirect';
-import { randomBytes, randomUUID } from 'node:crypto';
 import { comparePassword, generateToken, hashPassword, hashToken, processError } from './utils';
 
 export async function registerAction(formData: FormData) {

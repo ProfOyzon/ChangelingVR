@@ -1,9 +1,9 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { desc, eq } from 'drizzle-orm';
 import { verifyToken } from '@/lib/auth/session';
 import { db } from '@/lib/db';
-import { desc, eq } from 'drizzle-orm';
 import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
 
 export async function getUserMember() {

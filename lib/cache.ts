@@ -1,9 +1,9 @@
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
+import { desc, eq } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { posts, profiles } from '@/lib/db/schema';
 import type { Post } from '@/lib/db/schema';
-import { desc, eq } from 'drizzle-orm';
 
 type CachedData<T> = {
   status: number;

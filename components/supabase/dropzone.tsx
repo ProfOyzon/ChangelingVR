@@ -1,9 +1,9 @@
 'use client';
 
 import { type PropsWithChildren, createContext, useCallback, useContext } from 'react';
+import { CheckCircle, File, Loader2, Upload, X } from 'lucide-react';
 import { type UseSupabaseUploadReturn } from '@/hooks/use-supabase-upload';
 import { cn } from '@/lib/utils';
-import { CheckCircle, File, Loader2, Upload, X } from 'lucide-react';
 import { Button } from '../ui/button';
 
 export const formatBytes = (

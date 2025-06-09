@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Activity, Eye, Home, Settings, User } from 'lucide-react';
 import { LogoutButton } from '@/app/(client)/_components/logout-button';
 import {
   Sidebar,
@@ -14,7 +15,6 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
-import { Activity, Eye, Home, Settings, User } from 'lucide-react';
 
 export function AppSidebar() {
   return (

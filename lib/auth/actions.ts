@@ -3,6 +3,7 @@
 import { cookies } from 'next/headers';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { eq } from 'drizzle-orm';
 import { WelcomeEmail } from '@/components/email';
 import { LoginEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
@@ -26,7 +27,6 @@ import {
   profiles,
 } from '@/lib/db/schema';
 import { sendMail } from '@/lib/nodemailer';
-import { eq } from 'drizzle-orm';
 
 type GeoLocationData = {
   country: string;

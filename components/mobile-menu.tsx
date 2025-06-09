@@ -70,6 +70,16 @@ export function MobileMenu({ items }: MobileMenuProps) {
           aria-label="Mobile navigation menu"
         >
           <div className="flex flex-col gap-2">
+            <Button
+              href="/characters"
+              variant="link"
+              aria-label="View the characters"
+              className="justify-start"
+              onClick={closeMenu}
+            >
+              Characters
+            </Button>
+
             {items.map(({ href, label, ariaLabel, variant }) => (
               <Button
                 key={href}

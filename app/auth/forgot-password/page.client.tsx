@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 import { FormMessage } from '@/components/form-message';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
@@ -9,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { forgotPassword } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
-import { Loader2 } from 'lucide-react';
 
 export default function ForgotPasswordPageClient() {
   const [state, formAction, isPending] = useActionState<ActionState, FormData>(forgotPassword, {

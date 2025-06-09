@@ -1,5 +1,5 @@
-import { render } from '@react-email/components';
 import { createTransport } from 'nodemailer';
+import { render } from '@react-email/components';
 
 // Create a transporter for the email service
 const transporter = createTransport({

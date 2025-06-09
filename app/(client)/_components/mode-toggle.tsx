@@ -1,8 +1,8 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Monitor, Moon, Sun } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();

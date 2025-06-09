@@ -1,5 +1,5 @@
-import { getUserProfile } from '@/lib/db/queries';
 import { z } from 'zod/v4';
+import { getUserProfile } from '@/lib/db/queries';
 import type { Profile } from '../db/schema';
 
 function processError(error: z.ZodError) {

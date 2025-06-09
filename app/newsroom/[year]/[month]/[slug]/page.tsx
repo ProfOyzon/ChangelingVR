@@ -29,11 +29,11 @@ export async function generateMetadata({
   if (!post) return notFound();
 
   return {
-    title: post.title,
+    title: `${post.title} | Changeling VR`,
     description: post?.excerpt,
     authors: post.author?.map((a: string) => ({ name: a })) ?? [],
     openGraph: {
-      title: post.title,
+      title: `${post.title} | Changeling VR`,
       description: post?.excerpt ?? '',
       images: post?.cover_image
         ? [
@@ -44,7 +44,7 @@ export async function generateMetadata({
         : [],
     },
     twitter: {
-      title: post.title,
+      title: `${post.title} | Changeling VR`,
       description: post?.excerpt ?? '',
       images: post?.cover_image
         ? [
@@ -73,25 +73,25 @@ export default async function Post({
   const postUrl = `https://changelingvr.vercel.app/newsroom/${year}/${month}/${slug}`;
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-900/50 backdrop-blur-sm rounded-lg space-y-4">
-      <div className="flex flex-row justify-between items-center">
-        <span className="uppercase rounded border border-gray-500 text-gray-300 text-sm font-semibold py-1 px-2">
+    <div className="mx-auto max-w-7xl space-y-4 rounded-lg bg-gray-900/50 p-6 backdrop-blur-sm">
+      <div className="flex flex-row items-center justify-between">
+        <span className="rounded border border-gray-500 px-2 py-1 text-sm font-semibold text-gray-300 uppercase">
           {post.type}
         </span>
 
         <div className="flex flex-row gap-2">
           <CopyLink
             url={postUrl}
-            className="p-2 rounded border border-gray-500 hover:bg-gray-700 hover:cursor-pointer"
+            className="rounded border border-gray-500 p-2 hover:cursor-pointer hover:bg-gray-700"
           />
           <a
-            className="p-2 rounded border border-gray-500 hover:bg-gray-700"
+            className="rounded border border-gray-500 p-2 hover:bg-gray-700"
             href={`https://twitter.com/intent/tweet?text=Check out this post on Changeling VR:&url=${encodeURIComponent(postUrl)}`}
           >
             <FaXTwitter className="size-4" />
           </a>
           <a
-            className="p-2 rounded border border-gray-500 hover:bg-gray-700"
+            className="rounded border border-gray-500 p-2 hover:bg-gray-700"
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
           >
             <FaLinkedin className="size-4" />
@@ -125,13 +125,13 @@ export default async function Post({
           alt={post.title}
           width={1200}
           height={400}
-          className="object-cover w-full h-50 rounded-lg"
+          className="h-50 w-full rounded-lg object-cover"
         />
       )}
 
       {/* https://nextjs.org/docs/app/guides/mdx#using-tailwind-typography-plugin */}
       {/* https://github.com/tailwindlabs/tailwindcss-typography?tab=readme-ov-file */}
-      <div className="min-w-full prose-invert prose prose-headings:mt-8 prose-headings:font-semibold prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-3xl prose-h4:text-2xl prose-h5:text-xl prose-h6:text-lg">
+      <div className="prose-invert prose prose-headings:mt-8 prose-headings:font-semibold prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-3xl prose-h4:text-2xl prose-h5:text-xl prose-h6:text-lg min-w-full">
         <Post />
       </div>
     </div>

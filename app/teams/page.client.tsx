@@ -60,7 +60,7 @@ export default function TeamsPageClient() {
           value={search}
           onChange={handleSearch}
           placeholder="Search for a team member..."
-          className="w-full border-2 border-gray-300 rounded-md p-2"
+          className="w-full rounded-md border-2 border-gray-300 p-2"
         />
       </div>
 
@@ -69,7 +69,7 @@ export default function TeamsPageClient() {
       ) : paginated.length === 0 ? (
         <div className="text-center text-lg font-semibold">No profiles found</div>
       ) : (
-        <div className="flex flex-wrap justify-center gap-6 mb-6">
+        <div className="mb-6 flex flex-wrap justify-center gap-6">
           {paginated.map((profile) => (
             <TeamMemberCard key={profile.username} member={profile} />
           ))}

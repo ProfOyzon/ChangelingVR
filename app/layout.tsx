@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Lato } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 const latoSans = Lato({

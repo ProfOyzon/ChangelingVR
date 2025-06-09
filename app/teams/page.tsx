@@ -19,7 +19,7 @@ export default async function TeamsPage() {
   void queryClient.prefetchQuery(profileOptions);
 
   return (
-    <div className="p-6 mx-auto">
+    <div className="mx-auto p-6">
       <h1 className="mb-4 text-center text-3xl font-bold md:text-5xl">Meet the Team</h1>
       <p className="mx-auto mb-6 max-w-2xl text-center text-sm md:text-base">
         The Changeling VR game and website is created by students and faculty at the Rochester

@@ -12,19 +12,19 @@ const LinkIcon = {
 
 export function TeamMemberCard({ member }: { member: Profile & { links: ProfileLink[] } }) {
   return (
-    <div className="relative flex flex-col w-40 min-w-40 max-w-40 h-64 flex-1 bg-steel/50 backdrop-blur-sm rounded hover:bg-steel/75 transition-colors duration-300">
-      <Link href={`/users/${member.username}`} className="flex flex-col h-full cursor-pointer">
+    <div className="bg-steel/50 hover:bg-steel/75 relative flex h-64 w-40 max-w-40 min-w-40 flex-1 flex-col rounded backdrop-blur-sm transition-colors duration-300">
+      <Link href={`/users/${member.username}`} className="flex h-full cursor-pointer flex-col">
         <Image
           src={member.avatar_url || '/placeholder.png'}
           alt={member.username}
           width={128}
           height={128}
-          className=" w-full rounded-t-xl mask-b-from-50% object-cover"
+          className="w-full rounded-t-xl mask-b-from-50% object-cover"
           loading="lazy"
         />
 
-        <div className="p-2 w-full space-y-1">
-          <span className="text-lg line-clamp-1 font-bold">
+        <div className="w-full space-y-1 p-2">
+          <span className="line-clamp-1 text-lg font-bold">
             {member.display_name || `@${member.username}`}
           </span>
           <span className="line-clamp-3 text-xs text-gray-300">
