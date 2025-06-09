@@ -65,7 +65,7 @@ async function logActivity(userId: string, type: ActivityType) {
     // Check if this is a new location
     const isNewLocation = !activity.some((log) => log.zip === geolocationData.zip);
     if (isNewLocation) {
-      sendMail({
+      await sendMail({
         reciever: member[0].email,
         subject: 'New sign-in detected on your Changeling VR account',
         plainText: `A new login was detected from ${geolocationData.city}, ${geolocationData.regionName}, ${geolocationData.country}`,

@@ -32,8 +32,10 @@ export async function sendMail({
       html: await render(email),
     });
 
+    console.log('Email sent successfully');
     return { success: true, message: 'Email sent successfully' };
   } catch {
+    console.log('Failed to send email');
     return { success: false, message: 'Failed to send email' };
   }
 }

@@ -70,7 +70,7 @@ export async function registerAction(formData: FormData) {
   }
 
   // Send welcome email
-  sendMail({
+  await sendMail({
     reciever: email,
     subject: 'Welcome to Changeling VR',
     plainText: "Welcome to Changeling VR! We're excited to have you on board.",
