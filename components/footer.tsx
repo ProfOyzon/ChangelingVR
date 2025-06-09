@@ -1,56 +1,88 @@
-import { cloneElement } from 'react';
+import type { IconType } from 'react-icons';
 import { FaDiscord, FaInstagram, FaItchIo, FaSteam, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import Link from 'next/link';
+
+type SocialLink = {
+  href: string;
+  icon: IconType;
+  label: string;
+};
+
+type NavSection = {
+  title: string;
+  links: {
+    href: string;
+    label: string;
+    prefetch?: boolean;
+  }[];
+};
+
+const SOCIAL_LINKS: SocialLink[] = [
+  {
+    href: 'https://x.com/ChangelingVR',
+    icon: FaXTwitter,
+    label: 'Follow us on X (formerly Twitter)',
+  },
+  {
+    href: 'https://www.instagram.com/changelingvr',
+    icon: FaInstagram,
+    label: 'Follow us on Instagram',
+  },
+  {
+    href: 'https://www.youtube.com/@ChangelingVRStudio',
+    icon: FaYoutube,
+    label: 'Subscribe to our YouTube channel',
+  },
+  {
+    href: 'https://www.discord.gg/btEUjqazvP',
+    icon: FaDiscord,
+    label: 'Join our Discord server',
+  },
+  {
+    href: 'https://steamcommunity.com/app/2410100',
+    icon: FaSteam,
+    label: 'Follow us on Steam',
+  },
+  {
+    href: 'https://www.itch.io/changelingvr',
+    icon: FaItchIo,
+    label: 'Follow us on Itch.io',
+  },
+];
+
+const NAV_SECTIONS: NavSection[] = [
+  {
+    title: 'Explore',
+    links: [
+      { href: '/characters', label: 'Characters' },
+      { href: '/teams', label: 'Developers' },
+      { href: '/newsroom', label: 'News & Press' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { href: '/sitemap.xml', label: 'Sitemap' },
+      { href: '/terms', label: 'Terms of Service', prefetch: false },
+      { href: '/privacy', label: 'Privacy Policy', prefetch: false },
+    ],
+  },
+];
+
+const linkClass = 'hover:text-light-mustard transition-colors duration-300';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const socialLinks = [
-    {
-      href: 'x.com/ChangelingVR',
-      icon: <FaXTwitter size={20} />,
-      alt: 'X formerly Twitter Logo',
-    },
-    {
-      href: 'www.instagram.com/changelingvr',
-      icon: <FaInstagram size={20} />,
-      alt: 'Instagram Logo',
-    },
-    {
-      href: 'www.youtube.com/@ChangelingVRStudio',
-      icon: <FaYoutube size={20} />,
-      alt: 'YouTube Logo',
-    },
-    {
-      href: 'www.discord.gg/btEUjqazvP',
-      icon: <FaDiscord size={20} />,
-      alt: 'Discord Server Logo',
-    },
-    {
-      href: 'steamcommunity.com/app/2410100',
-      icon: <FaSteam size={20} />,
-      alt: 'Steam Logo',
-    },
-    {
-      href: 'www.itch.io/changelingvr',
-      icon: <FaItchIo size={20} />,
-      alt: 'Itch.io Logo',
-    },
-  ];
-
-  const linkClass = 'hover:text-light-mustard transition-colors duration-300';
-
   return (
-    <footer className="bg-dune px-6 py-12 md:px-12">
+    <footer className="bg-dune px-6 py-12 md:px-12" role="contentinfo">
       <div className="mx-auto flex flex-col gap-8">
         <div className="flex flex-col md:flex-row md:gap-8">
           <div className="mb-8 flex-1 space-y-4 md:mb-0">
-            {/* Logo */}
-            <Link href="/" className="inline-block">
+            <Link href="/" className="inline-block" aria-label="Home">
               <img src="/logo.svg" alt="Changeling VR Logo" className="w-50" />
             </Link>
 
-            {/* Description */}
             <p className="text-base leading-relaxed">
               Changeling VR is an experimental narrative mystery game created by artists, designers,
               and developers studying at the Rochester Institute of Technology School of Interactive
@@ -59,71 +91,41 @@ export function Footer() {
           </div>
 
           <div className="flex flex-1 flex-row gap-8">
-            {/* Internal links section */}
-            <div className="flex flex-1 flex-col items-center space-y-3">
-              <h4 className="text-light-mustard text-lg font-semibold">Explore</h4>
-              <ul className="space-y-2 text-center">
-                <li>
-                  <Link href="/characters" className={linkClass}>
-                    Characters
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/teams" className={linkClass}>
-                    Developers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/newsroom" className={linkClass}>
-                    News & Press
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {NAV_SECTIONS.map((section) => (
+              <nav key={section.title} className="flex flex-1 flex-col items-center space-y-3">
+                <h4 className="text-light-mustard text-lg font-semibold">{section.title}</h4>
+                <ul className="space-y-2 text-center">
+                  {section.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className={linkClass} prefetch={link.prefetch}>
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
 
-            {/* Legal section */}
-            <div className="flex flex-1 flex-col items-center space-y-3">
-              <h4 className="text-light-mustard text-lg font-semibold">Legal</h4>
-              <ul className="space-y-2 text-center">
-                <li>
-                  <Link href="/sitemap.xml" className={linkClass}>
-                    Sitemap
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/terms" className={linkClass}>
-                    Terms of Service
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy" className={linkClass}>
-                    Privacy Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Social links section */}
-            <div className="flex flex-1 flex-col items-center space-y-4">
+            <nav className="flex flex-1 flex-col items-center space-y-4">
               <h4 className="text-light-mustard text-lg font-semibold">Connect</h4>
               <div className="grid grid-cols-2 place-items-center gap-4">
-                {socialLinks.map(({ href, icon, alt }) => (
+                {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
                   <a
-                    key={alt}
-                    href={`https://${href}`}
+                    key={href}
+                    href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={alt}
+                    className={linkClass}
+                    aria-label={label}
                   >
-                    {icon && cloneElement(icon, { className: linkClass })}
+                    <Icon size={20} />
                   </a>
                 ))}
               </div>
-            </div>
+            </nav>
           </div>
         </div>
 
-        {/* Copyright */}
         <div className="border-t border-gray-400 pt-6 text-center text-sm">
           © {currentYear} Changeling VR. All rights reserved.
         </div>

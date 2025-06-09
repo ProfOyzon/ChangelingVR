@@ -1,7 +1,50 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './button';
+import type { ButtonVariant } from './button';
 import { MobileMenu } from './mobile-menu';
+
+export type NavItem = {
+  href: string;
+  label: string;
+  ariaLabel?: string;
+  variant?: ButtonVariant;
+};
+
+type CharacterLink = {
+  href: string;
+  label: string;
+  id: string;
+};
+
+const CHARACTER_LINKS: CharacterLink[] = [
+  { href: '/characters#protagonist', label: 'Aurelia Walker', id: 'protagonist' },
+  { href: '/characters#mother', label: 'Angela Summers', id: 'mother' },
+  { href: '/characters#father', label: 'Dylan Monelo', id: 'father' },
+  { href: '/characters#son', label: 'Douglas Summers-Monelo', id: 'son' },
+  { href: '/characters#daughter', label: 'Kirsten Summers-Monelo', id: 'daughter' },
+  { href: '/characters#infant', label: 'Tobi Summers-Monelo', id: 'infant' },
+];
+
+const NAV_ITEMS: NavItem[] = [
+  {
+    href: '/newsroom',
+    label: 'News',
+    ariaLabel: 'View the latest news',
+    variant: 'link',
+  },
+  {
+    href: '/teams',
+    label: 'Team',
+    ariaLabel: 'View the Changeling VR team',
+    variant: 'link',
+  },
+  {
+    href: 'https://changelingvrteam.itch.io/changelingvr',
+    label: 'Play Now',
+    ariaLabel: 'Play Changeling VR on itch.io',
+  },
+];
 
 export function Header() {
   return (
@@ -10,7 +53,7 @@ export function Header() {
         className="flex h-16 items-center justify-between gap-4 px-4"
         aria-label="Main Navigation"
       >
-        <Link href="/">
+        <Link href="/" aria-label="Home">
           <Image
             src="/logo.svg"
             alt="Changeling logo"
@@ -29,52 +72,39 @@ export function Header() {
               Characters
             </Button>
 
-            <div className="absolute left-1/2 hidden w-[300px] -translate-x-1/2 pt-4 group-hover:block">
+            <div
+              className="absolute left-1/2 hidden w-[300px] -translate-x-1/2 pt-4 group-hover:block"
+              role="menu"
+              aria-label="Character selection"
+            >
               <div className="translate-x-1/2">
                 <div className="border-b-dune/80 h-0 w-0 border-x-6 border-b-6 border-x-transparent"></div>
               </div>
 
               <div className="bg-dune/80 [&>a]:hover:bg-midnight/40 [&>a]:hover:text-light-mustard flex flex-col gap-1 rounded p-2 shadow-md backdrop-blur-sm [&>a]:block [&>a]:rounded [&>a]:px-3 [&>a]:py-2 [&>a]:text-center">
-                <Button href="/characters#aurelia" variant="link">
-                  Aurelia Walker
-                </Button>
-                <Button href="/characters#angela" variant="link">
-                  Angela Summers
-                </Button>
-                <Button href="/characters#dylan" variant="link">
-                  Dylan Monelo
-                </Button>
-                <Button href="/characters#douglas" variant="link">
-                  Douglas Summers-Monelo
-                </Button>
-                <Button href="/characters#kirsten" variant="link">
-                  Kirsten Summers-Monelo
-                </Button>
-                <Button href="/characters#tobi" variant="link">
-                  Tobi Summers-Monelo
-                </Button>
+                {CHARACTER_LINKS.map(({ href, label, id }) => (
+                  <Button
+                    key={id}
+                    href={href}
+                    variant="link"
+                    aria-label={`View ${label}'s profile`}
+                  >
+                    {label}
+                  </Button>
+                ))}
               </div>
             </div>
           </div>
 
-          <Button href="/newsroom" aria-label="View the latest news" variant="link">
-            News
-          </Button>
-
-          <Button href="/teams" aria-label="View the Changeling VR team" variant="link">
-            Team
-          </Button>
-
-          <Button
-            href="https://changelingvrteam.itch.io/changelingvr"
-            aria-label="Play Changeling VR on itch.io"
-          >
-            Play Now
-          </Button>
+          {NAV_ITEMS.map(({ href, label, ariaLabel, variant }) => (
+            <Button key={href} href={href} variant={variant} aria-label={ariaLabel}>
+              {label}
+            </Button>
+          ))}
         </div>
 
         {/* Mobile Menu Toggle */}
-        <MobileMenu />
+        <MobileMenu items={NAV_ITEMS} />
       </nav>
     </header>
   );
