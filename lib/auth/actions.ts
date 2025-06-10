@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -13,6 +14,7 @@ import {
   loginSchema,
   registerSchema,
   updatePasswordSchema,
+  updateProfileSchema,
 } from '@/lib/auth/validator';
 import { db } from '@/lib/db';
 import { getUserProfile } from '@/lib/db/queries';
@@ -170,6 +172,29 @@ export async function logout() {
   await logActivity(user.uuid, ActivityType.SIGN_OUT);
   (await cookies()).delete('session');
 }
+
+export const updateProfile = validatedActionWithUser(updateProfileSchema, async (data, _, user) => {
+  try {
+    await db
+      .update(profiles)
+      .set({
+        username: data.username,
+        display_name: data.display_name,
+        bio: data.bio,
+        terms: data.terms,
+        roles: data.roles,
+        teams: data.teams,
+        avatar_url: data.avatar_url,
+        bg_color: data.bg_color,
+      })
+      .where(eq(profiles.uuid, user.uuid));
+
+    revalidateTag('profile');
+    return { success: true };
+  } catch (error) {
+    return { error: 'Failed to update profile' };
+  }
+});
 
 export const updatePassword = validatedActionWithUser(
   updatePasswordSchema,

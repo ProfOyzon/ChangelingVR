@@ -16,6 +16,21 @@ export type ActionState = {
   [key: string]: any;
 };
 
+function processFormData(formData: FormData) {
+  const data: Record<string, any> = {};
+  for (const [key, value] of formData.entries()) {
+    if (data[key]) {
+      if (!Array.isArray(data[key])) {
+        data[key] = [data[key]];
+      }
+      data[key].push(value);
+    } else {
+      data[key] = value;
+    }
+  }
+  return data;
+}
+
 type ValidatedActionFunction<S extends z.ZodType<any, any>, T> = (
   data: z.infer<S>,
   formData: FormData,
@@ -26,7 +41,7 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
   action: ValidatedActionFunction<S, T>,
 ) {
   return async (prevState: ActionState, formData: FormData) => {
-    const result = schema.safeParse(Object.fromEntries(formData));
+    const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
       return { error: processError(result.error) };
     }
@@ -50,12 +65,13 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
     if (!user) {
       throw new Error('User is not authenticated');
     }
-
-    const result = schema.safeParse(Object.fromEntries(formData));
+    console.log(formData);
+    const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
+      console.log(result.error);
       return { error: processError(result.error) };
     }
-
+    console.log(result.data);
     return action(result.data, formData, user);
   };
 }

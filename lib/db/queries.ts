@@ -4,8 +4,9 @@ import { cookies } from 'next/headers';
 import { desc, eq } from 'drizzle-orm';
 import { verifyToken } from '@/lib/auth/session';
 import { db } from '@/lib/db';
-import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
+import { activityLogs, members, posts, profileLinks, profiles, resetTokens } from './schema';
 
+// Fetches member table; requires session cookie
 export async function getUserMember() {
   const sessionCookie = (await cookies()).get('session');
   if (!sessionCookie || !sessionCookie.value) {
@@ -34,6 +35,7 @@ export async function getUserMember() {
   return user[0];
 }
 
+// Fetches profile table; requires session cookie
 export async function getUserProfile() {
   const sessionCookie = (await cookies()).get('session');
   if (!sessionCookie || !sessionCookie.value) {
@@ -62,6 +64,7 @@ export async function getUserProfile() {
   return profile[0];
 }
 
+// Fetches profile links table; requires session cookie
 export async function getProfileLinks() {
   const user = await getUserProfile();
   if (!user) {
@@ -71,6 +74,7 @@ export async function getProfileLinks() {
   return await db.select().from(profileLinks).where(eq(profileLinks.uuid, user.uuid));
 }
 
+// Fetches activity logs table; requires session cookie
 export async function getActivityLogs() {
   const user = await getUserProfile();
   if (!user) {
@@ -99,10 +103,12 @@ export async function getActivityLogs() {
     .limit(10);
 }
 
+// Fetches reset token that matches the UUID
 export async function getResetToken(uuid: string) {
   return await db.select().from(resetTokens).where(eq(resetTokens.uuid, uuid)).limit(1);
 }
 
+// Fetches profile by username
 export async function getProfileByUsername(username: string) {
   // To secure profile from username fetches, we do not return the UUID
   return await db
@@ -119,4 +125,25 @@ export async function getProfileByUsername(username: string) {
     .from(profiles)
     .where(eq(profiles.username, username))
     .limit(1);
+}
+
+// Fetches posts table
+export async function getPosts() {
+  const result = await db.select().from(posts).orderBy(desc(posts.date));
+  if (!result) throw new Error('Failed to fetch posts');
+  return result;
+}
+
+// Fetches complete profiles table
+export async function getCompleteProfiles() {
+  const data = await db.select().from(profiles);
+  const links = await db.select().from(profileLinks);
+  if (!data) throw new Error('Failed to fetch profiles');
+
+  const enhancedData = data.map((profile) => ({
+    ...profile,
+    links: links.filter((link) => link.uuid === profile.uuid),
+  }));
+
+  return enhancedData;
 }

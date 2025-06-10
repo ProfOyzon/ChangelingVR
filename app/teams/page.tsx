@@ -1,10 +1,28 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { getQueryClient } from '@/lib/get-query-client';
+import { profileOptions } from '@/lib/query-options';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
-import { PageLoading } from './components/page-loading';
 import TeamsPageClient from './page.client';
-import { getQueryClient } from './utils/get-query-client';
-import { profileOptions } from './utils/profile-options';
+
+function Loading() {
+  return (
+    <div className="mb-6 flex flex-wrap justify-center gap-6">
+      {[...Array(20)].map((_, index) => (
+        <div
+          key={index}
+          className="bg-steel/50 mx-auto h-64 w-40 max-w-40 min-w-40 animate-pulse rounded backdrop-blur-sm"
+        >
+          <div className="bg-steel/50 h-40 w-full rounded backdrop-blur-sm"></div>
+          <div className="w-full space-y-1 p-2">
+            <div className="bg-steel/50 h-4 rounded backdrop-blur-sm"></div>
+            <div className="bg-steel/50 h-10 rounded backdrop-blur-sm"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export const metadata: Metadata = {
   title: 'Meet the Team',
@@ -13,9 +31,8 @@ export const metadata: Metadata = {
 };
 
 export default async function TeamsPage() {
-  const queryClient = getQueryClient();
-
   // Prefetch the data on the server
+  const queryClient = getQueryClient();
   void queryClient.prefetchQuery(profileOptions);
 
   return (
@@ -28,7 +45,7 @@ export default async function TeamsPage() {
       </p>
 
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<PageLoading />}>
+        <Suspense fallback={<Loading />}>
           <TeamsPageClient />
         </Suspense>
       </HydrationBoundary>

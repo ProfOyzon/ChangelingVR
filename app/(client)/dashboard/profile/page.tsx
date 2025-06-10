@@ -1,14 +1,19 @@
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { FormMessage } from '@/components/form-message';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
-import { getUserProfile } from '@/lib/db/queries';
-import type { Profile } from '@/lib/db/schema';
-import { updateProfileAction } from '../actions';
+import { useProfileMutation } from '../hooks/use-profile-mutation';
+import { useProfileQuery } from '../hooks/use-profile-query';
+
+const USERNAME_MAX = 15;
+const DISPLAY_NAME_MAX = 50;
+const BIO_MAX = 500;
 
 const TEAM_VALUES = [
   'Development',
@@ -37,50 +42,126 @@ const ROLE_VALUES = [
   'Lead',
 ] as const;
 
-export default async function ProfilePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>;
-}) {
-  const { error } = await searchParams;
+export default function ProfilePage() {
+  const { data: profile, isLoading, error } = useProfileQuery();
+  const mutation = useProfileMutation();
+  const formRef = useRef<HTMLFormElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [counts, setCounts] = useState({
+    username: profile?.username?.length || 0,
+    display_name: profile?.display_name?.length || 0,
+    bio: profile?.bio?.length || 0,
+  });
 
-  // If the user data is not found, show a 404 page
-  const userData = (await getUserProfile()) as Profile;
-  if (!userData) redirect('/auth/login');
+  const handleChange = useCallback(() => {
+    if (!formRef.current) return;
+
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Set a new timeout to save after 500ms of no changes
+    timeoutRef.current = setTimeout(() => {
+      const formData = new FormData(formRef.current!);
+      mutation.mutate(formData);
+    }, 500);
+  }, [mutation]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setCounts((prev) => ({ ...prev, [name]: value.length }));
+    handleChange();
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-4">
+        <Skeleton className="mb-4 h-8 w-48" />
+        <Skeleton className="mb-4 h-32 w-full" />
+        <Skeleton className="h-8 w-24" />
+      </div>
+    );
+  }
+
+  if (error || !profile) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold text-red-500">Error loading profile</h1>
+        <p className="text-gray-600">{error?.message || 'Profile not found'}</p>
+      </div>
+    );
+  }
 
   return (
-    <form action={updateProfileAction} className="space-y-6">
-      <input type="hidden" name="id" value={userData.username} />
-
-      {/* Profile Header */}
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="display_name">Display Name</Label>
-          <Input
-            id="display_name"
-            name="display_name"
-            defaultValue={userData.display_name ?? ''}
-            maxLength={50}
-            placeholder="Your display name"
-          />
+    <form ref={formRef} onChange={handleChange} className="space-y-4">
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="username">Username</Label>
+          <span className="text-muted-foreground text-xs">
+            {counts.username}/{USERNAME_MAX}
+          </span>
         </div>
-
-        <div className="flex flex-col gap-1">
-          <Label htmlFor="bio">About Me</Label>
-          <Textarea
-            id="bio"
-            name="bio"
-            defaultValue={userData.bio ?? ''}
-            maxLength={500}
-            placeholder="Tell us about yourself... (500 characters max)"
-            className="h-20 resize-none"
+        <div className="relative">
+          <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">@</span>
+          <Input
+            id="username"
+            name="username"
+            defaultValue={profile.username}
+            className="pl-7"
+            maxLength={USERNAME_MAX}
+            onChange={handleInputChange}
           />
         </div>
       </div>
 
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="display_name">Display Name</Label>
+          <span className="text-muted-foreground text-xs">
+            {counts.display_name}/{DISPLAY_NAME_MAX}
+          </span>
+        </div>
+        <Input
+          id="display_name"
+          name="display_name"
+          defaultValue={profile.display_name || ''}
+          className="w-full"
+          maxLength={DISPLAY_NAME_MAX}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="bio">Bio</Label>
+          <span className="text-muted-foreground text-xs">
+            {counts.bio}/{BIO_MAX}
+          </span>
+        </div>
+        <Textarea
+          id="bio"
+          name="bio"
+          defaultValue={profile.bio || ''}
+          className="w-full"
+          rows={4}
+          maxLength={BIO_MAX}
+          onChange={handleInputChange}
+        />
+      </div>
+
       {/* Terms, Teams & Roles */}
       <div className="flex flex-col gap-6 md:flex-row">
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-2">
           <Label>Terms</Label>
           <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
             <div className="grid grid-cols-1 gap-1">
@@ -92,7 +173,7 @@ export default async function ProfilePage({
                         id={`term-${year}`}
                         name="terms"
                         value={year.toString()}
-                        defaultChecked={userData.terms?.includes(year)}
+                        defaultChecked={profile.terms?.includes(year)}
                       />
                       <Label htmlFor={`term-${year}`} className="text-sm font-normal">
                         {year}
@@ -105,7 +186,7 @@ export default async function ProfilePage({
           </ScrollArea>
         </div>
 
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-2">
           <Label>Teams</Label>
           <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
             <div className="grid grid-cols-1 gap-1">
@@ -115,8 +196,8 @@ export default async function ProfilePage({
                     <Checkbox
                       id={`team-${team}`}
                       name="teams"
-                      value={team}
-                      defaultChecked={userData.teams?.includes(team.toLowerCase())}
+                      value={team.toLowerCase()}
+                      defaultChecked={profile.teams?.includes(team.toLowerCase())}
                     />
                     <Label htmlFor={`team-${team}`} className="text-sm font-normal capitalize">
                       {team}
@@ -128,7 +209,7 @@ export default async function ProfilePage({
           </ScrollArea>
         </div>
 
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 space-y-2">
           <Label>Roles</Label>
           <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
             <div className="grid grid-cols-1 gap-1">
@@ -138,8 +219,8 @@ export default async function ProfilePage({
                     <Checkbox
                       id={`role-${role}`}
                       name="roles"
-                      value={role}
-                      defaultChecked={userData.roles?.includes(role.toLowerCase())}
+                      value={role.toLowerCase()}
+                      defaultChecked={profile.roles?.includes(role.toLowerCase())}
                     />
                     <Label htmlFor={`role-${role}`} className="text-sm font-normal capitalize">
                       {role}
@@ -152,63 +233,7 @@ export default async function ProfilePage({
         </div>
       </div>
 
-      {/* Social Links */}
-
-      {/* <div className="flex flex-col gap-4 md:flex-row">
-          <div className="flex flex-1 flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="link_email">Email Link</Label>
-              <Input
-                id="link_email"
-                name="link_email"
-                type="email"
-                defaultValue={userData.links.email}
-                placeholder="your@email.com"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="link_website">Website</Label>
-              <Input
-                id="link_website"
-                name="link_website"
-                type="url"
-                defaultValue={userData.links.website}
-                placeholder="https://your-website.com"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-1 flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="link_github">GitHub</Label>
-              <Input
-                id="link_github"
-                name="link_github"
-                type="url"
-                defaultValue={userData.links.github}
-                placeholder="https://github.com/username"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <Label htmlFor="link_linkedin">LinkedIn</Label>
-              <Input
-                id="link_linkedin"
-                name="link_linkedin"
-                type="url"
-                defaultValue={userData.links.linkedin}
-                placeholder="https://linkedin.com/in/username"
-              />
-            </div>
-          </div>
-        </div> */}
-
-      {error && <FormMessage type="error" message={error} />}
-
-      <div className="flex justify-end">
-        <Button type="submit">Save Changes</Button>
-      </div>
+      {mutation.error && <FormMessage type="error" message={mutation.error.message} />}
     </form>
   );
 }

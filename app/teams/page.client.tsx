@@ -1,14 +1,22 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { FaGithub, FaGlobe, FaLinkedin, FaRegEnvelope } from 'react-icons/fa6';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Pagination } from '@/components/pagination';
+import { profileOptions } from '@/lib/query-options';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { TeamMemberCard } from './components/member-card';
-import { Pagination } from './components/pagination';
-import { profileOptions } from './utils/profile-options';
+
+const LinkIcon = {
+  email: <FaRegEnvelope className="size-4" />,
+  website: <FaGlobe className="size-4" />,
+  github: <FaGithub className="size-4" />,
+  linkedin: <FaLinkedin className="size-4" />,
+};
 
 export default function TeamsPageClient() {
   const { data, error, isPending } = useSuspenseQuery(profileOptions);
-
   const [search, setSearch] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const prevPageRef = useRef<number>(1);
@@ -71,7 +79,49 @@ export default function TeamsPageClient() {
       ) : (
         <div className="mb-6 flex flex-wrap justify-center gap-6">
           {paginated.map((profile) => (
-            <TeamMemberCard key={profile.username} member={profile} />
+            <div
+              key={profile.username}
+              className="bg-steel/50 hover:bg-steel/75 relative flex h-64 w-40 max-w-40 min-w-40 flex-1 flex-col rounded backdrop-blur-sm transition-colors duration-300"
+            >
+              <Link
+                href={`/users/${profile.username}`}
+                className="flex h-full cursor-pointer flex-col"
+              >
+                <Image
+                  src={profile.avatar_url || '/placeholder.png'}
+                  alt={profile.username}
+                  width={128}
+                  height={128}
+                  className="w-full rounded-t-xl mask-b-from-50% object-cover"
+                  loading="lazy"
+                />
+
+                <div className="w-full space-y-1 p-2">
+                  <span className="line-clamp-1 text-lg font-bold">
+                    {profile.display_name || `@${profile.username}`}
+                  </span>
+                  <span className="line-clamp-3 text-xs text-gray-300">
+                    {profile.bio || 'No bio available'}
+                  </span>
+                </div>
+              </Link>
+
+              <div className="[&>a]:hover:text-light-mustard absolute top-2 right-2 z-10 flex flex-col items-center gap-1 [&>a]:rounded [&>a]:bg-gray-800/80 [&>a]:p-1 [&>a]:text-white">
+                {profile.links.map((link) => {
+                  const icon = LinkIcon[link.platform as keyof typeof LinkIcon];
+                  return (
+                    <a
+                      key={link.platform}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {icon}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
       )}
