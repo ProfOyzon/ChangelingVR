@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { FaCircleInfo } from 'react-icons/fa6';
 import { FormMessage } from '@/components/form-message';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,9 @@ import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { updateProfileSchema } from '@/lib/auth/validator';
+import { cn } from '@/lib/utils';
 import { useProfileMutation } from '../hooks/use-profile-mutation';
 import { useProfileQuery } from '../hooks/use-profile-query';
 
@@ -42,31 +46,161 @@ const ROLE_VALUES = [
   'Lead',
 ] as const;
 
+type ValidationErrors = Record<string, string>;
+type CharacterCounts = {
+  username: number;
+  display_name: number;
+  bio: number;
+};
+
+const CharacterCount = ({ current, max }: { current: number; max: number }) => (
+  <span className="text-muted-foreground text-xs">
+    {current}/{max}
+  </span>
+);
+
+const ValidationError = ({ message }: { message: string }) => (
+  <p className="mt-1 text-xs text-red-500">{message}</p>
+);
+
+const FormField = ({
+  label,
+  id,
+  name,
+  value,
+  maxLength,
+  error,
+  count,
+  tooltip,
+  children,
+}: {
+  label: string;
+  id: string;
+  name: string;
+  value: string;
+  maxLength: number;
+  error?: string;
+  count: number;
+  tooltip: string;
+  children?: React.ReactNode;
+}) => (
+  <div className="space-y-2">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-1.5">
+        <Label htmlFor={id}>{label}</Label>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <FaCircleInfo className="text-muted-foreground hover:text-foreground size-[12px] transition-colors" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs">{tooltip}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
+      <CharacterCount current={count} max={maxLength} />
+    </div>
+    {children || (
+      <Input
+        id={id}
+        name={name}
+        defaultValue={value}
+        className={cn('w-full', error && 'border-red-500')}
+        maxLength={maxLength}
+      />
+    )}
+    {error && <ValidationError message={error} />}
+  </div>
+);
+
+const CheckboxGroup = ({
+  label,
+  items,
+  name,
+  defaultValues,
+}: {
+  label: string;
+  items: readonly string[];
+  name: string;
+  defaultValues?: string[];
+}) => (
+  <div className="flex-1 space-y-2">
+    <Label>{label}</Label>
+    <ScrollArea className="h-[100px] rounded-md border p-2 md:h-90">
+      <div className="grid grid-cols-1 gap-1">
+        {items.map((item) => (
+          <div key={item} className="flex items-center space-x-2">
+            <Checkbox
+              id={`${name}-${item}`}
+              name={name}
+              value={item.toLowerCase()}
+              defaultChecked={defaultValues?.includes(item.toLowerCase())}
+            />
+            <Label htmlFor={`${name}-${item}`} className="text-sm font-normal capitalize">
+              {item}
+            </Label>
+          </div>
+        ))}
+      </div>
+    </ScrollArea>
+  </div>
+);
+
 export default function ProfilePage() {
   const { data: profile, isLoading, error } = useProfileQuery();
   const mutation = useProfileMutation();
   const formRef = useRef<HTMLFormElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [counts, setCounts] = useState({
-    username: profile?.username?.length || 0,
-    display_name: profile?.display_name?.length || 0,
-    bio: profile?.bio?.length || 0,
+  const [counts, setCounts] = useState<CharacterCounts>({
+    username: 0,
+    display_name: 0,
+    bio: 0,
   });
+  const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
+
+  useEffect(() => {
+    if (profile) {
+      setCounts({
+        username: profile.username?.length || 0,
+        display_name: profile.display_name?.length || 0,
+        bio: profile.bio?.length || 0,
+      });
+    }
+  }, [profile]);
+
+  const validateForm = useCallback((formData: FormData) => {
+    const data = Object.fromEntries(formData);
+    const result = updateProfileSchema.safeParse(data);
+
+    if (!result.success) {
+      const errors: ValidationErrors = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[0] as string;
+        errors[path] = issue.message;
+      });
+      setValidationErrors(errors);
+      return false;
+    }
+
+    setValidationErrors({});
+    return true;
+  }, []);
 
   const handleChange = useCallback(() => {
     if (!formRef.current) return;
 
-    // Clear any existing timeout
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    // Set a new timeout to save after 500ms of no changes
     timeoutRef.current = setTimeout(() => {
       const formData = new FormData(formRef.current!);
-      mutation.mutate(formData);
-    }, 500);
-  }, [mutation]);
+      if (validateForm(formData)) {
+        mutation.mutate(formData);
+      }
+    }, 300);
+  }, [mutation, validateForm]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -74,7 +208,6 @@ export default function ProfilePage() {
     handleChange();
   };
 
-  // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -103,134 +236,97 @@ export default function ProfilePage() {
   }
 
   return (
-    <form ref={formRef} onChange={handleChange} className="space-y-4">
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="username">Username</Label>
-          <span className="text-muted-foreground text-xs">
-            {counts.username}/{USERNAME_MAX}
-          </span>
-        </div>
+    <form ref={formRef} onChange={handleChange} className="flex flex-col gap-6">
+      <FormField
+        label="Username"
+        id="username"
+        name="username"
+        value={profile.username}
+        maxLength={USERNAME_MAX}
+        error={validationErrors.username}
+        count={counts.username}
+        tooltip="Your unique identifier. This will be used in your profile URL and mentions."
+      >
         <div className="relative">
           <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">@</span>
           <Input
             id="username"
             name="username"
             defaultValue={profile.username}
-            className="pl-7"
+            className={cn('pl-7', validationErrors.username && 'border-red-500')}
+            placeholder="Enter your username"
             maxLength={USERNAME_MAX}
             onChange={handleInputChange}
           />
         </div>
-      </div>
+      </FormField>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="display_name">Display Name</Label>
-          <span className="text-muted-foreground text-xs">
-            {counts.display_name}/{DISPLAY_NAME_MAX}
-          </span>
-        </div>
+      <FormField
+        label="Display Name"
+        id="display_name"
+        name="display_name"
+        value={profile.display_name || ''}
+        maxLength={DISPLAY_NAME_MAX}
+        error={validationErrors.display_name}
+        count={counts.display_name}
+        tooltip="The name that will be shown to other users. This can be your real name or a nickname."
+      >
         <Input
           id="display_name"
           name="display_name"
           defaultValue={profile.display_name || ''}
-          className="w-full"
+          className={cn('w-full', validationErrors.display_name && 'border-red-500')}
+          placeholder="Enter your display name"
           maxLength={DISPLAY_NAME_MAX}
           onChange={handleInputChange}
         />
-      </div>
+      </FormField>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="bio">Bio</Label>
-          <span className="text-muted-foreground text-xs">
-            {counts.bio}/{BIO_MAX}
-          </span>
-        </div>
+      <FormField
+        label="Bio"
+        id="bio"
+        name="bio"
+        value={profile.bio || ''}
+        maxLength={BIO_MAX}
+        error={validationErrors.bio}
+        count={counts.bio}
+        tooltip="A brief description about yourself. This will be visible on your profile page."
+      >
         <Textarea
           id="bio"
           name="bio"
           defaultValue={profile.bio || ''}
-          className="w-full"
-          rows={4}
+          className={cn('w-full', validationErrors.bio && 'border-red-500')}
+          rows={3}
+          placeholder="Tell us about yourself..."
           maxLength={BIO_MAX}
           onChange={handleInputChange}
         />
-      </div>
+      </FormField>
 
-      {/* Terms, Teams & Roles */}
       <div className="flex flex-col gap-6 md:flex-row">
-        <div className="flex-1 space-y-2">
-          <Label>Terms</Label>
-          <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
-            <div className="grid grid-cols-1 gap-1">
-              {Array.from({ length: new Date().getFullYear() - 2019 }, (_, i) => 2020 + i).map(
-                (year) => {
-                  return (
-                    <div key={year} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`term-${year}`}
-                        name="terms"
-                        value={year.toString()}
-                        defaultChecked={profile.terms?.includes(year)}
-                      />
-                      <Label htmlFor={`term-${year}`} className="text-sm font-normal">
-                        {year}
-                      </Label>
-                    </div>
-                  );
-                },
-              )}
-            </div>
-          </ScrollArea>
-        </div>
+        <CheckboxGroup
+          label="Terms"
+          items={Array.from({ length: new Date().getFullYear() - 2019 }, (_, i) =>
+            (new Date().getFullYear() - i).toString(),
+          )}
+          name="terms"
+          defaultValues={profile.terms?.map(String) || undefined}
+        />
 
-        <div className="flex-1 space-y-2">
-          <Label>Teams</Label>
-          <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
-            <div className="grid grid-cols-1 gap-1">
-              {TEAM_VALUES.map((team) => {
-                return (
-                  <div key={team} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`team-${team}`}
-                      name="teams"
-                      value={team.toLowerCase()}
-                      defaultChecked={profile.teams?.includes(team.toLowerCase())}
-                    />
-                    <Label htmlFor={`team-${team}`} className="text-sm font-normal capitalize">
-                      {team}
-                    </Label>
-                  </div>
-                );
-              })}
-            </div>
-          </ScrollArea>
-        </div>
+        <CheckboxGroup
+          label="Teams"
+          items={TEAM_VALUES}
+          name="teams"
+          defaultValues={profile.teams || undefined}
+        />
 
-        <div className="flex-1 space-y-2">
-          <Label>Roles</Label>
-          <ScrollArea className="h-[100px] rounded-md border p-2 md:h-[250px]">
-            <div className="grid grid-cols-1 gap-1">
-              {ROLE_VALUES.map((role) => {
-                return (
-                  <div key={role} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={`role-${role}`}
-                      name="roles"
-                      value={role.toLowerCase()}
-                      defaultChecked={profile.roles?.includes(role.toLowerCase())}
-                    />
-                    <Label htmlFor={`role-${role}`} className="text-sm font-normal capitalize">
-                      {role}
-                    </Label>
-                  </div>
-                );
-              })}
-            </div>
-          </ScrollArea>
-        </div>
+        <CheckboxGroup
+          label="Roles"
+          items={ROLE_VALUES}
+          name="roles"
+          defaultValues={profile.roles || undefined}
+        />
       </div>
 
       {mutation.error && <FormMessage type="error" message={mutation.error.message} />}
