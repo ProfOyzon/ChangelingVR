@@ -12,11 +12,11 @@ export async function generateMetadata({
   const user = await getProfileByUsername(username);
 
   return {
-    title: `${user[0].display_name}`,
-    description: `View ${user[0].display_name}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+    title: user[0].username,
+    description: `View ${user[0].display_name || user[0].username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     openGraph: {
-      title: `${user[0].display_name} | Changeling VR`,
-      description: `View ${user[0].display_name}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+      title: `${user[0].username} | Changeling VR`,
+      description: `View ${user[0].display_name || user[0].username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
       images: [
         {
           url: user[0].avatar_url ?? '',
@@ -27,8 +27,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary',
-      title: `${user[0].display_name} | Changeling VR`,
-      description: `View ${user[0].display_name}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+      title: `${user[0].username} | Changeling VR`,
+      description: `View ${user[0].display_name || user[0].username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
       images: [
         {
           url: user[0].avatar_url ?? '',
