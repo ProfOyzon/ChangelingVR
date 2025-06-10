@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { getProfileByUsername } from '@/lib/db/queries';
 import './username.css';
 
 export async function generateMetadata({
@@ -7,16 +9,33 @@ export async function generateMetadata({
   params: Promise<{ username: string }>;
 }): Promise<Metadata> {
   const { username } = await params;
-
-  // TODO: Fetch the team member data from the database
-  // Construct better metadata based on the fetched data
+  const user = await getProfileByUsername(username);
 
   return {
-    title: username,
-    description: `User profile for ${username}`,
+    title: `${user[0].display_name}`,
+    description: `View ${user[0].display_name}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     openGraph: {
-      title: `${username} @ Changeling VR`,
-      description: `User profile for ${username}`,
+      title: `${user[0].display_name} | Changeling VR`,
+      description: `View ${user[0].display_name}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+      images: [
+        {
+          url: user[0].avatar_url ?? '',
+          width: 512,
+          height: 512,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary',
+      title: `${user[0].display_name} | Changeling VR`,
+      description: `View ${user[0].display_name}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+      images: [
+        {
+          url: user[0].avatar_url ?? '',
+          width: 512,
+          height: 512,
+        },
+      ],
     },
   };
 }
@@ -24,13 +43,12 @@ export async function generateMetadata({
 export default async function UserPage({ params }: { params: Promise<{ username: string }> }) {
   const { username } = await params;
 
-  // TODO: Fetch the team member data from the database
-  // slug === user.username
+  const user = await getProfileByUsername(username);
+  if (!user) return notFound();
 
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
-      <p>Hey,</p>
-      <p>{username}</p>
+    <div className="flex min-h-[calc(100svh-4rem)] w-screen flex-col items-center justify-center">
+      <p>Hey, {user[0].display_name}!</p>
       <div className="container">
         <div className="user-info"></div>
       </div>
