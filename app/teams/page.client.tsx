@@ -92,7 +92,7 @@ export default function TeamsPageClient() {
                   alt={profile.username}
                   width={128}
                   height={128}
-                  className="w-full rounded-t-xl mask-b-from-50% object-cover"
+                  className="w-full rounded-t mask-b-from-50% object-cover"
                   loading="lazy"
                 />
 
