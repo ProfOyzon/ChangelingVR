@@ -69,7 +69,7 @@ export default async function UserPage({ params }: { params: Promise<{ username:
             </div>
           </div>
 
-          <div className="absolute top-1/16 left-0 h-40 w-40 translate-x-1.5 translate-y-1/2 overflow-hidden rounded-full border border-gray-400 bg-gray-200 shadow-md">
+          <div className="absolute top-1/16 left-0 h-35 w-35 translate-x-2.5 translate-y-1/2 overflow-hidden rounded-full border border-gray-400 bg-gray-200 shadow-md">
             <img
               src={user[0].avatar_url || 'https://via.placeholder.com/56'}
               alt="Profile"
