@@ -27,7 +27,7 @@ export default async function PreviewPage() {
         <div className="bg-steel/50 rounded shadow-lg backdrop-blur-sm">
           <div className="relative h-32 w-full rounded-t bg-gradient-to-r from-indigo-500 to-indigo-600">
             <div className="absolute -bottom-6 left-6 flex items-end gap-2">
-              <div className="bg-background relative h-24 w-24 overflow-hidden rounded shadow-lg">
+              <div className="bg-white relative h-24 w-24 overflow-hidden rounded shadow-lg">
                 <Image
                   src={user.avatar_url ?? '/placeholder.png'}
                   alt={user.display_name || user.username}
