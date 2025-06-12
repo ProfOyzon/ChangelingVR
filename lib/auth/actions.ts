@@ -5,8 +5,8 @@ import { cookies } from 'next/headers';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
-import { WelcomeEmail } from '@/components/email';
-import { LoginEmail } from '@/components/email';
+import { createHash, randomUUID } from 'node:crypto';
+import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
 import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
@@ -27,6 +27,7 @@ import {
   activityLogs,
   members,
   profiles,
+  resetTokens,
 } from '@/lib/db/schema';
 import { sendMail } from '@/lib/nodemailer';
 
@@ -196,9 +197,78 @@ export const updateProfile = validatedActionWithUser(updateProfileSchema, async 
   }
 });
 
-export const updatePassword = validatedActionWithUser(
-  updatePasswordSchema,
-  async (data, _, user) => {},
-);
+export const updatePassword = validatedAction(updatePasswordSchema, async (data, formData) => {
+  const { token, password } = data;
+  const hashedToken = createHash('sha256').update(token).digest('hex');
+  const hashedPassword = await hashPassword(password);
 
-export const forgotPassword = validatedAction(forgotPasswordSchema, async (data, formData) => {});
+  const storedToken = await db
+    .select()
+    .from(resetTokens)
+    .where(eq(resetTokens.token, hashedToken))
+    .limit(1);
+
+  // Ensure token exists and is not expired
+  if (storedToken.length === 0 || storedToken[0].expires_at < new Date()) {
+    return { error: 'Invalid token or token expired' };
+  }
+
+  await Promise.all([
+    db
+      .update(members)
+      .set({ password: hashedPassword })
+      .where(eq(members.uuid, storedToken[0].uuid)),
+    db.delete(resetTokens).where(eq(resetTokens.uuid, storedToken[0].uuid)),
+    logActivity(storedToken[0].uuid, ActivityType.UPDATE_PASSWORD),
+  ]);
+
+  redirect('/auth/login');
+});
+
+export const forgotPassword = validatedAction(forgotPasswordSchema, async (data, formData) => {
+  const { email } = data;
+
+  const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
+  if (!member || member.length === 0) {
+    // Still show success message to prevent account enumeration
+    redirect('/auth/forgot-password?success=true');
+  }
+
+  const token = randomUUID();
+  const hashedToken = createHash('sha256').update(token).digest('hex');
+  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/update-password?token=${encodeURIComponent(token)}`;
+
+  const TOKEN_EXPIRY_MS = 1000 * 60 * 30; // 30 minutes
+
+  await db.transaction(async (tx) => {
+    const existingToken = await tx
+      .select()
+      .from(resetTokens)
+      .where(eq(resetTokens.uuid, member[0].uuid));
+
+    if (existingToken.length > 0) {
+      await tx
+        .update(resetTokens)
+        .set({
+          token: hashedToken,
+          expires_at: new Date(Date.now() + TOKEN_EXPIRY_MS),
+        })
+        .where(eq(resetTokens.uuid, member[0].uuid));
+    } else {
+      await tx.insert(resetTokens).values({
+        uuid: member[0].uuid,
+        token: hashedToken,
+        expires_at: new Date(Date.now() + TOKEN_EXPIRY_MS),
+      });
+    }
+  });
+
+  await sendMail({
+    reciever: email,
+    subject: 'Changeling VR Password Reset',
+    plainText: `Click the link below to reset your password: ${url}`,
+    email: PasswordResetEmail({ username: member[0].email, url }),
+  });
+
+  redirect('/auth/forgot-password?success=true');
+});

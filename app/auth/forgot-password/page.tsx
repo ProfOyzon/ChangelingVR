@@ -16,19 +16,42 @@ function ForgotPasswordSkeleton() {
   );
 }
 
-export default async function ForgotPasswordPage() {
+export default async function ForgotPasswordPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>;
+}) {
+  const { success } = await searchParams;
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-2xl">Reset Your Password</CardTitle>
-        <CardDescription>
-          Type in your email and we&apos;ll send you a link to reset your password
-        </CardDescription>
-      </CardHeader>
+      {success ? (
+        <>
+          <CardHeader>
+            <CardTitle className="text-2xl">Check Your Email</CardTitle>
+            <CardDescription>Password reset instructions sent</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground text-sm">
+              If you registered using your email and password, you will receive a password reset
+              email.
+            </p>
+          </CardContent>
+        </>
+      ) : (
+        <>
+          <CardHeader>
+            <CardTitle className="text-2xl">Reset Your Password</CardTitle>
+            <CardDescription>
+              Type in your email and we&apos;ll send you a link to reset your password
+            </CardDescription>
+          </CardHeader>
 
-      <Suspense fallback={<ForgotPasswordSkeleton />}>
-        <ForgotPasswordPageClient />
-      </Suspense>
+          <Suspense fallback={<ForgotPasswordSkeleton />}>
+            <ForgotPasswordPageClient />
+          </Suspense>
+        </>
+      )}
     </Card>
   );
 }

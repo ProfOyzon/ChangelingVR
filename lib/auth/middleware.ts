@@ -65,13 +65,12 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
     if (!user) {
       throw new Error('User is not authenticated');
     }
-    console.log(formData);
+
     const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
-      console.log(result.error);
       return { error: processError(result.error) };
     }
-    console.log(result.data);
+
     return action(result.data, formData, user);
   };
 }
