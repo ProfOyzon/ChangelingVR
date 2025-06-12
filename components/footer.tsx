@@ -39,12 +39,12 @@ const SOCIAL_LINKS: SocialLink[] = [
     label: 'Join our Discord server',
   },
   {
-    href: 'https://steamcommunity.com/app/2410100',
+    href: '#',
     icon: FaSteam,
     label: 'Follow us on Steam',
   },
   {
-    href: 'https://www.itch.io/changelingvr',
+    href: 'https://changelingvrteam.itch.io/changelingvr',
     icon: FaItchIo,
     label: 'Follow us on Itch.io',
   },
