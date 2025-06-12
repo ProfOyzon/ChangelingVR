@@ -10,9 +10,8 @@ import {
   useFormContext,
   useFormState,
 } from 'react-hook-form';
-import { cn } from '@/lib/utils';
 import { Label as LabelPrimitive, Slot as SlotPrimitive } from 'radix-ui';
-
+import { cn } from '@/lib/utils';
 import { Label } from './label';
 
 const Form = FormProvider;
