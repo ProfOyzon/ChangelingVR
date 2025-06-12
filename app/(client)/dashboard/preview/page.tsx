@@ -1,6 +1,5 @@
 import { FaGithub, FaGlobe, FaLinkedin, FaRegEnvelope } from 'react-icons/fa6';
 import Image from 'next/image';
-import Link from 'next/link';
 import { getProfileLinks, getUserProfile } from '@/lib/db/queries';
 import type { Profile, ProfileLink } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
@@ -27,7 +26,7 @@ export default async function PreviewPage() {
         <div className="bg-steel/50 rounded shadow-lg backdrop-blur-sm">
           <div className="relative h-32 w-full rounded-t bg-gradient-to-r from-indigo-500 to-indigo-600">
             <div className="absolute -bottom-6 left-6 flex items-end gap-2">
-              <div className="bg-white relative h-24 w-24 overflow-hidden rounded shadow-lg">
+              <div className="relative h-24 w-24 overflow-hidden rounded bg-white shadow-lg">
                 <Image
                   src={user.avatar_url ?? '/placeholder.png'}
                   alt={user.display_name || user.username}
@@ -49,7 +48,7 @@ export default async function PreviewPage() {
             {links.filter((link) => link.visible).length > 0 && (
               <div className="bg-steel/50 absolute top-2 right-2 flex justify-center gap-2 rounded px-2 py-1 shadow backdrop-blur-sm">
                 {links.map((link) => (
-                  <Link
+                  <a
                     key={link.platform}
                     href={link.url}
                     target="_blank"
@@ -57,12 +56,12 @@ export default async function PreviewPage() {
                     className="hover:text-light-mustard transition-colors duration-150"
                   >
                     {LinkIcon[link.platform as keyof typeof LinkIcon]}
-                  </Link>
+                  </a>
                 ))}
               </div>
             )}
 
-            {user.bio && <p className="mb-6 leading-relaxed">{user.bio}</p>}
+            {user.bio && <p className="mb-6 min-h-24 leading-relaxed">{user.bio}</p>}
 
             <div className="grid grid-cols-3 gap-4">
               {user.terms && user.terms.length > 0 && (
