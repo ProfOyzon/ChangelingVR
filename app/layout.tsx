@@ -21,6 +21,17 @@ export const metadata: Metadata = {
   description:
     'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
   keywords: ['changeling', 'vr', 'game', 'narrative', 'mystery', 'interactive', 'games', 'media'],
+  openGraph: {
+    title: 'Changeling VR - A Narrative Mystery',
+    description:
+      'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Changeling VR - A Narrative Mystery',
+    description:
+      'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
+  },
 };
 
 export const viewport: Viewport = {
