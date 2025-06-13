@@ -80,7 +80,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
               </p>
 
               <Button
-                href={`/characters/${character.name}`}
+                href={`/characters/${character.name.split(' ')[0].toLowerCase()}`}
                 aria-label={`Enter ${character.name}'s experience`}
                 className="mt-2 w-full"
               >

@@ -33,12 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${latoSans.className} antialiased`}
-      suppressHydrationWarning
-    >
-      <body className="bg-midnight text-gray-100 w-screen">
+    <html lang="en" className={`${latoSans.className} antialiased`} suppressHydrationWarning>
+      <body className="bg-midnight w-screen text-gray-100">
         <QueryProvider>
           <Header />
           <div className="h-16" aria-hidden="true"></div>
