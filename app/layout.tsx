@@ -35,10 +35,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${latoSans.className} min-w-svw antialiased`}
+      className={`${latoSans.className} antialiased`}
       suppressHydrationWarning
     >
-      <body className="bg-midnight text-gray-100">
+      <body className="bg-midnight text-gray-100 w-screen">
         <QueryProvider>
           <Header />
           <div className="h-16" aria-hidden="true"></div>
