@@ -40,9 +40,9 @@ const NAV_ITEMS: NavItem[] = [
     variant: 'link',
   },
   {
-    href: 'https://changelingvrteam.itch.io/changelingvr',
+    href: '/download',
     label: 'Play Now',
-    ariaLabel: 'Play Changeling VR on itch.io',
+    ariaLabel: 'Download Changeling VR',
   },
 ];
 

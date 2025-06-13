@@ -53,8 +53,8 @@ export default async function Home() {
 
           <div className="flex justify-center">
             <Button
-              href="https://changelingvrteam.itch.io/changelingvr"
-              aria-label="Play Changeling VR on itch.io"
+              href="/download"
+              aria-label="Download Changeling VR"
               className="text-midnight px-8 py-3 text-xl"
             >
               Play Now
@@ -168,7 +168,7 @@ export default async function Home() {
             journey as Aurelia Walker.
           </p>
 
-          <Button href="https://changelingvrteam.itch.io/changelingvr" className="w-full">
+          <Button href="/download" className="w-full">
             Play Now
           </Button>
         </div>
