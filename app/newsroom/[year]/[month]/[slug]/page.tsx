@@ -123,6 +123,8 @@ export default async function Post({
         <Image
           src={post.cover_image}
           alt={post.title}
+          width={1200}
+          height={400}
           className="h-50 w-full rounded-lg object-cover"
         />
       )}
