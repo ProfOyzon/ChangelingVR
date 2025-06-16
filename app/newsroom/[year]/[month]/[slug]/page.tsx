@@ -38,7 +38,7 @@ export async function generateMetadata({
       images: post?.cover_image
         ? [
             {
-              url: `https://changelingvr.vercel.app/${post.cover_image}`,
+              url: post.cover_image,
             },
           ]
         : [],
@@ -49,7 +49,7 @@ export async function generateMetadata({
       images: post?.cover_image
         ? [
             {
-              url: `https://changelingvr.vercel.app/${post.cover_image}`,
+              url: post.cover_image,
             },
           ]
         : [],
@@ -121,10 +121,8 @@ export default async function Post({
 
       {post.cover_image && (
         <Image
-          src={`/${post.cover_image}`}
+          src={post.cover_image}
           alt={post.title}
-          width={1200}
-          height={400}
           className="h-50 w-full rounded-lg object-cover"
         />
       )}
