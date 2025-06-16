@@ -1,8 +1,16 @@
-import Image from 'next/image';
+import Image, { type StaticImageData } from 'next/image';
 import promosData from '@/lib/data/promos.json';
+import AMothersFear from '@/public/media/press/angela_fear.png';
+import DougiesDrawing from '@/public/media/press/dougie_doodle.png';
+import TheTouchOfMemory from '@/public/media/press/memory_touch.png';
 import type { Promo } from '@/types';
 
 const promos = promosData as Promo[];
+const promoImages: Record<string, StaticImageData> = {
+  "Dougie's Drawings": DougiesDrawing,
+  "A Mother's Fear": AMothersFear,
+  'The Touch of Memory': TheTouchOfMemory,
+};
 
 export const PromoSection = () => {
   return (
@@ -14,19 +22,14 @@ export const PromoSection = () => {
         <p className="mb-4 text-base md:mb-6 md:text-lg">Explore and understand the characters</p>
 
         {/* Promo items */}
-        <div className="motion-safe:animate-fade-in flex flex-col justify-evenly gap-6 md:flex-row">
+        <div className="flex flex-col justify-evenly gap-6 md:flex-row">
           {promos.map((item) => (
             <div key={item.title} className="flex flex-1 flex-col items-center rounded">
               <div className="w-full mask-b-from-50%">
                 <Image
-                  src={item.image}
+                  src={promoImages[item.title]}
                   alt={item.alt}
-                  width={800}
-                  height={450}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="h-full max-h-[12.5rem] w-full rounded object-cover"
-                  placeholder="blur"
-                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkMjU1LS0yMi4qLjgyPj4+OD5AQEBAR0dHSEhISFJSUlJSUlJSUlL/2wBDAR4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHhL/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                  className="h-full max-h-50 w-full rounded object-cover"
                 />
               </div>
 

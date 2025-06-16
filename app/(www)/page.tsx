@@ -2,14 +2,13 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import { CharacterSkeleton } from '@/app/(www)/character-skeleton';
 import { Characters } from '@/app/(www)/characters';
-import { NewsSkeleton } from '@/app/(www)/news-skeleton';
+import { NewsContainer } from '@/app/(www)/news-container';
 import { PromoSection } from '@/app/(www)/promo-section';
 import { Button } from '@/components/button';
-import { NewsContainer } from '@/components/news-container';
 import { getCachedPosts } from '@/lib/cache';
 import aurelia from '@/public/aurelia.png';
+import LivingRoomWatercolor from '@/public/background/living_room_watercolor.png';
 
-// Main page component with optimized structure
 export default async function Home() {
   const { data: news } = await getCachedPosts();
 
@@ -28,6 +27,7 @@ export default async function Home() {
           aria-hidden="true"
         >
           <source src="/media/video/ChangelingTrailer2024.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
         </video>
 
         <div className="relative z-5 mx-auto max-w-2xl px-4">
@@ -104,11 +104,9 @@ export default async function Home() {
         <div className="mx-auto flex max-w-7xl flex-col items-center">
           <h1 className="mb-6 text-3xl font-bold uppercase md:text-5xl">The Latest</h1>
 
-          <Suspense fallback={<NewsSkeleton />}>
-            <div className="mb-6 flex flex-col justify-evenly gap-6 text-gray-100 md:flex-row">
-              {news?.slice(0, 3).map((item) => <NewsContainer key={item.id} news={item} />)}
-            </div>
-          </Suspense>
+          <div className="mb-6 flex flex-col justify-evenly gap-6 text-gray-100 md:flex-row">
+            {news?.slice(0, 3).map((item) => <NewsContainer key={item.id} news={item} />)}
+          </div>
 
           <Button href="/newsroom" aria-label="View all news" className="max-md:w-full">
             View All
@@ -123,15 +121,9 @@ export default async function Home() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-6 md:flex-row">
           <div className="w-full">
             <Image
-              src="/background/living_room_watercolor.png"
+              src={LivingRoomWatercolor}
               alt="Living room watercolor background"
-              width={1280}
-              height={720}
-              sizes="(max-width: 768px) 100vw, 50vw"
-              loading="lazy"
               className="h-auto w-full rounded object-cover"
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQtJSEkMjU1LS0yMi4qLjgyPj4+OD5AQEBAR0dHSEhISFJSUlJSUlJSUlL/2wBDAR4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHhL/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
           </div>
 
@@ -157,7 +149,7 @@ export default async function Home() {
       {/* Enter the Dream Section */}
       <div className="mx-auto flex w-full max-w-2xl flex-row items-center justify-center gap-2 px-6">
         <div className="pt-8">
-          <Image src={aurelia} alt="Aurelia" width={100} height={160} className="h-full w-auto" />
+          <Image src={aurelia} alt="Aurelia" className="h-80 w-auto" />
         </div>
 
         <div className="flex max-w-lg flex-1 flex-col items-start py-4">

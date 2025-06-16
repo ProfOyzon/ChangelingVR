@@ -1,15 +1,14 @@
 import { FaShare } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
-import { fetchSupabaseImage } from '../lib/api';
-import type { Post } from '../lib/db/schema';
+import type { Post } from '../../lib/db/schema';
 
 export function NewsContainer({ news }: { news: Post }) {
   return (
     // Clickable link to the news item
     <Link
       href={`/newsroom/${news.date.split('-')[0]}/${news.date.split('-')[1]}/${news.slug}`}
-      className="group bg-steel/25 relative max-w-[400px] min-w-[300px] flex-1 rounded backdrop-blur-sm transition-transform duration-300 hover:scale-102 active:scale-95"
+      className="group bg-steel/25 relative flex-1 rounded backdrop-blur-sm transition-transform duration-300 hover:scale-102 active:scale-95"
     >
       {/* External link icon */}
       <div className="bg-midnight/90 absolute top-2 right-2 z-20 flex items-center justify-center rounded-full p-2 shadow-lg backdrop-blur-sm">
@@ -19,10 +18,7 @@ export function NewsContainer({ news }: { news: Post }) {
       {/* Image */}
       {news.cover_image && (
         <Image
-          src={fetchSupabaseImage({
-            container: 'news',
-            path: news.cover_image,
-          })}
+          src={news.cover_image}
           alt={news.title}
           width={400}
           height={225}
