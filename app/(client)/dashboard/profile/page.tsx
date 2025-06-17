@@ -165,7 +165,7 @@ export default function ProfilePage() {
           }
         );
       }
-    }, 500);
+    }, 1000);
   }, [mutation, validateForm]);
 
   useEffect(() => {
