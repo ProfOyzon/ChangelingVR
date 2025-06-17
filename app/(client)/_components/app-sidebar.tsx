@@ -57,6 +57,14 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Avatar" asChild>
+                  <Link href="/dashboard/avatar">
+                    <User />
+                    <span>Avatar</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Activity" asChild>
                   <Link href="/dashboard/activity">
                     <Activity />

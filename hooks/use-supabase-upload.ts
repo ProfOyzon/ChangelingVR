@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { type FileError, type FileRejection, useDropzone } from 'react-dropzone';
 import { createClient } from '../lib/db/supabase/client';
-import { resizeAndConvertToWebP } from '../lib/format-image';
+import { resizeAndConvertToWebP } from '../lib/process-avatar';
 
 const supabase = createClient();
 

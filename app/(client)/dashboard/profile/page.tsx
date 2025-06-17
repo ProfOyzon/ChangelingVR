@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FaCircleInfo } from 'react-icons/fa6';
+import { toast } from 'sonner';
 import { FormMessage } from '@/components/form-message';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -14,10 +15,6 @@ import { updateProfileSchema } from '@/lib/auth/validator';
 import { cn } from '@/lib/utils';
 import { useProfileMutation } from '../hooks/use-profile-mutation';
 import { useProfileQuery } from '../hooks/use-profile-query';
-
-const USERNAME_MAX = 15;
-const DISPLAY_NAME_MAX = 50;
-const BIO_MAX = 500;
 
 const TEAM_VALUES = [
   'Development',
@@ -47,41 +44,22 @@ const ROLE_VALUES = [
 ] as const;
 
 type ValidationErrors = Record<string, string>;
-type CharacterCounts = {
-  username: number;
-  display_name: number;
-  bio: number;
-};
-
-const CharacterCount = ({ current, max }: { current: number; max: number }) => (
-  <span className="text-muted-foreground text-xs">
-    {current}/{max}
-  </span>
-);
 
 const ValidationError = ({ message }: { message: string }) => (
-  <p className="mt-1 text-xs text-red-500">{message}</p>
+  <p className="text-destructive mt-1 text-xs">{message}</p>
 );
 
 const FormField = ({
-  label,
   id,
-  name,
-  value,
-  maxLength,
-  error,
-  count,
+  label,
   tooltip,
+  error,
   children,
 }: {
-  label: string;
   id: string;
-  name: string;
-  value: string;
-  maxLength: number;
-  error?: string;
-  count: number;
+  label: string;
   tooltip: string;
+  error?: string;
   children?: React.ReactNode;
 }) => (
   <div className="space-y-2">
@@ -99,17 +77,8 @@ const FormField = ({
           </Tooltip>
         </TooltipProvider>
       </div>
-      <CharacterCount current={count} max={maxLength} />
     </div>
-    {children || (
-      <Input
-        id={id}
-        name={name}
-        defaultValue={value}
-        className={cn('w-full', error && 'border-red-500')}
-        maxLength={maxLength}
-      />
-    )}
+    {children}
     {error && <ValidationError message={error} />}
   </div>
 );
@@ -151,23 +120,8 @@ export default function ProfilePage() {
   const { data: profile, isLoading, error } = useProfileQuery();
   const mutation = useProfileMutation();
   const formRef = useRef<HTMLFormElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [counts, setCounts] = useState<CharacterCounts>({
-    username: 0,
-    display_name: 0,
-    bio: 0,
-  });
+  const mutationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
-
-  useEffect(() => {
-    if (profile) {
-      setCounts({
-        username: profile.username?.length || 0,
-        display_name: profile.display_name?.length || 0,
-        bio: profile.bio?.length || 0,
-      });
-    }
-  }, [profile]);
 
   const validateForm = useCallback((formData: FormData) => {
     const data = Object.fromEntries(formData);
@@ -187,31 +141,37 @@ export default function ProfilePage() {
     return true;
   }, []);
 
-  const handleChange = useCallback(() => {
+  const handleInput = useCallback(() => {
     if (!formRef.current) return;
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+    // Validate immediately
+    const formData = new FormData(formRef.current);
+    validateForm(formData);
+
+    // Clear existing timeout
+    if (mutationTimeoutRef.current) {
+      clearTimeout(mutationTimeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
-      const formData = new FormData(formRef.current!);
+    // Set new timeout for update
+    mutationTimeoutRef.current = setTimeout(() => {
       if (validateForm(formData)) {
-        mutation.mutate(formData);
+        toast.promise(
+          mutation.mutateAsync(formData),
+          {
+            loading: 'Updating profile...',
+            success: 'Profile updated successfully',
+            error: 'Failed to update profile',
+          }
+        );
       }
-    }, 300);
+    }, 500);
   }, [mutation, validateForm]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setCounts((prev) => ({ ...prev, [name]: value.length }));
-    handleChange();
-  };
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      if (mutationTimeoutRef.current) {
+        clearTimeout(mutationTimeoutRef.current);
       }
     };
   }, []);
@@ -229,23 +189,19 @@ export default function ProfilePage() {
   if (error || !profile) {
     return (
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold text-red-500">Error loading profile</h1>
-        <p className="text-gray-600">{error?.message || 'Profile not found'}</p>
+        <h1 className="text-destructive text-2xl font-bold">Error loading profile</h1>
+        <p className="text-muted-foreground">{error?.message || 'Profile not found'}</p>
       </div>
     );
   }
 
   return (
-    <form ref={formRef} onChange={handleChange} className="flex flex-col gap-6">
+    <form ref={formRef} onInput={handleInput} className="flex flex-col gap-6">
       <FormField
-        label="Username"
         id="username"
-        name="username"
-        value={profile.username}
-        maxLength={USERNAME_MAX}
-        error={validationErrors.username}
-        count={counts.username}
+        label="Username"
         tooltip="Your unique identifier. This will be used in your profile URL and mentions."
+        error={validationErrors.username}
       >
         <div className="relative">
           <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">@</span>
@@ -253,54 +209,46 @@ export default function ProfilePage() {
             id="username"
             name="username"
             defaultValue={profile.username}
-            className={cn('pl-7', validationErrors.username && 'border-red-500')}
+            className={cn(
+              'pl-7',
+              validationErrors.username && 'border-destructive focus-visible:ring-destructive',
+            )}
             placeholder="Enter your username"
-            maxLength={USERNAME_MAX}
-            onChange={handleInputChange}
+            maxLength={15}
           />
         </div>
       </FormField>
 
       <FormField
-        label="Display Name"
         id="display_name"
-        name="display_name"
-        value={profile.display_name || ''}
-        maxLength={DISPLAY_NAME_MAX}
-        error={validationErrors.display_name}
-        count={counts.display_name}
+        label="Display Name"
         tooltip="The name that will be shown to other users. This can be your real name or a nickname."
+        error={validationErrors.display_name}
       >
         <Input
           id="display_name"
           name="display_name"
           defaultValue={profile.display_name || ''}
-          className={cn('w-full', validationErrors.display_name && 'border-red-500')}
+          className={cn('w-full', validationErrors.display_name && 'border-destructive')}
           placeholder="Enter your display name"
-          maxLength={DISPLAY_NAME_MAX}
-          onChange={handleInputChange}
+          maxLength={50}
         />
       </FormField>
 
       <FormField
-        label="Bio"
         id="bio"
-        name="bio"
-        value={profile.bio || ''}
-        maxLength={BIO_MAX}
-        error={validationErrors.bio}
-        count={counts.bio}
+        label="Bio"
         tooltip="A brief description about yourself. This will be visible on your profile page."
+        error={validationErrors.bio}
       >
         <Textarea
           id="bio"
           name="bio"
           defaultValue={profile.bio || ''}
-          className={cn('w-full', validationErrors.bio && 'border-red-500')}
+          className={cn('w-full', validationErrors.bio && 'border-destructive')}
           rows={3}
           placeholder="Tell us about yourself..."
-          maxLength={BIO_MAX}
-          onChange={handleInputChange}
+          maxLength={500}
         />
       </FormField>
 

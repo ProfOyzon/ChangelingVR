@@ -8,6 +8,7 @@ const routeTitles: Record<string, string> = {
   '/dashboard/preview': 'Preview',
   '/dashboard/profile': 'Profile',
   '/dashboard/settings': 'Settings',
+  '/dashboard/avatar': 'Avatar',
 };
 
 export function DashboardTitle() {

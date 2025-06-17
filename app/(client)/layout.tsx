@@ -5,7 +5,7 @@ export default function DevLayout({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <div className="text-primary">{children}</div>
-      <Toaster richColors />
+      <Toaster position="top-center" richColors />
     </ThemeProvider>
   );
 }
