@@ -43,7 +43,7 @@ type GeoLocationData = {
   query: string;
 };
 
-async function logActivity(userId: string, type: ActivityType) {
+export async function logActivity(userId: string, type: ActivityType) {
   const header = await headers();
   const ipAddress = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
   const userAgent = header.get('user-agent') ?? 'unknown';
@@ -190,7 +190,7 @@ export const updateProfile = validatedActionWithUser(updateProfileSchema, async 
       })
       .where(eq(profiles.uuid, user.uuid));
 
-    revalidateTag('profile');
+    revalidateTag('profiles');
     return { success: true };
   } catch (error) {
     return { error: 'Failed to update profile' };

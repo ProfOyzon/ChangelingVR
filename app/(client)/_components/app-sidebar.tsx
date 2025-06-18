@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity, Eye, Home, Settings, User } from 'lucide-react';
+import { Activity, Eye, Home, Newspaper, Settings, User } from 'lucide-react';
 import { LogoutButton } from '@/app/(client)/_components/logout-button';
 import {
   Sidebar,
@@ -16,7 +16,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 
-export function AppSidebar() {
+export function AppSidebar({ team, role }: { team: string[]; role: string[] }) {
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader className="border-sidebar-border h-16 border-b">
@@ -91,6 +91,25 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Show admin menu if user is in web team and has lead or producer role */}
+        {team.includes('web') && (role.includes('lead') || role.includes('producer')) && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Admin</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton tooltip="Newsroom" asChild>
+                    <Link href="/dashboard/newsroom">
+                      <Newspaper />
+                      <span>Newsroom</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter>

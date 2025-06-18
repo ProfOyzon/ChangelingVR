@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
+import { logActivity } from '@/lib/auth/actions';
 import { db } from '@/lib/db';
 import { profiles } from '@/lib/db/schema';
+import { ActivityType } from '@/lib/db/schema';
 import { del, put } from '@vercel/blob';
 
 export async function POST(request: Request): Promise<NextResponse> {
@@ -39,7 +41,10 @@ export async function POST(request: Request): Promise<NextResponse> {
     });
 
     // Update user's avatar in the database
-    await db.update(profiles).set({ avatar_url: blob.url }).where(eq(profiles.uuid, uuid));
+    await Promise.all([
+      db.update(profiles).set({ avatar_url: blob.url }).where(eq(profiles.uuid, uuid)),
+      logActivity(uuid, ActivityType.UPDATE_ACCOUNT),
+    ]);
 
     return NextResponse.json(blob);
   } catch (error) {

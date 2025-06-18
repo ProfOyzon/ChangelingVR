@@ -1,4 +1,4 @@
-import { getCompleteProfiles, getPosts, getUserMember, getUserProfile } from '@/lib/db/queries';
+import { getCompleteProfiles } from '@/lib/db/queries';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 /**
@@ -13,23 +13,5 @@ export const profileOptions = queryOptions({
   queryKey: ['profiles'],
   queryFn: getCompleteProfiles,
   staleTime: 60 * 60 * 1000, // 1 hour
-  placeholderData: keepPreviousData,
-});
-
-export const postOptions = queryOptions({
-  queryKey: ['posts'],
-  queryFn: getPosts,
-  staleTime: 12 * 60 * 60 * 1000, // 12 hours
-  placeholderData: keepPreviousData,
-});
-
-export const memberOptions = queryOptions({
-  queryKey: ['currentMember'],
-  queryFn: async () => {
-    const member = await getUserMember();
-    const profile = await getUserProfile();
-    return { member, profile };
-  },
-  staleTime: 5 * 60 * 1000, // 5 minutes
   placeholderData: keepPreviousData,
 });

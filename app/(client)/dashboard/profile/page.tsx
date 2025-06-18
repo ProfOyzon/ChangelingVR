@@ -11,10 +11,9 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useProfileMutation, useProfileQuery } from '@/hooks/use-profile';
 import { updateProfileSchema } from '@/lib/auth/validator';
 import { cn } from '@/lib/utils';
-import { useProfileMutation } from '../hooks/use-profile-mutation';
-import { useProfileQuery } from '../hooks/use-profile-query';
 
 const TEAM_VALUES = [
   'Development',
@@ -156,14 +155,11 @@ export default function ProfilePage() {
     // Set new timeout for update
     mutationTimeoutRef.current = setTimeout(() => {
       if (validateForm(formData)) {
-        toast.promise(
-          mutation.mutateAsync(formData),
-          {
-            loading: 'Updating profile...',
-            success: 'Profile updated successfully',
-            error: 'Failed to update profile',
-          }
-        );
+        toast.promise(mutation.mutateAsync(formData), {
+          loading: 'Updating profile...',
+          success: 'Profile updated successfully',
+          error: 'Failed to update profile',
+        });
       }
     }, 1000);
   }, [mutation, validateForm]);
@@ -196,7 +192,12 @@ export default function ProfilePage() {
   }
 
   return (
-    <form ref={formRef} onInput={handleInput} className="flex flex-col gap-6">
+    <form
+      ref={formRef}
+      onInput={handleInput}
+      onChange={handleInput}
+      className="flex flex-col gap-6"
+    >
       <FormField
         id="username"
         label="Username"

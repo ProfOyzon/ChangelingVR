@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { Loader2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { useProfileQuery } from '@/hooks/use-profile';
 import { resizeAndConvertToWebP } from '@/lib/process-avatar';
 import { cn } from '@/lib/utils';
 import type { PutBlobResult } from '@vercel/blob';
-import { useProfileQuery } from '../hooks/use-profile-query';
 
 const AvatarDropzone = ({
   onUpload,
@@ -154,6 +154,12 @@ export default function AvatarPage() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-6 p-6">
+      <div className="flex flex-col items-center justify-center gap-2">
+        <p className="text-muted-foreground text-sm">This will be moved into the settings page</p>
+        <p className="text-muted-foreground text-sm">
+          This is a temporary page to upload an avatar for the user.
+        </p>
+      </div>
       {avatar && (
         <div className="relative h-32 w-32 overflow-hidden rounded border">
           <Image src={avatar} alt="Avatar" fill className="object-cover" sizes="128px" />
