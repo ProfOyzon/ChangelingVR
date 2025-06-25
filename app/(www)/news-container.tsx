@@ -16,7 +16,7 @@ export function NewsContainer({ news }: { news: Post }) {
       </div>
 
       {/* Image */}
-      {news.cover_image && (
+      {/* {news.cover_image && (
         <Image
           src={news.cover_image}
           alt={news.title}
@@ -24,7 +24,7 @@ export function NewsContainer({ news }: { news: Post }) {
           height={225}
           className="h-36 w-full rounded-t object-cover md:h-48"
         />
-      )}
+      )} */}
 
       {/* Title and date */}
       <div className="p-4">

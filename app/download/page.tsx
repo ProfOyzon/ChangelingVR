@@ -44,10 +44,10 @@ export default function DownloadPage() {
 
         <div className="flex items-center gap-6 max-md:hidden">
           <Image src={EsrbTeen} alt="ESRB Teen Rating" className="h-18 w-auto" />
-          <Button href="https://xkdlj9yxxa926ujy.public.blob.vercel-storage.com/downloads/spring-2025.zip">
+          {/* <Button href="https://xkdlj9yxxa926ujy.public.blob.vercel-storage.com/downloads/spring-2025.zip">
             <FaLaptop />
             PC Download
-          </Button>
+          </Button> */}
           <Button
             href="https://changelingvrteam.itch.io/changelingvr"
             target="_blank"
