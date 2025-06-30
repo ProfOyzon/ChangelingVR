@@ -11,7 +11,9 @@ export async function NewsSection() {
         <h1 className="mb-6 text-3xl font-bold uppercase md:text-5xl">The Latest</h1>
 
         <div className="mb-6 flex flex-col justify-evenly gap-6 text-gray-100 md:flex-row">
-          {news?.slice(0, 3).map((item) => <NewsContainer key={item.id} news={item} />)}
+          {news?.slice(0, 3).map((item) => (
+            <NewsContainer key={item.id} news={item} />
+          ))}
         </div>
 
         <Button href="/newsroom" aria-label="View all news" className="max-md:w-full">
