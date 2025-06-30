@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FaCheck, FaRegShareFromSquare } from 'react-icons/fa6';
+import { FaCheck, FaRegCopy } from 'react-icons/fa6';
 
 export function CopyLink({ url, ...props }: { url: string } & React.ComponentProps<'button'>) {
   const [isCopied, setIsCopied] = useState(false);
@@ -16,7 +16,7 @@ export function CopyLink({ url, ...props }: { url: string } & React.ComponentPro
 
   return (
     <button type="button" onClick={handleCopy} aria-label="Copy link" {...props}>
-      {isCopied ? <FaCheck className="size-4" /> : <FaRegShareFromSquare className="size-4" />}
+      {isCopied ? <FaCheck className="size-4" /> : <FaRegCopy className="size-4" />}
     </button>
   );
 }

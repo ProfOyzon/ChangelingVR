@@ -59,7 +59,7 @@ const AvatarDropzone = ({
   return (
     <div
       className={cn(
-        'rounded-lg border-2 border-dashed p-6 text-center transition-colors duration-300',
+        'rounded-md border-2 border-dashed p-6 text-center transition-colors duration-300',
         isDragActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/25',
         className,
       )}

@@ -23,7 +23,7 @@ export function AppSidebar({ team, role }: { team: string[]; role: string[] }) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg">
-              <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
                 <Image src="/logo_v2.svg" alt="Logo" width={32} height={32} className="w-full" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">

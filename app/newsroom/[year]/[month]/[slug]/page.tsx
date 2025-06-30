@@ -39,6 +39,8 @@ export async function generateMetadata({
         ? [
             {
               url: post.cover_image,
+              width: 512,
+              height: 512,
             },
           ]
         : [],
@@ -50,6 +52,8 @@ export async function generateMetadata({
         ? [
             {
               url: post.cover_image,
+              width: 512,
+              height: 512,
             },
           ]
         : [],
@@ -73,25 +77,25 @@ export default async function Post({
   const postUrl = `https://changelingvr.vercel.app/newsroom/${year}/${month}/${slug}`;
 
   return (
-    <div className="mx-auto max-w-7xl space-y-4 rounded-lg bg-gray-900/50 p-6 backdrop-blur-sm">
+    <div className="mx-auto max-w-7xl space-y-4 rounded-md bg-gray-900/50 p-6 backdrop-blur-sm">
       <div className="flex flex-row items-center justify-between">
-        <span className="rounded border border-gray-500 px-2 py-1 text-sm font-semibold text-gray-300 uppercase">
+        <span className="rounded-md border border-gray-500 px-2 py-1 text-sm font-semibold text-gray-300 uppercase">
           {post.type}
         </span>
 
         <div className="flex flex-row gap-2">
           <CopyLink
             url={postUrl}
-            className="rounded border border-gray-500 p-2 hover:cursor-pointer hover:bg-gray-700"
+            className="rounded-md border border-gray-500 p-2 hover:cursor-pointer hover:bg-gray-700"
           />
           <a
-            className="rounded border border-gray-500 p-2 hover:bg-gray-700"
+            className="rounded-md border border-gray-500 p-2 hover:bg-gray-700"
             href={`https://twitter.com/intent/tweet?text=Check out this post on Changeling VR:&url=${encodeURIComponent(postUrl)}`}
           >
             <FaXTwitter className="size-4" />
           </a>
           <a
-            className="rounded border border-gray-500 p-2 hover:bg-gray-700"
+            className="rounded-md border border-gray-500 p-2 hover:bg-gray-700"
             href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
           >
             <FaLinkedin className="size-4" />
@@ -125,13 +129,13 @@ export default async function Post({
           alt={post.title}
           width={1200}
           height={400}
-          className="h-50 w-full rounded-lg object-cover"
+          className="h-50 w-full rounded-md object-cover"
         />
       )}
 
       {/* https://nextjs.org/docs/app/guides/mdx#using-tailwind-typography-plugin */}
       {/* https://github.com/tailwindlabs/tailwindcss-typography?tab=readme-ov-file */}
-      <div className="prose-invert prose prose-headings:mt-8 prose-headings:font-semibold prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-3xl prose-h4:text-2xl prose-h5:text-xl prose-h6:text-lg min-w-full">
+      <div className="prose-invert prose prose-headings:mt-8 prose-headings:font-semibold prose-h1:text-5xl prose-h2:text-4xl prose-h3:text-3xl prose-h4:text-2xl prose-h5:text-xl prose-h6:text-lg prose-img:rounded-md min-w-full">
         <Post />
       </div>
     </div>

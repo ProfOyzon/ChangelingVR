@@ -81,7 +81,7 @@ export default function TeamsPageClient() {
           {paginated.map((profile) => (
             <div
               key={profile.username}
-              className="bg-steel/50 hover:bg-steel/75 relative flex h-64 w-40 max-w-40 min-w-40 flex-1 flex-col rounded backdrop-blur-sm transition-colors duration-300"
+              className="bg-steel/50 hover:bg-steel/75 relative flex h-64 w-40 max-w-40 min-w-40 flex-1 flex-col rounded-md backdrop-blur-sm transition-colors duration-300"
             >
               <Link
                 href={`/users/${profile.username}`}
@@ -92,7 +92,7 @@ export default function TeamsPageClient() {
                   alt={profile.username}
                   width={128}
                   height={128}
-                  className="w-full rounded-t mask-b-from-50% object-cover"
+                  className="w-full rounded-t-lg mask-b-from-50% object-cover"
                   loading="lazy"
                 />
 
@@ -106,7 +106,7 @@ export default function TeamsPageClient() {
                 </div>
               </Link>
 
-              <div className="[&>a]:hover:text-light-mustard absolute top-2 right-2 z-10 flex flex-col items-center gap-1 [&>a]:rounded [&>a]:bg-gray-800/80 [&>a]:p-1 [&>a]:text-white">
+              <div className="[&>a]:hover:text-light-mustard absolute top-2 right-2 z-10 flex flex-col items-center gap-1 [&>a]:rounded-md [&>a]:bg-gray-800/80 [&>a]:p-1 [&>a]:text-white">
                 {profile.links.map((link) => {
                   const icon = LinkIcon[link.platform as keyof typeof LinkIcon];
                   return (

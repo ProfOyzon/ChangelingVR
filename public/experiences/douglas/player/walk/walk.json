@@ -1,98 +1,97 @@
 {
-    "frames": {
-        "walk1.png": {
-            "frame": {
-                "x": 0,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "sourceSize": {
-                "w": 25,
-                "h": 50
-            }
-        },
-        "walk2.png": {
-            "frame": {
-                "x": 25,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "sourceSize": {
-                "w": 25,
-                "h": 50
-            }
-        },
-        "walk3.png": {
-            "frame": {
-                "x": 50,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "sourceSize": {
-                "w": 25,
-                "h": 50
-            }
-        },
-        "walk4.png": {
-            "frame": {
-                "x": 0,
-                "y": 50,
-                "w": 25,
-                "h": 50
-            },
-            "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 25,
-                "h": 50
-            },
-            "sourceSize": {
-                "w": 25,
-                "h": 50
-            }
-        }
+  "frames": {
+    "walk1.png": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "sourceSize": {
+        "w": 25,
+        "h": 50
+      }
     },
-    "animations":
-    {
-        "walk": [ "walk1.png", "walk2.png", "walk3.png", "walk4.png"]
+    "walk2.png": {
+      "frame": {
+        "x": 25,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "sourceSize": {
+        "w": 25,
+        "h": 50
+      }
     },
-    "meta": {
-        "app": "https://github.com/piskelapp/piskel/",
-        "version": "1.0",
-        "image": "walk.png",
-        "format": "RGBA8888",
-        "size": {
-            "w": 75,
-            "h": 100
-        }
+    "walk3.png": {
+      "frame": {
+        "x": 50,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "sourceSize": {
+        "w": 25,
+        "h": 50
+      }
+    },
+    "walk4.png": {
+      "frame": {
+        "x": 0,
+        "y": 50,
+        "w": 25,
+        "h": 50
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 25,
+        "h": 50
+      },
+      "sourceSize": {
+        "w": 25,
+        "h": 50
+      }
     }
+  },
+  "animations": {
+    "walk": ["walk1.png", "walk2.png", "walk3.png", "walk4.png"]
+  },
+  "meta": {
+    "app": "https://github.com/piskelapp/piskel/",
+    "version": "1.0",
+    "image": "walk.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 75,
+      "h": 100
+    }
+  }
 }

@@ -53,7 +53,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
   return (
     <div className="flex items-center gap-2.5 md:hidden" ref={menuRef}>
       <button
-        className="relative inline-grid size-9 place-items-center rounded px-2"
+        className="relative inline-grid size-9 place-items-center rounded-md px-2"
         onClick={toggleMenu}
         aria-expanded={isOpen}
         aria-controls="mobile-menu"

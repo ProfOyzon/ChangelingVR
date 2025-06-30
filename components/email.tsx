@@ -34,7 +34,7 @@ const EmailLayout = ({ preview, children }: { preview: string; children: React.R
       <Preview>{preview}</Preview>
       <Tailwind>
         <Body className="mx-auto my-auto bg-indigo-100 p-6 font-sans">
-          <Container className="mx-auto w-full max-w-xl rounded-lg border-2 border-gray-200 bg-sky-50 p-6 shadow-md">
+          <Container className="mx-auto w-full max-w-xl rounded-md border-2 border-gray-200 bg-sky-50 p-6 shadow-md">
             <Section className="mb-4 flex justify-center">
               <Img
                 src="https://changelingvr.vercel.app/logo.svg"
@@ -152,7 +152,7 @@ export const PasswordResetEmail = ({ username, url }: { username: string; url: s
       <Section className="my-6 text-center">
         <Button
           href={url}
-          className="rounded bg-indigo-600 px-6 py-3 text-base font-semibold text-white no-underline transition hover:bg-indigo-700"
+          className="rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-white no-underline transition hover:bg-indigo-700"
         >
           Reset Password
         </Button>

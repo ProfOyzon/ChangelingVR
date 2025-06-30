@@ -20,7 +20,7 @@ export default async function Posts() {
           <Link
             key={post.slug}
             href={`/newsroom/${post.date.split('-')[0]}/${post.date.split('-')[1]}/${post.slug}`}
-            className="flex min-h-50 flex-1 flex-col justify-between rounded bg-gray-600 p-4 shadow transition-colors hover:bg-gray-500"
+            className="flex min-h-50 flex-1 flex-col justify-between rounded-md bg-gray-600 p-4 shadow transition-colors hover:bg-gray-500"
           >
             <div>
               <h2 className="mb-2 text-xl font-bold">{post.title}</h2>

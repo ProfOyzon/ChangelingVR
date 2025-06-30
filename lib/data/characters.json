@@ -1,5 +1,6 @@
 [
   {
+    "id": "aurelia",
     "name": "Aurelia Walker",
     "role": "Protagonist",
     "age": 26,
@@ -12,6 +13,7 @@
     "prop": ["aurelia/deathheadmoth.png", "aurelia/painterpallete.png", "aurelia/casefile.png"]
   },
   {
+    "id": "angela",
     "name": "Angela Summers",
     "role": "Mother",
     "age": 39,
@@ -24,6 +26,7 @@
     "prop": ["angela/familyalbum.png", "angela/musicbox.png", "angela/mask.png"]
   },
   {
+    "id": "dylan",
     "name": "Dylan Monelo",
     "role": "Father",
     "age": 38,
@@ -36,6 +39,7 @@
     "prop": ["dylan/chisel.png", "dylan/gears.png", "dylan/wrench.png"]
   },
   {
+    "id": "douglas",
     "name": "Douglas Summers-Monelo",
     "role": "Son",
     "age": 12,
@@ -48,6 +52,7 @@
     "prop": ["douglas/headphones.png", "douglas/pencil.png", "douglas/notebook.png"]
   },
   {
+    "id": "kirsten",
     "name": "Kirsten Summers-Monelo",
     "role": "Daughter",
     "age": 3,
@@ -60,6 +65,7 @@
     "prop": ["kirsten/bunny.webp", "kirsten/fairy.svg", "kirsten/magic.webp"]
   },
   {
+    "id": "tobi",
     "name": "Tobi Summers-Monelo",
     "role": "Infant",
     "age": "6 months",

@@ -18,12 +18,12 @@ type CharacterLink = {
 };
 
 const CHARACTER_LINKS: CharacterLink[] = [
-  { href: '/characters#protagonist', label: 'Aurelia Walker', id: 'protagonist' },
-  { href: '/characters#mother', label: 'Angela Summers', id: 'mother' },
-  { href: '/characters#father', label: 'Dylan Monelo', id: 'father' },
-  { href: '/characters#son', label: 'Douglas Summers-Monelo', id: 'son' },
-  { href: '/characters#daughter', label: 'Kirsten Summers-Monelo', id: 'daughter' },
-  { href: '/characters#infant', label: 'Tobi Summers-Monelo', id: 'infant' },
+  { href: '/characters#aurelia', label: 'Aurelia Walker', id: 'aurelia' },
+  { href: '/characters#angela', label: 'Angela Summers', id: 'angela' },
+  { href: '/characters#dylan', label: 'Dylan Monelo', id: 'dylan' },
+  { href: '/characters#douglas', label: 'Douglas Summers-Monelo', id: 'douglas' },
+  { href: '/characters#kirsten', label: 'Kirsten Summers-Monelo', id: 'kirsten' },
+  { href: '/characters#tobi', label: 'Tobi Summers-Monelo', id: 'tobi' },
 ];
 
 const NAV_ITEMS: NavItem[] = [
@@ -81,7 +81,7 @@ export function Header() {
                 <div className="border-b-dune/80 h-0 w-0 border-x-6 border-b-6 border-x-transparent"></div>
               </div>
 
-              <div className="bg-dune/80 [&>a]:hover:bg-midnight/40 [&>a]:hover:text-light-mustard flex flex-col gap-1 rounded p-2 shadow-md backdrop-blur-sm [&>a]:block [&>a]:rounded [&>a]:px-3 [&>a]:py-2 [&>a]:text-center">
+              <div className="bg-dune/80 [&>a]:hover:bg-midnight/40 [&>a]:hover:text-light-mustard flex flex-col gap-1 rounded-md p-2 shadow-md backdrop-blur-sm [&>a]:block [&>a]:rounded-md [&>a]:px-3 [&>a]:py-2 [&>a]:text-center">
                 {CHARACTER_LINKS.map(({ href, label, id }) => (
                   <Button
                     key={id}

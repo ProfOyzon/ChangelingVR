@@ -18,8 +18,8 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
     <>
       {characters.map((character) => (
         <section
-          id={character.role.toLowerCase()}
-          key={character.name}
+          id={character.id}
+          key={character.id}
           className="flex h-svh w-full snap-center flex-col items-center justify-end p-6 md:flex-row md:justify-center"
         >
           {/* Portrait */}
@@ -57,7 +57,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
 
           {/* Info Card */}
           <div className="flex h-auto w-full md:w-1/2 md:items-center md:justify-center">
-            <div className="bg-steel/30 border-steel/40 w-full max-w-xl rounded border p-4 shadow-lg backdrop-blur-sm">
+            <div className="bg-steel/30 border-steel/40 w-full max-w-xl rounded-md border p-4 shadow-lg backdrop-blur-sm">
               <h1 className="mb-4 text-2xl font-bold tracking-tight md:text-4xl">
                 {character.name}
               </h1>
@@ -80,7 +80,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
               </p>
 
               <Button
-                href={`/characters/${character.name.split(' ')[0].toLowerCase()}`}
+                href={`/characters/${character.id}`}
                 aria-label={`Enter ${character.name}'s experience`}
                 className="mt-2 w-full"
               >

@@ -31,16 +31,16 @@ export default async function Characters() {
     <div className="h-svh snap-y snap-mandatory overflow-y-scroll">
       <div
         className={cn(
-          'absolute top-[10vh] left-0 z-10 flex flex-row gap-1 rounded bg-black/25 p-2 backdrop-blur-sm md:ml-6 md:flex-col',
+          'absolute top-[10vh] left-0 z-10 flex flex-row gap-1 rounded-md bg-black/25 p-2 backdrop-blur-sm md:ml-6 md:flex-col',
           'max-md:left-1/2 max-md:w-[90%] max-md:-translate-x-1/2 max-md:justify-evenly',
           '[&>a>img]:h-10 [&>a>img]:w-10 [&>a>img]:object-contain',
         )}
       >
         {characters.map((character) => (
           <Link
-            href={`#${character.role.toLowerCase()}`}
-            key={character.name}
-            className="hover:bg-mardi-grass/35 hover:text-light-mustard flex items-center gap-1 rounded p-2 transition-all duration-300 hover:scale-105"
+            href={`#${character.id}`}
+            key={character.id}
+            className="hover:bg-mardi-grass/35 hover:text-light-mustard flex items-center gap-1 rounded-md p-2 transition-all duration-300 hover:scale-105"
           >
             <Image
               src={`/media/characters/${character.image}`}
