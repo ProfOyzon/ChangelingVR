@@ -1,8 +1,15 @@
-import { FaItchIo, FaLaptop, FaSteam } from 'react-icons/fa6';
+import {
+  FaDesktop,
+  FaHardDrive,
+  FaItchIo,
+  FaMemory,
+  FaMicrochip,
+  FaSteam,
+  FaVideo,
+  FaVrCardboard,
+} from 'react-icons/fa6';
 import type { Metadata } from 'next';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import EsrbTeen from '@/public/esrb-teen.svg';
 
 function Button({
   children,
@@ -15,7 +22,7 @@ function Button({
   return (
     <a
       className={cn(
-        'flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-lg backdrop-blur-sm transition-colors hover:bg-white/20',
+        'flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-xl backdrop-blur-sm transition-colors hover:bg-white/20',
         className,
       )}
       {...props}
@@ -25,46 +32,74 @@ function Button({
   );
 }
 
+function SpecItem({ icon: Icon, title, spec }: { icon: any; title: string; spec: string }) {
+  return (
+    <div className="flex flex-col items-start gap-1 rounded-md bg-white/5 p-3 backdrop-blur-sm">
+      <div className="flex items-center gap-2">
+        <Icon className="text-light-mustard" />
+        <p className="text-xs font-medium text-gray-300">{title}</p>
+      </div>
+      <p className="text-xs text-gray-400">{spec}</p>
+    </div>
+  );
+}
+
 export const metadata: Metadata = {
   title: 'Play Now',
-  description: 'Download Changeling VR',
+  description: 'Download Changeling VR - A VR Narrative Mystery',
 };
 
 export default function DownloadPage() {
   return (
-    <div className="flex min-h-[calc(100svh-4rem)] items-end justify-center overflow-hidden bg-[url('/background/living_room_far.jpg')] bg-cover bg-center p-12 brightness-90">
-      <div className="flex flex-col gap-4">
-        <p className="text-center text-2xl font-bold">Enter the dreamscape - Download Now!</p>
-        <div className="flex items-center justify-center gap-6 md:hidden">
-          <Button href="https://xkdlj9yxxa926ujy.public.blob.vercel-storage.com/downloads/spring-2025.zip">
-            <FaLaptop />
-            PC Download
-          </Button>
+    <div className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-4xl items-center justify-center px-6">
+      <div className="flex flex-col items-center gap-12 text-center">
+        <div>
+          <h1 className="mb-6 text-4xl font-bold md:text-5xl">
+            Download{' '}
+            <span className="to-light-mustard bg-radial from-[#ffdd99] bg-clip-text text-transparent">
+              Changeling VR
+            </span>{' '}
+            Now
+          </h1>
+          <p className="max-w-2xl text-lg text-gray-300">
+            Step into the unknown as detective Aurelia Walker. Touch the memories of others, walk
+            through their dreams, and uncover the truth that lies hidden in the shadows.
+          </p>
         </div>
 
-        <div className="flex items-center gap-6 max-md:hidden">
-          <Image src={EsrbTeen} alt="ESRB Teen Rating" className="h-18 w-auto" />
-          {/* <Button href="https://xkdlj9yxxa926ujy.public.blob.vercel-storage.com/downloads/spring-2025.zip">
-            <FaLaptop />
-            PC Download
-          </Button> */}
+        <div className="flex flex-col gap-4 sm:flex-row">
           <Button
             href="https://changelingvrteam.itch.io/changelingvr"
-            target="_blank"
-            rel="noopener noreferrer"
+            className="border border-white/20 bg-[#fa5c5c] hover:bg-[#e54d4d]"
           >
             <FaItchIo />
-            Itch.io
+            Download on Itch.io
           </Button>
           <Button
             href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="cursor-not-allowed opacity-50"
+            className="cursor-not-allowed border border-white/20 bg-linear-to-b from-[#171a21] via-[#1b2838] to-[#2a475e] opacity-50"
+            aria-disabled
           >
             <FaSteam />
-            Steam
+            Coming Soon on Steam
           </Button>
+        </div>
+
+        {/* Divider */}
+        <div className="h-px w-32 bg-white/20"></div>
+
+        <div className="w-full max-w-2xl">
+          <h2 className="mb-6 text-xl font-bold">System Requirements</h2>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <div className="border-light-mustard/60 shadow-light-mustard/20 rounded-md border bg-white/5 shadow-md">
+              <SpecItem icon={FaVrCardboard} title="VR Headset" spec="Meta Quest 2 or higher" />
+            </div>
+            <SpecItem icon={FaDesktop} title="OS" spec="Windows 10/11" />
+            <SpecItem icon={FaMemory} title="Memory" spec="8 GB RAM minimum" />
+            <SpecItem icon={FaHardDrive} title="Storage" spec="5 GB available space" />
+            <SpecItem icon={FaVideo} title="Graphics" spec="GTX 1060 / RX 580 or better" />
+            <SpecItem icon={FaMicrochip} title="Processor" spec="Intel i5-4590 / AMD FX 8350" />
+          </div>
         </div>
       </div>
     </div>

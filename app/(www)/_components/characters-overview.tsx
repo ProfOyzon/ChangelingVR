@@ -37,7 +37,7 @@ function CharacterItem({ character, index, isSelected, onSelect }: CharacterItem
   );
 }
 
-export function Characters() {
+export function CharacterOverview() {
   const { selectedCharacter, setSelectedCharacter } = useCharacterRotation(characters);
   const character = characters[selectedCharacter];
 

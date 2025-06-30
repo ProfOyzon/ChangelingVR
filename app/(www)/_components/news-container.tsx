@@ -1,14 +1,13 @@
 import { FaShare } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { Post } from '../../lib/db/schema';
+import type { Post } from '../../../lib/db/schema';
 
 export function NewsContainer({ news }: { news: Post }) {
   return (
-    // Clickable link to the news item
     <Link
       href={`/newsroom/${news.date.split('-')[0]}/${news.date.split('-')[1]}/${news.slug}`}
-      className="group bg-steel/25 relative flex-1 rounded backdrop-blur-sm transition-transform duration-300 hover:scale-102 active:scale-95"
+      className="group bg-steel/25 relative flex-1 rounded-md backdrop-blur-sm transition-transform duration-300 hover:scale-102 active:scale-95"
     >
       {/* External link icon */}
       <div className="bg-midnight/90 absolute top-2 right-2 z-20 flex items-center justify-center rounded-full p-2 shadow-lg backdrop-blur-sm">
@@ -16,15 +15,15 @@ export function NewsContainer({ news }: { news: Post }) {
       </div>
 
       {/* Image */}
-      {/* {news.cover_image && (
+      {news.cover_image && (
         <Image
           src={news.cover_image}
           alt={news.title}
           width={400}
           height={225}
-          className="h-36 w-full rounded-t object-cover md:h-48"
+          className="h-36 w-full rounded-t-lg object-cover md:h-48"
         />
-      )} */}
+      )}
 
       {/* Title and date */}
       <div className="p-4">

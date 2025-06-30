@@ -12,7 +12,7 @@ const promoImages: Record<string, StaticImageData> = {
   'The Touch of Memory': TheTouchOfMemory,
 };
 
-export const PromoSection = () => {
+export function PromoSection() {
   return (
     <div className="bg-light-mustard text-midnight mt-5 p-6">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center">
@@ -24,12 +24,12 @@ export const PromoSection = () => {
         {/* Promo items */}
         <div className="flex flex-col justify-evenly gap-6 md:flex-row">
           {promos.map((item) => (
-            <div key={item.title} className="flex flex-1 flex-col items-center rounded">
+            <div key={item.title} className="flex flex-1 flex-col items-center rounded-md">
               <div className="w-full mask-b-from-50%">
                 <Image
                   src={promoImages[item.title]}
                   alt={item.alt}
-                  className="h-full max-h-50 w-full rounded object-cover"
+                  className="h-full max-h-50 w-full rounded-md object-cover"
                 />
               </div>
 
@@ -43,4 +43,4 @@ export const PromoSection = () => {
       </div>
     </div>
   );
-};
+}
