@@ -10,11 +10,11 @@ import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/components/email
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
 import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
-  forgotPasswordSchema,
-  loginSchema,
-  registerSchema,
-  updatePasswordSchema,
-  updateProfileSchema,
+  zForgotPasswordSchema,
+  zLoginSchema,
+  zRegisterSchema,
+  zUpdatePasswordSchema,
+  zUpdateProfileSchema,
 } from '@/lib/auth/validator';
 import { db } from '@/lib/db';
 import { getUserProfile } from '@/lib/db/queries';
@@ -97,7 +97,7 @@ export async function logActivity(userId: string, type: ActivityType) {
   await db.insert(activityLogs).values(newActivity);
 }
 
-export const login = validatedAction(loginSchema, async (data, formData) => {
+export const login = validatedAction(zLoginSchema, async (data, formData) => {
   const { email, password } = data;
 
   // Fetch member by email
@@ -118,7 +118,7 @@ export const login = validatedAction(loginSchema, async (data, formData) => {
   redirect('/dashboard');
 });
 
-export const register = validatedAction(registerSchema, async (data, formData) => {
+export const register = validatedAction(zRegisterSchema, async (data, formData) => {
   const { email, password } = data;
 
   const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
@@ -174,30 +174,33 @@ export async function logout() {
   (await cookies()).delete('session');
 }
 
-export const updateProfile = validatedActionWithUser(updateProfileSchema, async (data, _, user) => {
-  try {
-    await db
-      .update(profiles)
-      .set({
-        username: data.username,
-        display_name: data.display_name,
-        bio: data.bio,
-        terms: data.terms,
-        roles: data.roles,
-        teams: data.teams,
-        avatar_url: data.avatar_url,
-        bg_color: data.bg_color,
-      })
-      .where(eq(profiles.uuid, user.uuid));
+export const updateProfile = validatedActionWithUser(
+  zUpdateProfileSchema,
+  async (data, _, user) => {
+    try {
+      await db
+        .update(profiles)
+        .set({
+          username: data.username,
+          display_name: data.display_name,
+          bio: data.bio,
+          terms: data.terms,
+          roles: data.roles,
+          teams: data.teams,
+          avatar_url: data.avatar_url,
+          bg_color: data.bg_color,
+        })
+        .where(eq(profiles.uuid, user.uuid));
 
-    revalidateTag('profiles');
-    return { success: true };
-  } catch (error) {
-    return { error: 'Failed to update profile' };
-  }
-});
+      revalidateTag('profiles');
+      return { success: true };
+    } catch (error) {
+      return { error: 'Failed to update profile' };
+    }
+  },
+);
 
-export const updatePassword = validatedAction(updatePasswordSchema, async (data, formData) => {
+export const updatePassword = validatedAction(zUpdatePasswordSchema, async (data, formData) => {
   const { token, password } = data;
   const hashedToken = createHash('sha256').update(token).digest('hex');
   const hashedPassword = await hashPassword(password);
@@ -225,7 +228,7 @@ export const updatePassword = validatedAction(updatePasswordSchema, async (data,
   redirect('/auth/login');
 });
 
-export const forgotPassword = validatedAction(forgotPasswordSchema, async (data, formData) => {
+export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data, formData) => {
   const { email } = data;
 
   const member = await db.select().from(members).where(eq(members.email, email)).limit(1);

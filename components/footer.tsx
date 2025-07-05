@@ -38,16 +38,6 @@ const SOCIAL_LINKS: SocialLink[] = [
     icon: FaDiscord,
     label: 'Join our Discord server',
   },
-  {
-    href: '#',
-    icon: FaSteam,
-    label: 'Follow us on Steam',
-  },
-  {
-    href: 'https://changelingvrteam.itch.io/changelingvr',
-    icon: FaItchIo,
-    label: 'Follow us on Itch.io',
-  },
 ];
 
 const NAV_SECTIONS: NavSection[] = [
@@ -56,13 +46,11 @@ const NAV_SECTIONS: NavSection[] = [
     links: [
       { href: '/characters', label: 'Characters' },
       { href: '/teams', label: 'Developers' },
-      { href: '/newsroom', label: 'News & Press' },
     ],
   },
   {
     title: 'Legal',
     links: [
-      { href: '/sitemap.xml', label: 'Sitemap' },
       { href: '/terms', label: 'Terms of Service', prefetch: false },
       { href: '/privacy', label: 'Privacy Policy', prefetch: false },
     ],

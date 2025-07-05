@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'motion/react';
 import { Button } from '@/components/button';
 import type { Character } from '@/types';
 
@@ -23,13 +22,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
           className="flex h-svh w-full snap-center flex-col items-center justify-end p-6 md:flex-row md:justify-center"
         >
           {/* Portrait */}
-          <motion.div
-            className="hidden w-full items-center justify-center md:flex md:w-1/2"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            viewport={{ once: false, amount: 0.3 }}
-          >
+          <div className="hidden w-full items-center justify-center md:flex md:w-1/2">
             <Image
               src={`/media/characters/${character.image}`}
               alt={`${character.name}'s portrait`}
@@ -37,12 +30,12 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
               height={320}
               className="object-contain"
             />
-          </motion.div>
+          </div>
 
           {Array.isArray(character.prop) && character.prop.length > 0 && (
             <div className="flex w-full items-center justify-center md:hidden">
               {character.prop.map((prop: string) => (
-                <motion.div key={prop} className="flex items-center justify-center">
+                <div key={prop} className="flex items-center justify-center">
                   <Image
                     src={`/media/characters/${prop}`}
                     alt={prop}
@@ -50,7 +43,7 @@ export function CharacterClientPage({ characters }: { characters: Character[] })
                     height={72}
                     className="h-12 w-12 object-contain"
                   />
-                </motion.div>
+                </div>
               ))}
             </div>
           )}

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { desc, eq } from 'drizzle-orm';
 import { verifyToken } from '@/lib/auth/session';
 import { db } from '@/lib/db';
-import { activityLogs, members, posts, profileLinks, profiles, resetTokens } from './schema';
+import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
 
 // Fetches member table; requires session cookie
 export async function getUserMember() {
@@ -125,13 +125,6 @@ export async function getProfileByUsername(username: string) {
     .from(profiles)
     .where(eq(profiles.username, username))
     .limit(1);
-}
-
-// Fetches posts table
-export async function getPosts() {
-  const result = await db.select().from(posts).orderBy(desc(posts.date));
-  if (!result) throw new Error('Failed to fetch posts');
-  return result;
 }
 
 // Fetches complete profiles table

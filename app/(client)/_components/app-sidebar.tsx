@@ -91,25 +91,6 @@ export function AppSidebar({ team, role }: { team: string[]; role: string[] }) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {/* Show admin menu if user is in web team and has lead or producer role */}
-        {team.includes('web') && (role.includes('lead') || role.includes('producer')) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Admin</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip="Newsroom" asChild>
-                    <Link href="/dashboard/newsroom">
-                      <Newspaper />
-                      <span>Newsroom</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
       </SidebarContent>
 
       <SidebarFooter>

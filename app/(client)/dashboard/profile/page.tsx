@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useProfileMutation, useProfileQuery } from '@/hooks/use-profile';
-import { updateProfileSchema } from '@/lib/auth/validator';
+import { zUpdateProfileSchema } from '@/lib/auth/validator';
 import { cn } from '@/lib/utils';
 
 const TEAM_VALUES = [
@@ -124,7 +124,7 @@ export default function ProfilePage() {
 
   const validateForm = useCallback((formData: FormData) => {
     const data = Object.fromEntries(formData);
-    const result = updateProfileSchema.safeParse(data);
+    const result = zUpdateProfileSchema.safeParse(data);
 
     if (!result.success) {
       const errors: ValidationErrors = {};

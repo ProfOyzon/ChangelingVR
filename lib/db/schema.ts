@@ -11,9 +11,6 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 
-// Enums
-export const postTypeEnum = pgEnum('post_type', ['blog', 'game', 'event', 'announcement']);
-
 // Tables
 export const activityLogs = pgTable('activity_logs', {
   id: bigint('id', { mode: 'number' }),
@@ -43,19 +40,6 @@ export const members = pgTable('members', {
   password: text('password').notNull(),
   created_at: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updated_at: timestamp('updated_at', { withTimezone: true }),
-});
-
-export const posts = pgTable('posts', {
-  id: bigint('id', { mode: 'number' }).notNull(),
-  slug: text('slug').notNull(),
-  title: text('title').notNull(),
-  date: date('date').notNull(),
-  type: postTypeEnum('type').notNull(),
-  author: text('author').array().notNull(),
-  published: boolean('published').notNull().default(false),
-  file_path: text('file_path').notNull(),
-  excerpt: text('excerpt'),
-  cover_image: text('cover_image'),
 });
 
 export const profileLinks = pgTable('profile_links', {
@@ -123,7 +107,6 @@ export const profileLinkRelations = relations(profileLinks, ({ one }) => ({
   }),
 }));
 
-export type Post = typeof posts.$inferSelect;
 export type Cron = typeof cron.$inferSelect;
 
 export type Member = typeof members.$inferSelect;

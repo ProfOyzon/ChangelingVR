@@ -78,11 +78,6 @@ export default function manifest(): MetadataRoute.Manifest {
         url: '/characters',
       },
       {
-        name: 'News',
-        description: 'Read the latest news about Changeling VR',
-        url: '/newsroom',
-      },
-      {
         name: 'Team',
         description: 'Meet the team behind Changeling VR',
         url: '/teams',

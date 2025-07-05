@@ -28,12 +28,6 @@ const CHARACTER_LINKS: CharacterLink[] = [
 
 const NAV_ITEMS: NavItem[] = [
   {
-    href: '/newsroom',
-    label: 'News',
-    ariaLabel: 'View the latest news',
-    variant: 'link',
-  },
-  {
     href: '/teams',
     label: 'Team',
     ariaLabel: 'View the Changeling VR team',

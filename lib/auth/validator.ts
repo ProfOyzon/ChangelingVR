@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-export const registerSchema = z.object({
+export const zRegisterSchema = z.object({
   email: z.email().trim().endsWith('@rit.edu', { error: 'Email must be a RIT email (@rit.edu)' }),
   password: z
     .string()
@@ -14,16 +14,16 @@ export const registerSchema = z.object({
     .refine((code) => code === process.env.AUTH_ACCESS_CODE, { message: 'Invalid access code' }),
 });
 
-export const loginSchema = z.object({
+export const zLoginSchema = z.object({
   email: z.email().trim(),
   password: z.string(),
 });
 
-export const forgotPasswordSchema = z.object({
+export const zForgotPasswordSchema = z.object({
   email: z.email().trim(),
 });
 
-export const updatePasswordSchema = z.object({
+export const zUpdatePasswordSchema = z.object({
   token: z.string().min(1),
   password: z
     .string()
@@ -33,7 +33,7 @@ export const updatePasswordSchema = z.object({
     .regex(/[^A-Za-z0-9]/, { error: 'Password must contain at least one special character' }),
 });
 
-export const updateProfileSchema = z.object({
+export const zUpdateProfileSchema = z.object({
   username: z
     .string()
     .trim()
@@ -72,7 +72,7 @@ export const updateProfileSchema = z.object({
   bg_color: z.string().trim().optional(),
 });
 
-export type RegisterInput = z.infer<typeof registerSchema>;
-export type LoginInput = z.infer<typeof loginSchema>;
-export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
-export type UpdatePasswordInput = z.infer<typeof updatePasswordSchema>;
+export type RegisterInput = z.infer<typeof zRegisterSchema>;
+export type LoginInput = z.infer<typeof zLoginSchema>;
+export type ForgotPasswordInput = z.infer<typeof zForgotPasswordSchema>;
+export type UpdatePasswordInput = z.infer<typeof zUpdatePasswordSchema>;
