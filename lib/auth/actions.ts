@@ -194,7 +194,7 @@ export const updateProfile = validatedActionWithUser(
 
       revalidateTag('profiles');
       return { success: true };
-    } catch (error) {
+    } catch {
       return { error: 'Failed to update profile' };
     }
   },

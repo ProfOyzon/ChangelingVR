@@ -2,7 +2,7 @@ export type Character = {
   id: string;
   name: string;
   role: string;
-  age: number;
+  age: string | number;
   height: string;
   nationality: string;
   bio: string;

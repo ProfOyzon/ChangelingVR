@@ -1,15 +1,5 @@
 import { relations } from 'drizzle-orm';
-import {
-  bigint,
-  boolean,
-  date,
-  integer,
-  pgEnum,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { bigint, boolean, integer, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 // Tables
 export const activityLogs = pgTable('activity_logs', {

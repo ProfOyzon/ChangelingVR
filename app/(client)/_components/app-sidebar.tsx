@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity, Eye, Home, Newspaper, Settings, User } from 'lucide-react';
+import { Activity, Eye, Home, Settings, User } from 'lucide-react';
 import { LogoutButton } from '@/app/(client)/_components/logout-button';
 import {
   Sidebar,
@@ -16,7 +16,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 
-export function AppSidebar({ team, role }: { team: string[]; role: string[] }) {
+export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader className="border-sidebar-border h-16 border-b">

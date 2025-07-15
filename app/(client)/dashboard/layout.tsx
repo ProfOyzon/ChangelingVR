@@ -15,7 +15,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <SidebarProvider>
-      <AppSidebar team={user.teams ?? []} role={user.roles ?? []} />
+      <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center justify-between gap-2 pr-4">
           <div className="flex items-center gap-2 px-4">

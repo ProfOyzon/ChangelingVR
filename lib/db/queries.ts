@@ -105,7 +105,11 @@ export async function getActivityLogs() {
 
 // Fetches reset token that matches the UUID
 export async function getResetToken(uuid: string) {
-  return await db.select().from(resetTokens).where(eq(resetTokens.uuid, uuid)).limit(1);
+  return await db
+    .select({ token: resetTokens.token, expires_at: resetTokens.expires_at })
+    .from(resetTokens)
+    .where(eq(resetTokens.uuid, uuid))
+    .limit(1);
 }
 
 // Fetches profile by username

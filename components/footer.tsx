@@ -1,5 +1,6 @@
 import type { IconType } from 'react-icons';
-import { FaDiscord, FaInstagram, FaItchIo, FaSteam, FaXTwitter, FaYoutube } from 'react-icons/fa6';
+import { FaDiscord, FaInstagram, FaXTwitter, FaYoutube } from 'react-icons/fa6';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type SocialLink = {
@@ -68,7 +69,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row md:gap-8">
           <div className="mb-8 flex-1 space-y-4 md:mb-0">
             <Link href="/" className="inline-block" aria-label="Home">
-              <img src="/logo.svg" alt="Changeling VR Logo" className="w-50" />
+              <Image src="/logo.svg" alt="Changeling VR Logo" width={200} height={200} />
             </Link>
 
             <p className="text-base leading-relaxed">
