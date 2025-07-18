@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Activity, Eye, Home, Settings, User } from 'lucide-react';
-import { LogoutButton } from '@/app/(client)/_components/logout-button';
+import { LogoutButton } from '@/app/_components/dashboard/logout-button';
 import {
   Sidebar,
   SidebarContent,
