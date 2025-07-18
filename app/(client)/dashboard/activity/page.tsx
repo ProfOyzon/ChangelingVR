@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import {
   AlertCircle,
   Lock,
@@ -54,7 +55,7 @@ export default async function ActivityPage() {
   const logs = await getActivityLogs();
 
   return (
-    <>
+    <Fragment>
       {logs.length > 0 ? (
         <ul className="space-y-4">
           {logs.map((log) => {
@@ -88,6 +89,6 @@ export default async function ActivityPage() {
           </p>
         </div>
       )}
-    </>
+    </Fragment>
   );
 }

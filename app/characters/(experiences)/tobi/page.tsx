@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import Script from 'next/script';
 
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function TobiPage() {
   return (
-    <>
+    <Fragment>
       {/* Center experience */}
       <div className="bg-midnight flex h-full w-full items-center justify-center">
         <div id="wrapper"></div>
@@ -16,6 +17,6 @@ export default function TobiPage() {
 
       {/* Script */}
       <Script type="module" src="/scripts/tobi/index.js" strategy="afterInteractive" />
-    </>
+    </Fragment>
   );
 }

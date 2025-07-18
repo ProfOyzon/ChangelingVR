@@ -8,14 +8,14 @@ export function HeroSection() {
       <BackgroundVideo />
 
       <div className="relative z-5 mx-auto max-w-2xl px-4">
-        <div className="mb-4 px-8 brightness-110 drop-shadow-md">
+        <div className="px-8 brightness-110 drop-shadow-md">
           <Image
             src="/logo.svg"
             alt="Changeling VR Logo"
             width={800}
             height={200}
             priority
-            className="mx-auto w-full"
+            className="mx-auto w-full shrink-0"
             fetchPriority="high"
           />
         </div>

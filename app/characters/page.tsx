@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { CharacterSection } from '@/app/_components/characters/character-section';
 import charactersData from '@/lib/data/characters.json';
 import { cn } from '@/lib/utils';
 import type { Character } from '@/types';
-import { CharacterClientPage } from './page.client';
 
 const characters = charactersData as Character[];
 
@@ -55,7 +55,15 @@ export default async function Characters() {
         ))}
       </div>
 
-      <CharacterClientPage characters={characters} />
+      {characters.map((character) => (
+        <section
+          id={character.id}
+          key={character.id}
+          className="flex h-svh w-full snap-center flex-col items-center justify-end p-6 md:flex-row md:justify-center"
+        >
+          <CharacterSection character={character} />
+        </section>
+      ))}
     </div>
   );
 }

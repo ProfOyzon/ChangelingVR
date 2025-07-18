@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import type { Metadata } from 'next';
 import Head from 'next/head';
 import Script from 'next/script';
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Angela() {
   return (
-    <>
+    <Fragment>
       <Head>
         {/* Link style sheets */}
         <link rel="stylesheet" href="/assets/styles/base.css" />
@@ -48,6 +49,6 @@ export default function Angela() {
 
       {/* Script */}
       <Script type="module" src="/scripts/angela/index.js" strategy="afterInteractive" />
-    </>
+    </Fragment>
   );
 }

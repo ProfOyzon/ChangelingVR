@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Fragment, Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import ForgotPasswordPageClient from './page.client';
@@ -26,7 +26,7 @@ export default async function ForgotPasswordPage({
   return (
     <Card>
       {success ? (
-        <>
+        <Fragment>
           <CardHeader>
             <CardTitle className="text-2xl">Check Your Email</CardTitle>
             <CardDescription>Password reset instructions sent</CardDescription>
@@ -37,9 +37,9 @@ export default async function ForgotPasswordPage({
               email.
             </p>
           </CardContent>
-        </>
+        </Fragment>
       ) : (
-        <>
+        <Fragment>
           <CardHeader>
             <CardTitle className="text-2xl">Reset Your Password</CardTitle>
             <CardDescription>
@@ -50,7 +50,7 @@ export default async function ForgotPasswordPage({
           <Suspense fallback={<ForgotPasswordSkeleton />}>
             <ForgotPasswordPageClient />
           </Suspense>
-        </>
+        </Fragment>
       )}
     </Card>
   );

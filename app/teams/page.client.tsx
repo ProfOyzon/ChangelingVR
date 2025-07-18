@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { FaGithub, FaGlobe, FaLinkedin, FaRegEnvelope } from 'react-icons/fa6';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -62,7 +62,7 @@ export default function TeamsPageClient() {
   const totalPages = Math.ceil(filtered.length / pageSize);
 
   return (
-    <>
+    <Fragment>
       <div className="mx-auto mb-6 max-w-md">
         <input
           value={search}
@@ -129,6 +129,6 @@ export default function TeamsPageClient() {
       {paginated.length > 0 && (
         <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       )}
-    </>
+    </Fragment>
   );
 }
