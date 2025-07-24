@@ -71,7 +71,14 @@ export async function getProfileLinks() {
     throw new Error('User not authenticated');
   }
 
-  return await db.select().from(profileLinks).where(eq(profileLinks.uuid, user.uuid));
+  return await db
+    .select({
+      platform: profileLinks.platform,
+      url: profileLinks.url,
+      visible: profileLinks.visible,
+    })
+    .from(profileLinks)
+    .where(eq(profileLinks.uuid, user.uuid));
 }
 
 // Fetches activity logs table; requires session cookie
@@ -115,7 +122,7 @@ export async function getResetToken(uuid: string) {
 // Fetches profile by username
 export async function getProfileByUsername(username: string) {
   // To secure profile from username fetches, we do not return the UUID
-  return await db
+  const profile = await db
     .select({
       display_name: profiles.display_name,
       username: profiles.username,
@@ -129,18 +136,46 @@ export async function getProfileByUsername(username: string) {
     .from(profiles)
     .where(eq(profiles.username, username))
     .limit(1);
+
+  if (profile.length === 0) {
+    return null;
+  }
+
+  return profile[0];
 }
 
 // Fetches complete profiles table
 export async function getCompleteProfiles() {
-  const data = await db.select().from(profiles);
-  const links = await db.select().from(profileLinks);
-  if (!data) throw new Error('Failed to fetch profiles');
+  const profilesData = await db
+    .select({
+      uuid: profiles.uuid,
+      username: profiles.username,
+      display_name: profiles.display_name,
+      avatar_url: profiles.avatar_url,
+      bio: profiles.bio,
+      terms: profiles.terms,
+      teams: profiles.teams,
+      roles: profiles.roles,
+      bg_color: profiles.bg_color,
+    })
+    .from(profiles);
 
-  const enhancedData = data.map((profile) => ({
+  if (!profilesData) return [];
+
+  const linksData = await db
+    .select({
+      uuid: profileLinks.uuid,
+      platform: profileLinks.platform,
+      url: profileLinks.url,
+      visible: profileLinks.visible,
+    })
+    .from(profileLinks);
+
+  // Remove uuid from both profile and links before returning
+  const filteredData = profilesData.map(({ uuid, ...profile }) => ({
     ...profile,
-    links: links.filter((link) => link.uuid === profile.uuid),
+    links: linksData.filter((link) => link.uuid === uuid).map(({ uuid, ...rest }) => rest),
   }));
 
-  return enhancedData;
+  return filteredData;
 }

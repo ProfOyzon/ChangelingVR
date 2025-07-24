@@ -11,7 +11,7 @@ export const zRegisterSchema = z.object({
   accessCode: z
     .string()
     .trim()
-    .refine((code) => code === process.env.AUTH_ACCESS_CODE, { message: 'Invalid access code' }),
+    .refine((code) => code === process.env.AUTH_ACCESS_CODE, { message: 'Access Code is invalid' }),
 });
 
 export const zLoginSchema = z.object({

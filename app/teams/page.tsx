@@ -8,7 +8,7 @@ import TeamsPageClient from './page.client';
 function Loading() {
   return (
     <div className="mb-6 flex flex-wrap justify-center gap-6">
-      {[...Array(20)].map((_, index) => (
+      {[...Array(40)].map((_, index) => (
         <div
           key={index}
           className="bg-steel/50 mx-auto h-64 w-40 max-w-40 min-w-40 animate-pulse rounded-md backdrop-blur-sm"

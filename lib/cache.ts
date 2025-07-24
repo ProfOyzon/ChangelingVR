@@ -12,7 +12,18 @@ type CachedData<T> = {
 export const getCachedUser = cache(
   unstable_cache(
     async () => {
-      const data = await db.select().from(profiles);
+      const data = await db
+        .select({
+          username: profiles.username,
+          display_name: profiles.display_name,
+          avatar_url: profiles.avatar_url,
+          bio: profiles.bio,
+          terms: profiles.terms,
+          teams: profiles.teams,
+          roles: profiles.roles,
+          bg_color: profiles.bg_color,
+        })
+        .from(profiles);
 
       return {
         status: 200,

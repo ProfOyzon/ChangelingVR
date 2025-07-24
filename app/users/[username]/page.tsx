@@ -10,16 +10,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { username } = await params;
   const user = await getProfileByUsername(username);
+  if (!user) return notFound();
 
   return {
-    title: user[0].username,
-    description: `View ${user[0].display_name || user[0].username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+    title: user.username,
+    description: `View ${user.display_name || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     openGraph: {
-      title: `${user[0].username} | Changeling VR`,
-      description: `View ${user[0].display_name || user[0].username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+      title: `${user.username} | Changeling VR`,
+      description: `View ${user.display_name || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
       images: [
         {
-          url: user[0].avatar_url ?? '',
+          url: user.avatar_url ?? '',
           width: 512,
           height: 512,
         },
@@ -27,11 +28,11 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary',
-      title: `${user[0].username} | Changeling VR`,
-      description: `View ${user[0].display_name || user[0].username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+      title: `${user.username} | Changeling VR`,
+      description: `View ${user.display_name || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
       images: [
         {
-          url: user[0].avatar_url ?? '',
+          url: user.avatar_url ?? '',
           width: 512,
           height: 512,
         },
@@ -52,14 +53,12 @@ export default async function UserPage({ params }: { params: Promise<{ username:
         <div className="h-1/4 rounded-t-2xl bg-gray-400"></div>
 
         <div className="flex h-3/4 flex-col-reverse gap-10 rounded-b-2xl bg-white p-4">
-          <div className="h-4/5 overflow-auto rounded-md bg-sky-300 p-4 text-2xl">
-            {user[0].bio}
-          </div>
+          <div className="h-4/5 overflow-auto rounded-md bg-sky-300 p-4 text-2xl">{user.bio}</div>
 
           <div className="flex items-center gap-4 self-center rounded-md bg-amber-300 px-4 py-2">
-            <span className="font-semibold text-black">{user[0].username}</span>
+            <span className="font-semibold text-black">{user.username}</span>
             <div className="flex flex-wrap gap-2">
-              {user[0].roles?.map((role, index) => (
+              {user.roles?.map((role, index) => (
                 <span
                   key={index}
                   className="rounded-full bg-yellow-100 px-2 py-1 text-sm font-medium text-yellow-800"
@@ -72,7 +71,7 @@ export default async function UserPage({ params }: { params: Promise<{ username:
 
           <div className="absolute top-1/16 left-0 h-35 w-35 translate-x-2.5 translate-y-1/2 overflow-hidden rounded-full border border-gray-400 bg-gray-200 shadow-md">
             <Image
-              src={user[0].avatar_url || '/placeholder.png'}
+              src={user.avatar_url || '/placeholder.png'}
               alt="Profile"
               className="h-full w-full object-cover"
               width={512}

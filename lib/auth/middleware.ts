@@ -2,7 +2,18 @@ import { z } from 'zod/v4';
 import { getUserProfile } from '@/lib/db/queries';
 import type { Profile } from '../db/schema';
 
-function processError(error: z.ZodError) {
+export type ActionState = {
+  error?: string;
+  success?: string;
+  [key: string]: any;
+};
+
+/**
+ * Processes a Zod error and returns a string of the error messages
+ * @param error - The Zod error
+ * @returns A string of the error messages
+ */
+function processZodError(error: z.ZodError) {
   return z
     .prettifyError(error)
     .split('\n')
@@ -10,12 +21,11 @@ function processError(error: z.ZodError) {
     .join(';');
 }
 
-export type ActionState = {
-  error?: string;
-  success?: string;
-  [key: string]: any;
-};
-
+/**
+ * Processes the form data and returns a record of the data
+ * @param formData - The form data
+ * @returns A record of the data
+ */
 function processFormData(formData: FormData) {
   const data: Record<string, any> = {};
   for (const [key, value] of formData.entries()) {
@@ -31,11 +41,14 @@ function processFormData(formData: FormData) {
   return data;
 }
 
-type ValidatedActionFunction<S extends z.ZodType<any, any>, T> = (
-  data: z.infer<S>,
-  formData: FormData,
-) => Promise<T>;
+type ValidatedActionFunction<S extends z.ZodType<any, any>, T> = (data: z.infer<S>) => Promise<T>;
 
+/**
+ * Validates the form data and returns the data
+ * @param schema - The Zod schema
+ * @param action - The action to perform
+ * @returns The resulting data of the action
+ */
 export function validatedAction<S extends z.ZodType<any, any>, T>(
   schema: S,
   action: ValidatedActionFunction<S, T>,
@@ -43,10 +56,10 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
   return async (prevState: ActionState, formData: FormData) => {
     const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
-      return { error: processError(result.error) };
+      return { error: processZodError(result.error) };
     }
 
-    return action(result.data, formData);
+    return action(result.data);
   };
 }
 
@@ -56,6 +69,12 @@ type ValidatedActionWithUserFunction<S extends z.ZodType<any, any>, T> = (
   user: Profile,
 ) => Promise<T>;
 
+/**
+ * Validates the form data and returns the data
+ * @param schema - The Zod schema
+ * @param action - The action to perform
+ * @returns The resulting data of the action
+ */
 export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
   schema: S,
   action: ValidatedActionWithUserFunction<S, T>,
@@ -68,7 +87,7 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
 
     const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
-      return { error: processError(result.error) };
+      return { error: processZodError(result.error) };
     }
 
     return action(result.data, formData, user);

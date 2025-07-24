@@ -102,6 +102,7 @@ export type Cron = typeof cron.$inferSelect;
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
 export type Profile = typeof profiles.$inferSelect;
+export type PublicProfile = Omit<Profile, 'uuid'>;
 export type NewProfile = typeof profiles.$inferInsert;
 export type ProfileLink = typeof profileLinks.$inferSelect;
 export type NewProfileLink = typeof profileLinks.$inferInsert;

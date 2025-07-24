@@ -5,7 +5,7 @@ export default function Loading() {
       <div className="bg-steel/50 mx-auto mb-6 h-10 w-xl rounded-md backdrop-blur-sm"></div>
       <div className="bg-steel/50 mx-auto mb-6 h-10 w-lg rounded-md backdrop-blur-sm"></div>
 
-      <div className="bg-steel/50 h-svh w-full rounded-md backdrop-blur-sm"></div>
+      <div className="bg-steel/50 h-150 w-full rounded-md backdrop-blur-sm"></div>
     </div>
   );
 }

@@ -43,6 +43,12 @@ type GeoLocationData = {
   query: string;
 };
 
+/**
+ * Logs an activity to the database
+ * @param userId - The user's ID
+ * @param type - The type of activity
+ * @returns void
+ */
 export async function logActivity(userId: string, type: ActivityType) {
   const header = await headers();
   const ipAddress = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
@@ -56,13 +62,19 @@ export async function logActivity(userId: string, type: ActivityType) {
   try {
     const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
     geolocationData = await response.json();
-  } catch {}
+  } catch {
+    // Do nothing
+  }
 
   if (type === ActivityType.SIGN_IN && geolocationData) {
     const [member, profile, activity] = await Promise.all([
       db.select({ email: members.email }).from(members).where(eq(members.uuid, userId)),
       db.select({ username: profiles.username }).from(profiles).where(eq(profiles.uuid, userId)),
-      db.select().from(activityLogs).where(eq(activityLogs.uuid, userId)).limit(10),
+      db
+        .select({ zip: activityLogs.zip })
+        .from(activityLogs)
+        .where(eq(activityLogs.uuid, userId))
+        .limit(10),
     ]);
 
     // Check if this is a new location
@@ -97,33 +109,58 @@ export async function logActivity(userId: string, type: ActivityType) {
   await db.insert(activityLogs).values(newActivity);
 }
 
-export const login = validatedAction(zLoginSchema, async (data, formData) => {
+/**
+ * Validates the login form data and logs the user in
+ */
+export const login = validatedAction(zLoginSchema, async (data) => {
   const { email, password } = data;
 
   // Fetch member by email
-  const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
+  const member = await db
+    .select({ uuid: members.uuid, password: members.password })
+    .from(members)
+    .where(eq(members.email, email))
+    .limit(1);
+
+  // Member not found, redirect back with error
   if (!member || member.length === 0) {
-    return { error: 'Invalid email or password.', email, password };
+    return { error: '✖ Invalid email or password.', email, password };
   }
 
   // Compare password
   const isPasswordValid = await comparePassword(password, member[0].password);
+
+  // Password is invalid, redirect back with error
   if (!isPasswordValid) {
-    return { error: 'Invalid email or password.', email, password };
+    return { error: '✖ Invalid email or password.', email, password };
   }
 
-  await Promise.all([setSession(member[0]), logActivity(member[0].uuid, ActivityType.SIGN_IN)]);
+  // Set session and log activity
+  await Promise.all([
+    setSession(member[0].uuid),
+    logActivity(member[0].uuid, ActivityType.SIGN_IN),
+  ]);
 
   // Redirect to dashboard
   redirect('/dashboard');
 });
 
-export const register = validatedAction(zRegisterSchema, async (data, formData) => {
+/**
+ * Validates the register form data and creates a new user
+ */
+export const register = validatedAction(zRegisterSchema, async (data) => {
   const { email, password } = data;
 
-  const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
+  // Check if member already exists
+  const member = await db
+    .select({ uuid: members.uuid })
+    .from(members)
+    .where(eq(members.email, email))
+    .limit(1);
+
+  // Member already exists, redirect back with error
   if (member.length > 0) {
-    return { error: 'Failed to create user.', email, password };
+    return { error: '✖ Failed to create user' };
   }
 
   // Create new member
@@ -135,9 +172,12 @@ export const register = validatedAction(zRegisterSchema, async (data, formData) 
   };
 
   // Create new member in database
-  const newMemberData = await db.insert(members).values(newMember).returning();
+  const newMemberData = await db
+    .insert(members)
+    .values(newMember)
+    .returning({ uuid: members.uuid });
   if (!newMemberData || newMemberData.length === 0) {
-    return { error: 'Failed to create user.', email, password };
+    return { error: '✖ Failed to create user' };
   }
 
   // Create new profile
@@ -148,13 +188,17 @@ export const register = validatedAction(zRegisterSchema, async (data, formData) 
   };
 
   // Create new profile in database
-  const newProfileData = await db.insert(profiles).values(newProfile).returning();
+  const newProfileData = await db
+    .insert(profiles)
+    .values(newProfile)
+    .returning({ username: profiles.username });
   if (!newProfileData || newProfileData.length === 0) {
-    return { error: 'Failed to create profile.', email, password };
+    return { error: '✖ Failed to create profile' };
   }
 
+  // Set session, log activity, and send welcome email
   await Promise.all([
-    setSession(newMemberData[0]),
+    setSession(newMemberData[0].uuid),
     logActivity(newMemberData[0].uuid, ActivityType.SIGN_UP),
     sendMail({
       reciever: email,
@@ -168,12 +212,18 @@ export const register = validatedAction(zRegisterSchema, async (data, formData) 
   redirect('/dashboard');
 });
 
+/**
+ * Logs the user out and redirects to the home page
+ */
 export async function logout() {
   const user = (await getUserProfile()) as Profile;
   await logActivity(user.uuid, ActivityType.SIGN_OUT);
   (await cookies()).delete('session');
 }
 
+/**
+ * Validates the update profile form data and updates the user's profile
+ */
 export const updateProfile = validatedActionWithUser(
   zUpdateProfileSchema,
   async (data, _, user) => {
@@ -193,29 +243,36 @@ export const updateProfile = validatedActionWithUser(
         .where(eq(profiles.uuid, user.uuid));
 
       revalidateTag('profiles');
-      return { success: true };
+      return { success: '✔ Profile updated successfully' };
     } catch {
-      return { error: 'Failed to update profile' };
+      return { error: '✖ Failed to update profile' };
     }
   },
 );
 
-export const updatePassword = validatedAction(zUpdatePasswordSchema, async (data, formData) => {
+/**
+ * Validates the update password form data and updates the user's password
+ */
+export const updatePassword = validatedAction(zUpdatePasswordSchema, async (data) => {
   const { token, password } = data;
+
+  // Hash the token and password
   const hashedToken = createHash('sha256').update(token).digest('hex');
   const hashedPassword = await hashPassword(password);
 
+  // Fetch stored token
   const storedToken = await db
-    .select()
+    .select({ uuid: resetTokens.uuid, expires_at: resetTokens.expires_at })
     .from(resetTokens)
     .where(eq(resetTokens.token, hashedToken))
     .limit(1);
 
   // Ensure token exists and is not expired
   if (storedToken.length === 0 || storedToken[0].expires_at < new Date()) {
-    return { error: 'Invalid token or token expired' };
+    return { error: '✖ Invalid token or token expired' };
   }
 
+  // Update password and delete token
   await Promise.all([
     db
       .update(members)
@@ -225,13 +282,21 @@ export const updatePassword = validatedAction(zUpdatePasswordSchema, async (data
     logActivity(storedToken[0].uuid, ActivityType.UPDATE_PASSWORD),
   ]);
 
+  // Redirect to login page
   redirect('/auth/login');
 });
 
-export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data, formData) => {
+/**
+ * Validates the forgot password form data and sends a password reset email
+ */
+export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data) => {
   const { email } = data;
 
-  const member = await db.select().from(members).where(eq(members.email, email)).limit(1);
+  const member = await db
+    .select({ uuid: members.uuid, email: members.email })
+    .from(members)
+    .where(eq(members.email, email))
+    .limit(1);
   if (!member || member.length === 0) {
     // Still show success message to prevent account enumeration
     redirect('/auth/forgot-password?success=true');
@@ -245,7 +310,7 @@ export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data
 
   await db.transaction(async (tx) => {
     const existingToken = await tx
-      .select()
+      .select({ uuid: resetTokens.uuid })
       .from(resetTokens)
       .where(eq(resetTokens.uuid, member[0].uuid));
 
