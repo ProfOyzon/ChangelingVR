@@ -9,6 +9,7 @@ import {
   UserMinus,
   UserPlus,
 } from 'lucide-react';
+import { Card, CardContent, CardDescription } from '@/components/ui/card';
 import { getActivityLogs } from '@/lib/db/queries';
 import { ActivityType } from '@/lib/db/schema';
 
@@ -29,7 +30,13 @@ function getRelativeTime(date: Date) {
   if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
   if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
   if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-  return date.toLocaleDateString();
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 function formatAction(action: ActivityType): string {
@@ -57,28 +64,32 @@ export default async function ActivityPage() {
   return (
     <Fragment>
       {logs.length > 0 ? (
-        <ul className="space-y-4">
+        <div className="flex flex-col gap-2">
           {logs.map((log) => {
             const Icon = iconMap[log.action as ActivityType] || Settings;
             const formattedAction = formatAction(log.action as ActivityType);
 
             return (
-              <li key={log.id} className="flex items-center space-x-4">
-                <div className="rounded-full bg-orange-100 p-2">
-                  <Icon className="h-5 w-5 text-orange-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium">
-                    {formattedAction} {log.ip_address && ` from ${log.city}, ${log.region}`}
-                  </p>
-                  <p className="text-muted-foreground text-xs">
-                    {getRelativeTime(new Date(log.timestamp))}
-                  </p>
-                </div>
-              </li>
+              <Card key={log.id} className="p-3.5">
+                <CardContent className="flex flex-col gap-2 p-0">
+                  <CardDescription className="flex flex-row items-center gap-2">
+                    <div className="rounded-full bg-orange-100 p-2">
+                      <Icon className="size-5 text-orange-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">
+                        {formattedAction} {log.ip_address && ` from ${log.city}, ${log.region}`}
+                      </p>
+                      <p className="text-muted-foreground text-xs">
+                        {getRelativeTime(new Date(log.timestamp))}
+                      </p>
+                    </div>
+                  </CardDescription>
+                </CardContent>
+              </Card>
             );
           })}
-        </ul>
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center py-12 text-center">
           <AlertCircle className="text-light-mustard mb-4 h-12 w-12" />

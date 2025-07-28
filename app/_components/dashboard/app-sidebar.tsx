@@ -1,6 +1,19 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { Activity, Eye, Home, Settings, User } from 'lucide-react';
+import {
+  Activity,
+  Apple,
+  Briefcase,
+  Eye,
+  FileText,
+  Home,
+  Link2,
+  Settings,
+  User,
+  UserCheck,
+  UserCog,
+  Users,
+} from 'lucide-react';
 import { LogoutButton } from '@/app/_components/dashboard/logout-button';
 import {
   Sidebar,
@@ -49,18 +62,10 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Profile" asChild>
-                  <Link href="/dashboard/profile">
-                    <User />
-                    <span>Profile</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Avatar" asChild>
-                  <Link href="/dashboard/avatar">
-                    <User />
-                    <span>Avatar</span>
+                <SidebarMenuButton tooltip="Preview" asChild>
+                  <Link href="/dashboard/preview">
+                    <Eye />
+                    <span>Preview</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -73,18 +78,26 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Preview" asChild>
-                  <Link href="/dashboard/preview">
-                    <Eye />
-                    <span>Preview</span>
+                <SidebarMenuButton tooltip="Profile" asChild>
+                  <Link href="/dashboard/profile">
+                    <FileText />
+                    <span>Profile</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Settings" asChild>
-                  <Link href="/dashboard/settings">
-                    <Settings />
-                    <span>Settings</span>
+                <SidebarMenuButton tooltip="Team & Roles" asChild>
+                  <Link href="/dashboard/assignments">
+                    <Briefcase />
+                    <span>Team & Roles</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton tooltip="Identity" asChild>
+                  <Link href="/dashboard/identity">
+                    <UserCog />
+                    <span>Identity</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

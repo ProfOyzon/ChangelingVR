@@ -1,29 +1,22 @@
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { logActivity } from '@/lib/auth/actions';
-import { verifyToken } from '@/lib/auth/session';
+import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { ActivityType, profiles } from '@/lib/db/schema';
 import { del, put } from '@vercel/blob';
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const sessionCookie = (await cookies()).get('session');
+  const session = await getSession();
   const filename = new URL(request.url).searchParams.get('filename');
 
-  // No session cookie
-  if (!sessionCookie || !sessionCookie.value) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Invalid session cookie
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (!sessionData || !sessionData.user || typeof sessionData.user.id !== 'string') {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  // Session expired
-  if (new Date(sessionData.expires) < new Date()) {
+  // Invalid session
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -33,7 +26,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   // UUID mismatch
-  if (sessionData.user.id !== filename.split('.')[0]) {
+  if (session.user.id !== filename.split('.')[0]) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

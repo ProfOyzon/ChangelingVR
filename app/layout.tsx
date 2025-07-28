@@ -45,11 +45,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${latoSans.className} antialiased`} suppressHydrationWarning>
-      <body className="bg-midnight w-screen text-gray-100">
+      <body className="bg-midnight w-screen overflow-x-hidden text-gray-100">
         <QueryProvider>
           <Header />
           <div className="h-16" aria-hidden="true"></div>
-          <main className="min-h-[calc(100svh-4rem)] items-center">{children}</main>
+          <main className="min-h-[calc(100svh-4rem)] w-full items-center">{children}</main>
           <Footer />
         </QueryProvider>
 

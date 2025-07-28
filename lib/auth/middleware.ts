@@ -1,45 +1,13 @@
 import { z } from 'zod/v4';
 import { getUserProfile } from '@/lib/db/queries';
 import type { Profile } from '../db/schema';
+import { processFormData, processZodError } from './validator';
 
 export type ActionState = {
   error?: string;
   success?: string;
   [key: string]: any;
 };
-
-/**
- * Processes a Zod error and returns a string of the error messages
- * @param error - The Zod error
- * @returns A string of the error messages
- */
-function processZodError(error: z.ZodError) {
-  return z
-    .prettifyError(error)
-    .split('\n')
-    .filter((line) => !line.trim().startsWith('→'))
-    .join(';');
-}
-
-/**
- * Processes the form data and returns a record of the data
- * @param formData - The form data
- * @returns A record of the data
- */
-function processFormData(formData: FormData) {
-  const data: Record<string, any> = {};
-  for (const [key, value] of formData.entries()) {
-    if (data[key]) {
-      if (!Array.isArray(data[key])) {
-        data[key] = [data[key]];
-      }
-      data[key].push(value);
-    } else {
-      data[key] = value;
-    }
-  }
-  return data;
-}
 
 type ValidatedActionFunction<S extends z.ZodType<any, any>, T> = (data: z.infer<S>) => Promise<T>;
 
@@ -65,7 +33,6 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
 
 type ValidatedActionWithUserFunction<S extends z.ZodType<any, any>, T> = (
   data: z.infer<S>,
-  formData: FormData,
   user: Profile,
 ) => Promise<T>;
 
@@ -90,6 +57,6 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
       return { error: processZodError(result.error) };
     }
 
-    return action(result.data, formData, user);
+    return action(result.data, user);
   };
 }

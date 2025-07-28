@@ -1,10 +1,10 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { createHash, randomUUID } from 'node:crypto';
 import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
@@ -12,8 +12,10 @@ import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
   zForgotPasswordSchema,
   zLoginSchema,
+  zPlatformSchema,
   zRegisterSchema,
   zUpdatePasswordSchema,
+  zUpdateProfileLinkSchema,
   zUpdateProfileSchema,
 } from '@/lib/auth/validator';
 import { db } from '@/lib/db';
@@ -26,6 +28,7 @@ import {
   type Profile,
   activityLogs,
   members,
+  profileLinks,
   profiles,
   resetTokens,
 } from '@/lib/db/schema';
@@ -224,31 +227,52 @@ export async function logout() {
 /**
  * Validates the update profile form data and updates the user's profile
  */
-export const updateProfile = validatedActionWithUser(
-  zUpdateProfileSchema,
-  async (data, _, user) => {
+export const updateProfile = validatedActionWithUser(zUpdateProfileSchema, async (data, user) => {
+  try {
+    await db.update(profiles).set(data).where(eq(profiles.uuid, user.uuid));
+    revalidateTag('profiles');
+  } catch {
+    // It failed, client will handle the error
+  }
+});
+
+export const updateProfileLink = validatedActionWithUser(
+  zUpdateProfileLinkSchema,
+  async (data, user) => {
     try {
       await db
-        .update(profiles)
-        .set({
-          username: data.username,
-          display_name: data.display_name,
-          bio: data.bio,
-          terms: data.terms,
-          roles: data.roles,
-          teams: data.teams,
-          avatar_url: data.avatar_url,
-          bg_color: data.bg_color,
+        .insert(profileLinks)
+        .values({
+          uuid: user.uuid,
+          platform: data.platform,
+          url: data.url,
+          visible: data.visible,
         })
-        .where(eq(profiles.uuid, user.uuid));
+        .onConflictDoUpdate({
+          target: [profileLinks.uuid, profileLinks.platform],
+          set: {
+            url: data.url,
+            visible: data.visible,
+          },
+        });
 
-      revalidateTag('profiles');
-      return { success: '✔ Profile updated successfully' };
+      revalidatePath('/dashboard/g');
     } catch {
-      return { error: '✖ Failed to update profile' };
+      // It failed, client will handle the error
     }
   },
 );
+
+export const deleteProfileLink = validatedActionWithUser(zPlatformSchema, async (data, user) => {
+  try {
+    await db
+      .delete(profileLinks)
+      .where(and(eq(profileLinks.uuid, user.uuid), eq(profileLinks.platform, data.platform)));
+    revalidatePath('/dashboard/g');
+  } catch {
+    // It failed, client will handle the error
+  }
+});
 
 /**
  * Validates the update password form data and updates the user's password
@@ -297,6 +321,7 @@ export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data
     .from(members)
     .where(eq(members.email, email))
     .limit(1);
+
   if (!member || member.length === 0) {
     // Still show success message to prevent account enumeration
     redirect('/auth/forgot-password?success=true');

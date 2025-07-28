@@ -1,32 +1,23 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { desc, eq } from 'drizzle-orm';
-import { verifyToken } from '@/lib/auth/session';
+import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
 
 // Fetches member table; requires session cookie
 export async function getUserMember() {
-  const sessionCookie = (await cookies()).get('session');
-  if (!sessionCookie || !sessionCookie.value) {
+  const session = await getSession();
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
     return null;
   }
 
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (!sessionData || !sessionData.user || typeof sessionData.user.id !== 'string') {
-    return null;
-  }
-
-  if (new Date(sessionData.expires) < new Date()) {
-    return null;
-  }
-
-  const user = await db
-    .select()
-    .from(members)
-    .where(eq(members.uuid, sessionData.user.id))
-    .limit(1);
+  const user = await db.select().from(members).where(eq(members.uuid, session.user.id)).limit(1);
 
   if (user.length === 0) {
     return null;
@@ -37,24 +28,20 @@ export async function getUserMember() {
 
 // Fetches profile table; requires session cookie
 export async function getUserProfile() {
-  const sessionCookie = (await cookies()).get('session');
-  if (!sessionCookie || !sessionCookie.value) {
-    return null;
-  }
-
-  const sessionData = await verifyToken(sessionCookie.value);
-  if (!sessionData || !sessionData.user || typeof sessionData.user.id !== 'string') {
-    return null;
-  }
-
-  if (new Date(sessionData.expires) < new Date()) {
+  const session = await getSession();
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
     return null;
   }
 
   const profile = await db
     .select()
     .from(profiles)
-    .where(eq(profiles.uuid, sessionData.user.id))
+    .where(eq(profiles.uuid, session.user.id))
     .limit(1);
 
   if (profile.length === 0) {
@@ -78,6 +65,7 @@ export async function getProfileLinks() {
       visible: profileLinks.visible,
     })
     .from(profileLinks)
+    .leftJoin(profiles, eq(profileLinks.uuid, profiles.uuid))
     .where(eq(profileLinks.uuid, user.uuid));
 }
 

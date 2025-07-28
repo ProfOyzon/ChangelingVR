@@ -8,7 +8,6 @@ export function useProfileQuery() {
     queryKey: ['profiles'],
     queryFn: getUserProfile,
     staleTime: 0,
-    gcTime: 0,
     meta: {
       tags: ['profiles'],
     },

@@ -1,5 +1,38 @@
 import { z } from 'zod/v4';
 
+/**
+ * Processes a Zod error and returns a string of the error messages
+ * @param error - The Zod error
+ * @returns A string of the error messages
+ */
+export function processZodError(error: z.ZodError) {
+  return z
+    .prettifyError(error)
+    .split('\n')
+    .filter((line) => !line.trim().startsWith('→'))
+    .join(';');
+}
+
+/**
+ * Processes the form data and returns a record of the data
+ * @param formData - The form data
+ * @returns A record of the data
+ */
+export function processFormData(formData: FormData) {
+  const data: Record<string, any> = {};
+  for (const [key, value] of formData.entries()) {
+    if (data[key]) {
+      if (!Array.isArray(data[key])) {
+        data[key] = [data[key]];
+      }
+      data[key].push(value);
+    } else {
+      data[key] = value;
+    }
+  }
+  return data;
+}
+
 export const zRegisterSchema = z.object({
   email: z.email().trim().endsWith('@rit.edu', { error: 'Email must be a RIT email (@rit.edu)' }),
   password: z
@@ -33,13 +66,56 @@ export const zUpdatePasswordSchema = z.object({
     .regex(/[^A-Za-z0-9]/, { error: 'Password must contain at least one special character' }),
 });
 
-export const zUpdateProfileSchema = z.object({
+export const zUsernameSchema = z.object({
   username: z
     .string()
     .trim()
     .min(3, { error: 'Username must be at least 3 characters long' })
     .max(15, { error: 'Username must be less than 15 characters' })
     .regex(/^[a-z0-9]+$/, { error: 'Username can only contain lowercase letters and numbers' }),
+});
+
+export const zDisplayNameSchema = z.object({
+  display_name: z
+    .string()
+    .trim()
+    .max(50, { error: 'Display name must be less than 50 characters' })
+    .optional(),
+});
+
+export const zBioSchema = z.object({
+  bio: z.string().trim().max(500, { error: 'Bio must be less than 500 characters' }).optional(),
+});
+
+export const zTermsSchema = z.object({
+  terms: z
+    .string()
+    .trim()
+    .transform((val) => JSON.parse(val as string).map(Number)),
+});
+
+export const zRolesSchema = z.object({
+  roles: z
+    .string()
+    .trim()
+    .transform((val) => JSON.parse(val as string)),
+});
+
+export const zTeamsSchema = z.object({
+  teams: z
+    .string()
+    .trim()
+    .transform((val) => JSON.parse(val as string)),
+});
+
+export const zUpdateProfileSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(3, { error: 'Username must be at least 3 characters long' })
+    .max(15, { error: 'Username must be less than 15 characters' })
+    .regex(/^[a-z0-9]+$/, { error: 'Username can only contain lowercase letters and numbers' })
+    .optional(),
   display_name: z
     .string()
     .trim()
@@ -47,29 +123,32 @@ export const zUpdateProfileSchema = z.object({
     .optional(),
   bio: z.string().trim().max(500, { error: 'Bio must be less than 500 characters' }).optional(),
   terms: z
-    .union([z.string(), z.array(z.string())])
-    .transform((val) => {
-      if (!val) return [];
-      const arr = Array.isArray(val) ? val : [val];
-      return arr.map((v) => parseInt(v, 10));
-    })
+    .string()
+    .trim()
+    .transform((val) => JSON.parse(val as string).map(Number))
     .optional(),
   roles: z
-    .union([z.string(), z.array(z.string())])
-    .transform((val) => {
-      if (!val) return [];
-      return Array.isArray(val) ? val : [val];
-    })
+    .string()
+    .trim()
+    .transform((val) => JSON.parse(val as string))
     .optional(),
   teams: z
-    .union([z.string(), z.array(z.string())])
-    .transform((val) => {
-      if (!val) return [];
-      return Array.isArray(val) ? val : [val];
-    })
+    .string()
+    .trim()
+    .transform((val) => JSON.parse(val as string))
     .optional(),
   avatar_url: z.url().optional(),
   bg_color: z.string().trim().optional(),
+});
+
+export const zPlatformSchema = z.object({
+  platform: z.enum(['github', 'linkedin', 'email', 'website']),
+});
+
+export const zUpdateProfileLinkSchema = z.object({
+  platform: z.enum(['github', 'linkedin', 'email', 'website']),
+  url: z.union([z.url({ message: 'Invalid URL' }), z.email({ message: 'Invalid email' })]),
+  visible: z.string().transform((val) => val === 'true'),
 });
 
 export type RegisterInput = z.infer<typeof zRegisterSchema>;
