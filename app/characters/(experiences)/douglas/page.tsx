@@ -8,9 +8,8 @@ export const metadata: Metadata = {
 export default function Douglas() {
   return (
     <>
-      <div id="app">
-		</div>
-		{/* <div id = "credits">
+      <div id="app"></div>
+      {/* <div id = "credits">
 			<ul>
 				<li>Erase Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=73587">Pixabay</a></li>
 				<li>Jump Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=80241">Pixabay</a></li>
@@ -20,9 +19,9 @@ export default function Douglas() {
 				<li>Paintbrush Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=107494">Pixabay</a></li>
 			</ul>
 		</div>  */}
-		<div id="wrapper"></div>
+      <div id="wrapper"></div>
 
-    <Script type="module" src="/scripts/douglas/index.js" strategy="afterInteractive" />
+      <Script type="module" src="/scripts/douglas/index.js" strategy="afterInteractive" />
     </>
   );
 }
