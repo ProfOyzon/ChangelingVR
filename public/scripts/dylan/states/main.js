@@ -1,4 +1,4 @@
-import { Application, Graphics, Text, TextStyle } from 'pixi.js';
+import { Application, Graphics, Text, TextStyle } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 import { makeButton, makeCover, makeRepeater, makeReplaceCover, makeWindow } from '../util.js';
 
 /**

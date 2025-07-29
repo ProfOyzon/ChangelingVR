@@ -1,5 +1,5 @@
-import * as CANNON from 'cannon-es/dist/cannon-es.js';
-import * as THREE from 'three';
+import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
+import * as CANNON from 'https://unpkg.com/cannon-es@0.20.0/dist/cannon-es.js';
 import { PointerLockControlsCannon } from './PointerLockControlsCannon.js';
 import * as ADVANCEDBODY from './advancedBody.js';
 import { Checkpoint, Teleporter } from './checkpoint.js';
@@ -263,7 +263,7 @@ function loadAudio() {
 
   // Loading the background track.
   backgroundSound = new THREE.Audio(listener);
-  audioLoader.load(`/assets/sounds/kirsten-bg-music.mp3`, function (buffer) {
+  audioLoader.load(`/sounds/kirsten-bg-music.mp3`, function (buffer) {
     backgroundSound.setBuffer(buffer);
     backgroundSound.setLoop(true);
     backgroundSound.setVolume(0.3);
@@ -273,7 +273,7 @@ function loadAudio() {
   let trackNum = 1; // This is tied to the names of each collectable noise.
   for (let i = 0; i < 8; i++) {
     collectableSounds.push(new THREE.Audio(listener));
-    audioLoader.load(`/assets/sounds/glass-tap-${trackNum}.mp3`, function (buffer) {
+    audioLoader.load(`/sounds/glass-tap-${trackNum}.mp3`, function (buffer) {
       collectableSounds[i].setBuffer(buffer);
       collectableSounds[i].setLoop(false);
       collectableSounds[i].setVolume(0.3);
@@ -283,13 +283,13 @@ function loadAudio() {
 
   // Loading jump sounds.
   jumpSounds.push(new THREE.Audio(listener));
-  audioLoader.load(`/assets/sounds/spring-1.mp3`, function (buffer) {
+  audioLoader.load(`/sounds/spring-1.mp3`, function (buffer) {
     jumpSounds[0].setBuffer(buffer);
     jumpSounds[0].setLoop(false);
     jumpSounds[0].setVolume(0.3);
   });
   jumpSounds.push(new THREE.Audio(listener));
-  audioLoader.load(`/assets/sounds/spring-2.mp3`, function (buffer) {
+  audioLoader.load(`/sounds/spring-2.mp3`, function (buffer) {
     jumpSounds[1].setBuffer(buffer);
     jumpSounds[1].setLoop(false);
     jumpSounds[1].setVolume(0.3);
@@ -314,7 +314,7 @@ function loadGeometry() {
     new CANNON.Vec3(60.828, 60.828, 3),
     new THREE.Vector3(0, 0, 0),
     'mainIsland',
-    '/assets/models/bigIslandDoodle.glb',
+    '/models/bigIslandDoodle.glb',
   );
 
   /* North Path: Planes */
@@ -330,7 +330,7 @@ function loadGeometry() {
     new CANNON.Vec3(12.723, 12.723, 1),
     new THREE.Vector3(0, 0, 0),
     'planeIsland1',
-    '/assets/models/smallIslandDoodle.glb',
+    '/models/smallIslandDoodle.glb',
   );
   bodies['planeIsland2'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -343,7 +343,7 @@ function loadGeometry() {
     new CANNON.Vec3(4.412, 4.412, 1),
     new THREE.Vector3(0, 0, 0),
     'planeIsland2',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
   bodies['planeIsland3'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -356,7 +356,7 @@ function loadGeometry() {
     new CANNON.Vec3(8.181, 8.181, 1),
     new THREE.Vector3(0, 79.32, 0),
     'planeIsland3',
-    '/assets/models/smallIslandDoodle.glb',
+    '/models/smallIslandDoodle.glb',
   );
   bodies['planeIsland4'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -369,7 +369,7 @@ function loadGeometry() {
     new CANNON.Vec3(8.181, 8.181, 1),
     new THREE.Vector3(0, 79.32, 0),
     'planeIsland4',
-    '/assets/models/smallIslandDoodle.glb',
+    '/models/smallIslandDoodle.glb',
   );
   bodies['planeIsland5'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -382,7 +382,7 @@ function loadGeometry() {
     new CANNON.Vec3(4.412, 4.412, 1),
     new THREE.Vector3(0, 0, 0),
     'planeIsland5',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
   bodies['planeIsland6'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -395,7 +395,7 @@ function loadGeometry() {
     new CANNON.Vec3(4.412, 4.412, 1),
     new THREE.Vector3(0, 0, 0),
     'planeIsland6',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
   bodies['planeIsland7'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -408,7 +408,7 @@ function loadGeometry() {
     new CANNON.Vec3(4.412, 4.412, 1),
     new THREE.Vector3(0, 0, 0),
     'planeIsland7',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
   bodies['planeIsland8'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -421,7 +421,7 @@ function loadGeometry() {
     new CANNON.Vec3(8.181, 8.181, 1),
     new THREE.Vector3(0, 45.79, 0),
     'planeIsland8',
-    '/assets/models/smallIslandDoodle.glb',
+    '/models/smallIslandDoodle.glb',
   );
   bodies['planeIsland9'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -434,7 +434,7 @@ function loadGeometry() {
     new CANNON.Vec3(8.181, 8.181, 1),
     new THREE.Vector3(0, 45.79, 0),
     'planeIsland9',
-    '/assets/models/smallIslandDoodle.glb',
+    '/models/smallIslandDoodle.glb',
   );
   bodies['planeIsland10'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -447,7 +447,7 @@ function loadGeometry() {
     new CANNON.Vec3(4.412, 4.412, 1),
     new THREE.Vector3(0, 0, 0),
     'planeIsland10',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
   bodies['planeIsland11'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -460,7 +460,7 @@ function loadGeometry() {
     new CANNON.Vec3(8.181, 8.181, 1),
     new THREE.Vector3(0, 45.79, 0),
     'planeIsland11',
-    '/assets/models/smallIslandDoodle.glb',
+    '/models/smallIslandDoodle.glb',
   );
   bodies['planeIsland12'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -473,7 +473,7 @@ function loadGeometry() {
     new CANNON.Vec3(4.412, 4.412, 1),
     new THREE.Vector3(0, 69.28, 0),
     'planeIsland12',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
   bodies['planeIsland13'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -486,7 +486,7 @@ function loadGeometry() {
     new CANNON.Vec3(12.723, 12.723, 19.0),
     new THREE.Vector3(0, -4.99, 0),
     'planeIsland13',
-    '/assets/models/bigIslandDoodle.glb',
+    '/models/bigIslandDoodle.glb',
   );
   bodies['planeIsland14'] = new ADVANCEDBODY.Cylinder(
     scene,
@@ -499,7 +499,7 @@ function loadGeometry() {
     new CANNON.Vec3(2.287, 2.287, 1.5),
     new THREE.Vector3(0, 69.28, 0),
     'planeIsland14',
-    '/assets/models/miniIslandDoodle.glb',
+    '/models/miniIslandDoodle.glb',
   );
 
   // Still Plane Platforms
@@ -977,7 +977,7 @@ function loadProps() {
         x,
         y,
         z,
-        '/assets/images/experiences/kirsten/sky_prop_' + propIndex + '.png',
+        '/experiences/kirsten/sky_prop_' + propIndex + '.png',
         5,
         5,
       ),
@@ -1018,7 +1018,7 @@ function loadProps() {
         (lowerPropBounds.z - 500);
 
     // Import a new cloud.
-    ImportSpriteStill(scene, x, y, z, '/assets/images/experiences/kirsten/skyCloud.png', 100, 100);
+    ImportSpriteStill(scene, x, y, z, '/experiences/kirsten/skyCloud.png', 100, 100);
   }
   //Top/Bottom clouds.
   for (let i = 0; i < 20; i++) {
@@ -1040,7 +1040,7 @@ function loadProps() {
         (lowerPropBounds.y - 500);
 
     // Import a new cloud.
-    ImportSpriteStill(scene, x, y, z, '/assets/images/experiences/kirsten/skyCloud.png', 100, 100);
+    ImportSpriteStill(scene, x, y, z, '/experiences/kirsten/skyCloud.png', 100, 100);
   }
 }
 

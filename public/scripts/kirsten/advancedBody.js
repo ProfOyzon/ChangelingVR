@@ -1,6 +1,5 @@
-import * as CANNON from 'cannon-es/dist/cannon-es.js';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import * as CANNON from 'https://unpkg.com/cannon-es@0.20.0/dist/cannon-es.js';
+import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 import { ImportGLTFModelStill } from './helpers.js';
 
 /**
@@ -205,7 +204,7 @@ class PlaneBody extends CollisionBody {
         modelScale,
         rotation,
         name,
-        '/assets/models/toyAirplaneDoodleZ.glb',
+        '/models/toyAirplaneDoodleZ.glb',
         offset,
       );
       //creating the bounds of the shape
@@ -228,7 +227,7 @@ class PlaneBody extends CollisionBody {
         modelScale,
         rotation,
         name,
-        '/assets/models/toyAirplaneDoodle.glb',
+        '/models/toyAirplaneDoodle.glb',
         offset,
       );
       //creating the bounds of the shape

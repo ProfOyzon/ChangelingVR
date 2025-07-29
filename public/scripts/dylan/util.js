@@ -1,4 +1,4 @@
-import { Container, Graphics, LINE_CAP, LINE_JOIN, Text, TextStyle, Ticker } from 'pixi.js';
+import { Container, Graphics, LINE_CAP, LINE_JOIN, Text, TextStyle, Ticker } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 
 /**
  * Makes an object that can repeatedly call a function at a certain rate

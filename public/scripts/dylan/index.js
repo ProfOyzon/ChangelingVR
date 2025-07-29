@@ -4,15 +4,15 @@
  * The main state consists of the main menu and an introductory dialogue
  * The play state is the actual game
  */
-import { Application, Assets, Container } from 'pixi.js';
+import { Application, Assets, Container } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 import { initMain } from './states/main.js';
 import { initPlay } from './states/play.js';
 
 // Load all sprites and fonts before initializing states
-Assets.addBundle('assets', {
-  fira: '/assets/fonts/fira.ttf',
-});
-await Assets.loadBundle('assets');
+// Assets.addBundle('assets', {
+//   fira: './fira.ttf',
+// });
+// await Assets.loadBundle('assets');
 
 // The width calculation makes the screen's left and right margins equal to its top and bottom ones
 // The height calculation makes the screen's bottom margin equal to its top margin specified in dylan.css

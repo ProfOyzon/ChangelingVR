@@ -1,4 +1,4 @@
-import { Application, Container, Sprite, Text, TextStyle, Texture } from 'pixi.js';
+import { Application, Container, Sprite, Text, TextStyle, Texture } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 import { makeCover, makeRepeater } from '../util.js';
 
 /**
@@ -27,12 +27,12 @@ function initTask1(app, stats) {
 
   let dragTarget = null;
   let ingredientCount = 0;
-  const potBottomT = Texture.from('/assets/images/experiences/dylan/potBottom.png');
-  const potText = Texture.from('/assets/images/experiences/dylan/pot.png');
+  const potBottomT = Texture.from('/experiences/dylan/potBottom.png');
+  const potText = Texture.from('/experiences/dylan/pot.png');
 
   // Ingredients
   const onion = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/onion.png'),
+    Texture.from('/experiences/dylan/onion.png'),
     false,
     true,
     100 + Math.floor(Math.random() * 550),
@@ -40,7 +40,7 @@ function initTask1(app, stats) {
     0.15,
   );
   const greenOnion = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/greenOnion.png'),
+    Texture.from('/experiences/dylan/greenOnion.png'),
     false,
     false,
     app.screen.width - (Math.floor(Math.random() * 400) + 215) - app.screen.width / 100,
@@ -48,7 +48,7 @@ function initTask1(app, stats) {
     0.3,
   );
   const flour = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/flour.png'),
+    Texture.from('/experiences/dylan/flour.png'),
     false,
     false,
     400 + Math.floor(Math.random() * 400),
@@ -56,7 +56,7 @@ function initTask1(app, stats) {
     0.35,
   );
   const beef = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/beef.png'),
+    Texture.from('/experiences/dylan/beef.png'),
     false,
     true,
     app.screen.width - (Math.floor(Math.random() * 325) + 95) - app.screen.width / 100,
@@ -64,7 +64,7 @@ function initTask1(app, stats) {
     0.25,
   );
   const apple = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/apple.png'),
+    Texture.from('/experiences/dylan/apple.png'),
     false,
     false,
     400 + Math.floor(Math.random() * 300),
@@ -72,7 +72,7 @@ function initTask1(app, stats) {
     0.2,
   ); // same column as flour
   const carrot = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/carrot.png'),
+    Texture.from('/experiences/dylan/carrot.png'),
     false,
     true,
     app.screen.width - (Math.floor(Math.random() * 300) + 215) - app.screen.width / 100,
@@ -80,7 +80,7 @@ function initTask1(app, stats) {
     0.2,
   ); // same row as tomato
   const tomato = createIngredient(
-    Texture.from('/assets/images/experiences/dylan/tomato.png'),
+    Texture.from('/experiences/dylan/tomato.png'),
     false,
     true,
     app.screen.width - (Math.floor(Math.random() * 400) + 85) - app.screen.width / 100,
@@ -89,7 +89,7 @@ function initTask1(app, stats) {
   ); // same column as beef
 
   // Background
-  const background = Texture.from('/assets/images/experiences/dylan/cookingBackground.png');
+  const background = Texture.from('/experiences/dylan/cookingBackground.png');
   const backgroundSprite = new Sprite(background);
   backgroundSprite.anchor.set(0.5);
   backgroundSprite.position.set(app.screen.width / 2, app.screen.height / 2);
@@ -104,7 +104,7 @@ function initTask1(app, stats) {
   task.container.y = -app.screen.height / 2;
 
   // Recipe list
-  const recipeList = Texture.from('/assets/images/experiences/dylan/recipeList.png');
+  const recipeList = Texture.from('/experiences/dylan/recipeList.png');
   const recipeSprite = new Sprite(recipeList);
   recipeSprite.anchor.set(0.5);
   recipeSprite.width = 250;
@@ -156,7 +156,7 @@ function initTask1(app, stats) {
   task.container.addChild(recipeSprite);
 
   // Add all ingredients to the container.
-  for (i = 0; i < ingredients.length; i++) {
+  for (let i = 0; i < ingredients.length; i++) {
     task.container.addChild(ingredients[i]);
   }
 
@@ -168,7 +168,7 @@ function initTask1(app, stats) {
   // This is the task's game loop
   function update() {
     // Check for collision between ingredient and the bottom of the bot
-    for (i = 0; i < ingredients.length; i++) {
+    for (let i = 0; i < ingredients.length; i++) {
       if (testForAABB(ingredients[i], potBottom)) {
         // Only count for ingredients that are not already in the pot
         if (!ingredients[i].inPot) {
@@ -232,7 +232,7 @@ function initTask1(app, stats) {
     tomato.x = app.screen.width - (Math.floor(Math.random() * 400) + 85) - app.screen.width / 100;
 
     // All inPot set to false
-    for (i = 0; i < ingredients.length; i++) {
+    for (let i = 0; i < ingredients.length; i++) {
       ingredients[i].inPot = false;
     }
   }

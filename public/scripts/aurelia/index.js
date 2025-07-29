@@ -1,4 +1,4 @@
-import { Howl, Howler } from 'https://cdn.skypack.dev/howler@2.2.4';
+import { Howl } from 'https://cdn.skypack.dev/howler@2.2.4';
 
 let caseFileData = {
   file1: {

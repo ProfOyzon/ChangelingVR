@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 import { ImportPlaneStill } from './helpers.js';
 
 /**
@@ -41,7 +41,7 @@ class Teleporter {
       position.x,
       position.y,
       position.z,
-      '/assets/images/experiences/kirsten/portal.png',
+      '/experiences/kirsten/portal.png',
       10,
       10,
       rotation.x,
