@@ -1,4 +1,4 @@
-import { Application, Container, Graphics, LINE_CAP } from 'pixi.js';
+import { Application, Container, Graphics, LINE_CAP } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 import { initTask1 } from '../tasks/task1.js';
 import { initTask2 } from '../tasks/task2.js';
 import { initTask3 } from '../tasks/task3.js';

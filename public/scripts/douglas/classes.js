@@ -1,4 +1,4 @@
-import { AnimatedSprite, Graphics, SCALE_MODES, Sprite, Text } from 'pixi.js';
+import { AnimatedSprite, Graphics, SCALE_MODES, Sprite, Text } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 
 /*Author: Elliot Gong
 Date: 1/2024 - 5/2024
@@ -539,7 +539,7 @@ class CustomButton extends Sprite {
   //Constructor with default named parameters to assist with readability and versatility.
   constructor({
     stage = '',
-    baseTexture = '/assets/images/experiences/douglas/start.png',
+    baseTexture = '/experiences/douglas/start.png',
     x = 0,
     y = 0,
     unlocked = false,

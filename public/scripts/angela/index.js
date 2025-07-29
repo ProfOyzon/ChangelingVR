@@ -1,4 +1,4 @@
-//import * as sounds from './sounds.js';
+import * as sounds from './sounds.js';
 import {
   Application,
   Container,
@@ -14,7 +14,7 @@ import * as textStyles from './textStyles.js';
 
 // get references
 const canvas = document.getElementById('back'); // game canvas
-const vignettesDiv = document.querySelector('#vignettesDiv');
+const vignettesDiv = document.querySelector('.vignettesDiv');
 const gameResult = document.querySelector('#game-result'); // texts that show up when the game is finished
 const restartBtn = document.querySelector('#restartBtn'); // brings to rules and resets the game
 const playBtn = document.querySelector('#playBtn'); // changes to game state
@@ -123,14 +123,14 @@ app.stage.addChild(finishedContainer);
 
 // onboarding background
 const onboardingBg = new Sprite(
-  Texture.from('/assets/images/experiences/angela/angelaBackground.png'),
+  Texture.from('/experiences/angela/angelaBackground.png'),
 );
 onboardingBg.width = screenWidth;
 onboardingBg.height = screenHeight;
 onboardingContainer.addChild(onboardingBg);
 
 // rule background
-const ruleBg = new Sprite(Texture.from('/assets/images/experiences/angela/angelaRules.png')); // black bg
+const ruleBg = new Sprite(Texture.from('/experiences/angela/angelaRules.png')); // black bg
 ruleBg.width = screenWidth;
 ruleBg.height = screenHeight;
 ruleContainer.addChild(ruleBg);
@@ -313,7 +313,7 @@ let introNum = 0;
 function clickSoliloquy() {
   if (introNum == 0) {
     introNum = 1;
-    //sounds.introMusic.play();
+    sounds.introMusic.play();
   }
   // change to the next soliloquy in the array
   soliloquyIndex++;
@@ -536,7 +536,7 @@ function clickBadTask(task) {
 
     // increase game speed when a bad task is clicked
     helpers.increaseGameSpeed(1.1, gameSpeed, maxGameSpeed);
-    //sounds.failureSound.play();
+    sounds.failureSound.play();
 
     // darken the background
     darkenBackground();
@@ -836,7 +836,7 @@ function gameLoop(delta) {
       {
         playingContainer.visible = true;
         if (gameNum1 == 0) {
-          //sounds.gameMusic1.play();
+          sounds.gameMusic1.play();
           gameNum1 += 1;
         }
 
@@ -844,7 +844,7 @@ function gameLoop(delta) {
         gameResult.style.display = 'none';
 
         //run the music
-        //sounds.introMusic.stop();
+        sounds.introMusic.stop();
 
         // disable the play button
         if (playBtnActive) {
@@ -1070,7 +1070,7 @@ function gameLoop(delta) {
         finishedContainer.visible = true;
 
         //stopping all music
-        //sounds.gameMusic1.stop();
+        sounds.gameMusic1.stop();
 
         // clear tasks array and remove all of them from the screen
         for (let i = 0; i < tasksInGame.length; i++) {

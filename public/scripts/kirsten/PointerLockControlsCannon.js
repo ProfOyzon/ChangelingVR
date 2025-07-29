@@ -6,8 +6,8 @@
  * Imported in to help with Camera Movement/Player Movement of a CANNON body.
  * Some code has been altered/added to so that it could better suit the purposes of this experience.
  */
-import * as CANNON from 'cannon-es/dist/cannon-es.js';
-import * as THREE from 'three';
+import * as CANNON from 'https://unpkg.com/cannon-es@0.20.0/dist/cannon-es.js';
+import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 
 class PointerLockControlsCannon extends THREE.EventDispatcher {
   constructor(camera, cannonBody, threeBody, jumpSounds) {

@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 import { ImportSpriteStill } from './helpers.js';
 
 /**
@@ -17,7 +17,7 @@ class Collectable {
       x,
       y + 1,
       z,
-      '/assets/images/experiences/kirsten/spark_of_magic2.0.png',
+      '/experiences/kirsten/spark_of_magic2.0.png',
       3,
       3,
     );
