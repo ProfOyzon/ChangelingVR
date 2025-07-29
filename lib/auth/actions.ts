@@ -4,7 +4,7 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { createHash, randomUUID } from 'node:crypto';
 import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
@@ -92,6 +92,26 @@ export async function logActivity(userId: string, type: ActivityType) {
           data: geolocationData,
         }),
       });
+    }
+  }
+
+  if (type === ActivityType.UPDATE_ACCOUNT) {
+    // Get most recent UPDATE_ACCOUNT activity
+    const recentActivity = await db
+      .select({ id: activityLogs.id, timestamp: activityLogs.timestamp })
+      .from(activityLogs)
+      .where(
+        and(eq(activityLogs.uuid, userId), eq(activityLogs.action, ActivityType.UPDATE_ACCOUNT)),
+      )
+      .orderBy(desc(activityLogs.timestamp))
+      .limit(1);
+
+    // If the activity is within the last 10 minutes, do not log a new activity
+    if (
+      recentActivity.length > 0 &&
+      recentActivity[0].timestamp > new Date(Date.now() - 1000 * 60 * 10)
+    ) {
+      return;
     }
   }
 
@@ -222,6 +242,7 @@ export async function logout() {
   const user = (await getUserProfile()) as Profile;
   await logActivity(user.uuid, ActivityType.SIGN_OUT);
   (await cookies()).delete('session');
+  redirect('/auth/login');
 }
 
 /**
@@ -229,7 +250,11 @@ export async function logout() {
  */
 export const updateProfile = validatedActionWithUser(zUpdateProfileSchema, async (data, user) => {
   try {
-    await db.update(profiles).set(data).where(eq(profiles.uuid, user.uuid));
+    await Promise.all([
+      db.update(profiles).set(data).where(eq(profiles.uuid, user.uuid)),
+      logActivity(user.uuid, ActivityType.UPDATE_ACCOUNT),
+    ]);
+
     revalidateTag('profiles');
   } catch {
     // It failed, client will handle the error
@@ -240,23 +265,27 @@ export const updateProfileLink = validatedActionWithUser(
   zUpdateProfileLinkSchema,
   async (data, user) => {
     try {
-      await db
-        .insert(profileLinks)
-        .values({
-          uuid: user.uuid,
-          platform: data.platform,
-          url: data.url,
-          visible: data.visible,
-        })
-        .onConflictDoUpdate({
-          target: [profileLinks.uuid, profileLinks.platform],
-          set: {
+      await Promise.all([
+        db
+          .insert(profileLinks)
+          .values({
+            uuid: user.uuid,
+            platform: data.platform,
             url: data.url,
             visible: data.visible,
-          },
-        });
+          })
+          .onConflictDoUpdate({
+            target: [profileLinks.uuid, profileLinks.platform],
+            set: {
+              url: data.url,
+              visible: data.visible,
+            },
+          }),
+        logActivity(user.uuid, ActivityType.UPDATE_ACCOUNT),
+      ]);
 
-      revalidatePath('/dashboard/g');
+      revalidateTag('profiles');
+      revalidatePath('/dashboard/profile');
     } catch {
       // It failed, client will handle the error
     }
@@ -265,10 +294,15 @@ export const updateProfileLink = validatedActionWithUser(
 
 export const deleteProfileLink = validatedActionWithUser(zPlatformSchema, async (data, user) => {
   try {
-    await db
-      .delete(profileLinks)
-      .where(and(eq(profileLinks.uuid, user.uuid), eq(profileLinks.platform, data.platform)));
-    revalidatePath('/dashboard/g');
+    await Promise.all([
+      db
+        .delete(profileLinks)
+        .where(and(eq(profileLinks.uuid, user.uuid), eq(profileLinks.platform, data.platform))),
+      logActivity(user.uuid, ActivityType.UPDATE_ACCOUNT),
+    ]);
+
+    revalidateTag('profiles');
+    revalidatePath('/dashboard/profile');
   } catch {
     // It failed, client will handle the error
   }

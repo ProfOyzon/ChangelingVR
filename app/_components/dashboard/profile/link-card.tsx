@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FaEnvelope, FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa6';
 import { toast } from 'sonner';
-import { Button } from '@/components/ui/button';
+import { SubmitButton } from '@/components/submit-button';
 import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -68,7 +68,9 @@ export function LinkCard({ platform, link }: { platform: string; link?: ProfileL
           </CardDescription>
         </CardContent>
         <CardFooter className="p-0">
-          <Button type="submit">Save</Button>
+          <SubmitButton className="w-full" pendingText="Saving...">
+            Save
+          </SubmitButton>
         </CardFooter>
       </Card>
     </form>

@@ -1,11 +1,71 @@
 import Link from 'next/link';
-import { Activity, Briefcase, CheckCircle, Circle, UserCheck, UserCog } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import {
+  Activity,
+  Briefcase,
+  CheckCircle,
+  Circle,
+  type LucideIcon,
+  UserCheck,
+  UserCog,
+} from 'lucide-react';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { getProfileLinks, getUserProfile } from '@/lib/db/queries';
+import { cn } from '@/lib/utils';
+
+function randomHeading() {
+  const headings = [
+    'Ready to uncover the truth?',
+    'The mystery awaits your investigation...',
+    'Your journey into the unknown continues',
+    'What secrets will you discover today?',
+    'The veil between worlds grows thin...',
+    'Your magical abilities are needed',
+    'The family needs your guidance',
+    'Time to face the supernatural',
+    'Your detective skills are required',
+    "The changeling's story unfolds...",
+    'Magic and mystery call to you',
+    'Your investigation continues...',
+    'The truth lies just beyond reach',
+    'Ready to protect the innocent?',
+    'Your supernatural senses are tingling',
+    'The case file awaits your attention',
+    'Time to dive deeper into the mystery',
+    'Your magical insight is invaluable',
+    "The family's fate rests in your hands",
+    'Ready to confront the impossible?',
+  ];
+  return headings[Math.floor(Math.random() * headings.length)];
+}
+
+function QuickActions(action: {
+  title: string;
+  href: string;
+  color: string;
+  icon: LucideIcon;
+  description: string;
+}) {
+  return (
+    <Link key={action.title} href={action.href} className="flex-1">
+      <Card
+        className={cn('cursor-pointer transition-shadow hover:shadow-md max-md:p-2', action.color)}
+      >
+        <CardContent className="flex flex-row items-center p-0 text-center md:flex-col md:p-6">
+          <div className="rounded-lg p-3">
+            <action.icon className="size-6" />
+          </div>
+          <div>
+            <p className="font-semibold">{action.title}</p>
+            <p className="text-muted-foreground hidden text-xs md:block">{action.description}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
 
 export default async function DashboardPage() {
   const [profile, links] = await Promise.all([getUserProfile(), getProfileLinks()]);
@@ -27,38 +87,6 @@ export default async function DashboardPage() {
   const completedItems = completionItems.filter((item) => item.completed).length;
   const completionPercentage = (completedItems / completionItems.length) * 100;
 
-  // Quick actions
-  const quickActions = [
-    {
-      title: 'Edit Profile',
-      description: 'Update your bio and social links',
-      icon: UserCheck,
-      href: '/dashboard/profile',
-      color: 'bg-blue-50 text-blue-600 hover:bg-blue-100',
-    },
-    {
-      title: 'Team & Roles',
-      description: 'Manage your roles and team assignments',
-      icon: Briefcase,
-      href: '/dashboard/assignments',
-      color: 'bg-green-50 text-green-600 hover:bg-green-100',
-    },
-    {
-      title: 'Identity Settings',
-      description: 'Update avatar, display name, and username',
-      icon: UserCog,
-      href: '/dashboard/identity',
-      color: 'bg-purple-50 text-purple-600 hover:bg-purple-100',
-    },
-    {
-      title: 'View Activity',
-      description: 'Check your recent activity',
-      icon: Activity,
-      href: '/dashboard/activity',
-      color: 'bg-orange-50 text-orange-600 hover:bg-orange-100',
-    },
-  ];
-
   return (
     <div className="flex flex-col gap-6">
       <Card className="p-4">
@@ -69,40 +97,52 @@ export default async function DashboardPage() {
                 <AvatarImage src={profile.avatar_url || '/placeholder.png'} />
               </Avatar>
               <div className="flex flex-col gap-1">
-                <p className="text-primary text-xl font-semibold">Welcome back,</p>
-                <p className="text-lg">{profile.display_name || profile.username}</p>
+                <p className="text-primary text-xl font-semibold">
+                  Welcome back, {profile.display_name || profile.username}
+                </p>
+                <p className="text-muted-foreground">{randomHeading()}</p>
               </div>
             </div>
           </CardDescription>
         </CardContent>
       </Card>
 
-      <div className="flex gap-4">
-        {quickActions.map((action) => {
-          const Icon = action.icon;
-          return (
-            <Link key={action.title} href={action.href} className="flex-1">
-              <Card className={`cursor-pointer transition-shadow hover:shadow-md ${action.color}`}>
-                <CardContent className="flex flex-col items-center gap-3 p-6 text-center">
-                  <div className="rounded-lg p-3">
-                    <Icon className="h-8 w-8" />
-                  </div>
-                  <div>
-                    <p className="font-semibold">{action.title}</p>
-                    <p className="text-muted-foreground hidden text-xs md:block">
-                      {action.description}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          );
-        })}
+      <div className="flex flex-col gap-4 md:flex-row">
+        <div className="flex flex-1 flex-row gap-4">
+          <QuickActions
+            title="Edit Profile"
+            href="/dashboard/profile"
+            color="bg-blue-50 text-blue-600 hover:bg-blue-100"
+            icon={UserCheck}
+            description="Update your bio and social links"
+          />
+          <QuickActions
+            title="Team & Roles"
+            href="/dashboard/assignments"
+            color="bg-green-50 text-green-600 hover:bg-green-100"
+            icon={Briefcase}
+            description="Manage your roles and team assignments"
+          />
+        </div>
+        <div className="flex flex-1 flex-row gap-4">
+          <QuickActions
+            title="Identity Settings"
+            href="/dashboard/identity"
+            color="bg-purple-50 text-purple-600 hover:bg-purple-100"
+            icon={UserCog}
+            description="Update avatar, display name, and username"
+          />
+          <QuickActions
+            title="View Activity"
+            href="/dashboard/activity"
+            color="bg-orange-50 text-orange-600 hover:bg-orange-100"
+            icon={Activity}
+            description="Check your recent activity"
+          />
+        </div>
       </div>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        {/* Profile Completion */}
         <Card>
           <CardHeader>
             <CardTitle>Profile Completion</CardTitle>

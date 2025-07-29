@@ -54,9 +54,7 @@ export async function getUserProfile() {
 // Fetches profile links table; requires session cookie
 export async function getProfileLinks() {
   const user = await getUserProfile();
-  if (!user) {
-    throw new Error('User not authenticated');
-  }
+  if (!user) return null;
 
   return await db
     .select({
@@ -72,9 +70,7 @@ export async function getProfileLinks() {
 // Fetches activity logs table; requires session cookie
 export async function getActivityLogs() {
   const user = await getUserProfile();
-  if (!user) {
-    throw new Error('User not authenticated');
-  }
+  if (!user) return null;
 
   return await db
     .select({

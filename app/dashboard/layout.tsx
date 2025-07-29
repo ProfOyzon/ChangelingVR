@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
@@ -6,7 +7,7 @@ import { DashboardTitle } from '../_components/dashboard/dashboard-title';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <Fragment>
       <div className="text-primary">
         <SidebarProvider>
           <AppSidebar />
@@ -21,6 +22,6 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </SidebarProvider>
       </div>
       <Toaster position="top-center" richColors />
-    </>
+    </Fragment>
   );
 }

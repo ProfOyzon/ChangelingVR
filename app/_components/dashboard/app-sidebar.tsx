@@ -1,33 +1,17 @@
 import Image from 'next/image';
-import Link from 'next/link';
-import {
-  Activity,
-  Apple,
-  Briefcase,
-  Eye,
-  FileText,
-  Home,
-  Link2,
-  Settings,
-  User,
-  UserCheck,
-  UserCog,
-  Users,
-} from 'lucide-react';
 import { LogoutButton } from '@/app/_components/dashboard/logout-button';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { NavMain } from './nav-main';
+import { NavSecondary } from './nav-secondary';
 
 export function AppSidebar() {
   return (
@@ -49,61 +33,8 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Overview" asChild>
-                  <Link href="/dashboard">
-                    <Home />
-                    <span>Overview</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Preview" asChild>
-                  <Link href="/dashboard/preview">
-                    <Eye />
-                    <span>Preview</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Activity" asChild>
-                  <Link href="/dashboard/activity">
-                    <Activity />
-                    <span>Activity</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Profile" asChild>
-                  <Link href="/dashboard/profile">
-                    <FileText />
-                    <span>Profile</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Team & Roles" asChild>
-                  <Link href="/dashboard/assignments">
-                    <Briefcase />
-                    <span>Team & Roles</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Identity" asChild>
-                  <Link href="/dashboard/identity">
-                    <UserCog />
-                    <span>Identity</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain />
+        <NavSecondary />
       </SidebarContent>
 
       <SidebarFooter>
