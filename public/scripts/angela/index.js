@@ -14,7 +14,7 @@ import * as textStyles from './textStyles.js';
 
 // get references
 const canvas = document.getElementById('back'); // game canvas
-const vignettesDiv = document.querySelector('.vignettesDiv');
+const vignettesDiv = document.querySelector('#vignettesDiv');
 const gameResult = document.querySelector('#game-result'); // texts that show up when the game is finished
 const restartBtn = document.querySelector('#restartBtn'); // brings to rules and resets the game
 const playBtn = document.querySelector('#playBtn'); // changes to game state

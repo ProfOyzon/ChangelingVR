@@ -6,6 +6,6 @@ function init() {
 
 function checkClicked() {
   setTimeout(() => {
-    window.location.replace('/aurelia.html');
+    window.location.replace('/aurelia/page.tsx');
   }, 3000);
 }

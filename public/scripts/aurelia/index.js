@@ -1,9 +1,9 @@
-import { Howl } from 'howler/dist/howler.js';
+import { Howl, Howler } from 'https://cdn.skypack.dev/howler@2.2.4';
 
 let caseFileData = {
   file1: {
     left: `<h2>Case No. 1</h2>
-	<img src="/assets/images/experiences/aurelia/polaroid_flat1.png" alt="BoogeyManImage">
+	<img src="/experiences/aurelia/polaroid_flat1.png" alt="BoogeyManImage">
 	<h3>Name: A Standard Boogeyman</h3>
 	<h3>Status: Resolved</h3>`,
     right: `<h3>Background:</h3>
@@ -34,7 +34,7 @@ let caseFileData = {
   },
   file2: {
     left: `<h2>Case No. 2</h2>
-	<img id="caseImg" src="/assets/images/experiences/aurelia/polaroid_flat2.png" alt="PlantImage">
+	<img id="caseImg" src="/experiences/aurelia/polaroid_flat2.png" alt="PlantImage">
 	<h3>Name: The Neuro-Carnivorous Plant</h3>
 	<h3>Status: Resolved</h3>`,
     right: `<h3>Background:</h3>
@@ -74,7 +74,7 @@ let caseFileData = {
   },
   file3: {
     left: `<h2>Case No. 3</h2>
-	<img id="caseImg" src="/assets/images/experiences/aurelia/polaroid_flat3.png" alt="ShapeShiftCase">
+	<img id="caseImg" src="/experiences/aurelia/polaroid_flat3.png" alt="ShapeShiftCase">
 	<h3>Name: The Shape Shifter</h3>
 	<h3>Status: Resolved</h3>`,
     right: `<h3>Background: </h3>
@@ -102,7 +102,7 @@ let caseFileData = {
   file4: {
     left: `<div id="aboutInfo">
 	<h2>My Abilities</h2>
-	<img id="profile" src="/assets/images/experiences/aurelia/pfp.PNG" alt="Logo">
+	<img id="profile" src="/experiences/aurelia/pfp.PNG" alt="Logo">
 	<p>I am specialized in dealing with mind altering or otherwise psychological effects and creatures,
 	    but I can also diagnose most magical disturbances and refer you to an expert when
 	    physical force is required.</p>
@@ -113,11 +113,11 @@ let caseFileData = {
     right: `<div id="contactInfo">
 	<h2 id="CIHeader">Contact Information</h2>
 	<div id="call">
-	    <img class="iconImage" src="/assets/images/experiences/aurelia/phoneIcon.png" alt="phone">
+	    <img class="iconImage" src="/experiences/aurelia/phoneIcon.png" alt="phone">
 	    <p class="CCInfo">555-824-2345</p>
 	</div>
 	<div id="address">
-	    <img class="iconImage" src="/assets/images/experiences/aurelia/HomeIcon.png" alt="home">
+	    <img class="iconImage" src="/experiences/aurelia/HomeIcon.png" alt="home">
 	    <p class="CCInfo">
 		123 Fake Loc<br>
 		New York, NY<br>
@@ -125,11 +125,11 @@ let caseFileData = {
 	    </p>
 	</div>
 	<div id="mail">
-	    <img class="iconImage" src="/assets/images/experiences/aurelia/MailIcon.png" alt="email">
+	    <img class="iconImage" src="/experiences/aurelia/MailIcon.png" alt="email">
 	    <p class="CCInfo">Awalker@Dreamwalkers.com</p>
 	</div>
 	<div id="other">
-	    <img class="iconImage" src="/assets/images/experiences/aurelia/Scryglass.png" alt="ScryglassIcon">
+	    <img class="iconImage" src="/experiences/aurelia/Scryglass.png" alt="ScryglassIcon">
 	    <p class="CCInfo">🜀 - 🜚 - 🝒 - 🜛 - 🝆 - 🜾</p>
 	</div>
 	</div> `,
@@ -173,7 +173,7 @@ function onFileClick(e) {
     }
     // Initializes shuffle paper sound
     var shufflePaper = new Howl({
-      src: ['/assets/sounds/page-turn.mp3'],
+      src: ['/sounds/page-turn.mp3'],
       volume: 0.2,
     });
 
