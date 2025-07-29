@@ -1,4 +1,11 @@
-import { Application, Container, Sprite, Text, TextStyle, Texture } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
+import {
+  Application,
+  Container,
+  Sprite,
+  Text,
+  TextStyle,
+  Texture,
+} from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 import { makeCover, makeRepeater } from '../util.js';
 
 /**

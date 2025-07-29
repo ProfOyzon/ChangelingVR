@@ -1,4 +1,10 @@
-import { AnimatedSprite, Graphics, SCALE_MODES, Sprite, Text } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
+import {
+  AnimatedSprite,
+  Graphics,
+  SCALE_MODES,
+  Sprite,
+  Text,
+} from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 
 /*Author: Elliot Gong
 Date: 1/2024 - 5/2024

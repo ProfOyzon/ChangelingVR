@@ -1,4 +1,12 @@
-import { Application, Container, Graphics, Sprite, Text, TextStyle, Texture } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
+import {
+  Application,
+  Container,
+  Graphics,
+  Sprite,
+  Text,
+  TextStyle,
+  Texture,
+} from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 
 //Task 2: Tricycle Repair
 /**

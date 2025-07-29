@@ -1,4 +1,3 @@
-import * as sounds from './sounds.js';
 import {
   Application,
   Container,
@@ -10,6 +9,7 @@ import {
 } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
 import * as helpers from './helpers.js';
 import * as images from './images.js';
+import * as sounds from './sounds.js';
 import * as textStyles from './textStyles.js';
 
 // get references
@@ -122,9 +122,7 @@ app.stage.addChild(playingContainer);
 app.stage.addChild(finishedContainer);
 
 // onboarding background
-const onboardingBg = new Sprite(
-  Texture.from('/experiences/angela/angelaBackground.png'),
-);
+const onboardingBg = new Sprite(Texture.from('/experiences/angela/angelaBackground.png'));
 onboardingBg.width = screenWidth;
 onboardingBg.height = screenHeight;
 onboardingContainer.addChild(onboardingBg);

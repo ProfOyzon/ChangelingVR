@@ -1,7 +1,6 @@
 import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 import { GLTFLoader } from 'https://unpkg.com/three@0.174.0/examples/jsm/loaders/GLTFLoader.js';
 
-
 /**
  * This file contains all of the important helper functions that will be used by multiple other scripts.
  * Technically, it only has loader functions and should be called "loader.js" but I don't really feel like changing all of the places it's referenced so...

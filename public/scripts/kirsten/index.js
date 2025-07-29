@@ -1,5 +1,5 @@
-import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 import * as CANNON from 'https://unpkg.com/cannon-es@0.20.0/dist/cannon-es.js';
+import * as THREE from 'https://unpkg.com/three@0.174.0/build/three.module.js';
 import { PointerLockControlsCannon } from './PointerLockControlsCannon.js';
 import * as ADVANCEDBODY from './advancedBody.js';
 import { Checkpoint, Teleporter } from './checkpoint.js';
