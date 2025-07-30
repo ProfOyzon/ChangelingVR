@@ -14,6 +14,7 @@ import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { getProfileLinks, getUserProfile } from '@/lib/db/queries';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 function randomHeading() {
   const headings = [
@@ -187,14 +188,11 @@ export default async function DashboardPage() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Premium Features</CardTitle>
-            <CardDescription>
-              Unlock premium features to get the most out of your page.
-            </CardDescription>
-          </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-2"></div>
+            <div className="flex flex-col items-center justify-center">
+              <Image src="/man.png" alt="Man" width={100} height={100} />
+              <p className="text-muted-foreground text-sm">loading...</p>
+            </div>
           </CardContent>
         </Card>
       </div>
