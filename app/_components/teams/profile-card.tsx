@@ -8,7 +8,7 @@ export const ProfileCard = memo(ProfileCardComponent);
 function ProfileCardComponent({ profile }: { profile: PublicProfile }) {
   return (
     <div className="bg-steel/50 hover:bg-steel/75 relative flex h-64 w-40 max-w-40 min-w-40 flex-1 flex-col rounded-md backdrop-blur-sm transition-colors duration-300">
-      <Link href={`/teams/${profile.username}`} className="flex h-full cursor-pointer flex-col">
+      <Link href={`/users/${profile.username}`} className="flex h-full cursor-pointer flex-col">
         <Image
           src={profile.avatar_url || '/placeholder.png'}
           alt={profile.username}

@@ -25,9 +25,11 @@ export const metadata: Metadata = {
     title: 'Changeling VR - A Narrative Mystery',
     description:
       'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
+    siteName: 'Changeling VR',
+    url: 'https://changelingvr.vercel.app',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Changeling VR - A Narrative Mystery',
     description:
       'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
