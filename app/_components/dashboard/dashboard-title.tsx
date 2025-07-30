@@ -5,10 +5,10 @@ import { usePathname } from 'next/navigation';
 const routeTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
   '/dashboard/activity': 'Activity',
+  '/dashboard/assignments': 'Assignments',
+  '/dashboard/identity': 'Identity',
   '/dashboard/preview': 'Preview',
   '/dashboard/profile': 'Profile',
-  '/dashboard/settings': 'Settings',
-  '/dashboard/avatar': 'Avatar',
 };
 
 export function DashboardTitle() {

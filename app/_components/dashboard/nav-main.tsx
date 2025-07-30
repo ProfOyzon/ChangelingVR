@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Activity, Briefcase, Eye, FileText, Home, UserCog } from 'lucide-react';
+import { Activity, Eye, Home } from 'lucide-react';
 import {
   SidebarGroup,
   SidebarGroupContent,

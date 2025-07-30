@@ -8,13 +8,11 @@ import type { Character } from '@/types';
 
 const characters = charactersData as Character[];
 
-// Metadata
 export const metadata: Metadata = {
   title: 'Characters',
   description: 'Meet the characters of Changeling',
 };
 
-// Page Component
 export default async function Characters() {
   if (!characters?.length) {
     return (
