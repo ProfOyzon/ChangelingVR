@@ -38,7 +38,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             alt={`${user.display_name || user.username}'s profile picture`}
             width={512}
             height={512}
-            className="size-32 rounded-md"
+            className="size-32 rounded-md bg-white"
           />
         </figure>
 
