@@ -63,7 +63,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
         )}
       </aside>
 
-      <section className="flex flex-1 flex-col gap-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0">
+      <section className="flex flex-1 flex-col gap-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0 pb-4">
         {user.bio && (
           <section>
             <h2 className="sr-only">Biography</h2>
