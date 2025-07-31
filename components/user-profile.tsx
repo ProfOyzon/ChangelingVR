@@ -121,13 +121,20 @@ export function UserProfile({ user }: { user: FullProfile }) {
 }
 
 function SocialLink({ link, user }: { link: ProfileLink; user: Profile }) {
+  // Determine if the link is an email address
+  const isEmail = link.platform === 'email';
+
   return (
     <a
-      href={link.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={isEmail ? `mailto:${link.url}` : link.url}
+      target={isEmail ? undefined : '_blank'}
+      rel={isEmail ? undefined : 'noopener noreferrer'}
       className="flex flex-1 flex-col items-center justify-center rounded-md bg-zinc-900/50 p-2 transition-colors hover:bg-zinc-900/75"
-      aria-label={`Visit ${user.display_name || user.username}'s ${link.platform} profile`}
+      aria-label={
+        isEmail
+          ? `Send email to ${user.display_name || user.username}`
+          : `Visit ${user.display_name || user.username}'s ${link.platform} profile`
+      }
     >
       <span className="flex flex-row items-center justify-center gap-2">
         {iconMap[link.platform]}
