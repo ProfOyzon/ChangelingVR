@@ -363,7 +363,6 @@ export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data
   const token = randomUUID();
   const hashedToken = createHash('sha256').update(token).digest('hex');
   const url = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/update-password?token=${encodeURIComponent(token)}`;
-  console.log(url);
 
   const TOKEN_EXPIRY_MS = 1000 * 60 * 30; // 30 minutes
 
@@ -390,13 +389,12 @@ export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data
     }
   });
 
-  const e = await sendMail({
+  await sendMail({
     reciever: email,
     subject: 'Changeling VR Password Reset',
     plainText: `Click the link below to reset your password: ${url}`,
     email: PasswordResetEmail({ username: member[0].email, url }),
   });
-  console.log(e.message, e.success);
 
   redirect('/auth/forgot-password?success=true');
 });
