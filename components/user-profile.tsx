@@ -22,7 +22,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             className="rounded-t-md"
           />
 
-          <div className="absolute top-2 right-2 rounded-md bg-zinc-600/50 px-2 py-1.5 group">
+          <div className="group absolute top-2 right-2 rounded-md bg-zinc-600/50 px-2 py-1.5">
             <CopyLink
               url={`https://changelingvr.com/users/${user.username}`}
               className="flex flex-row items-center gap-2 text-sm font-medium group-hover:cursor-pointer"
@@ -63,7 +63,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
         )}
       </aside>
 
-      <section className="flex flex-1 flex-col gap-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0 pb-4">
+      <section className="flex flex-1 flex-col gap-4 pb-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0">
         {user.bio && (
           <section>
             <h2 className="sr-only">Biography</h2>

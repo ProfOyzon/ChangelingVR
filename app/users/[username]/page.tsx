@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
 import { UserProfile } from '@/components/user-profile';
 import { getProfileByUsername } from '@/lib/db/queries';
 import type { FullProfile } from '@/lib/db/schema';
@@ -48,8 +50,17 @@ export default async function UserPage({ params }: { params: Promise<{ username:
   if (!user) return notFound();
 
   return (
-    <div className="flex min-h-[calc(100vh-10rem)] w-full items-center justify-center p-6">
+    <div className="relative flex min-h-[calc(100vh-10rem)] w-full items-center justify-center p-6">
       <UserProfile user={user as FullProfile} />
+      <div className="absolute top-4 left-4">
+        <Link
+          href="/teams"
+          className="bg-light-mustard text-midnight hover:bg-steel flex items-center rounded px-2 py-1 transition-colors"
+        >
+          <ArrowLeft className="size-4" />
+          Back to Teams
+        </Link>
+      </div>
     </div>
   );
 }
