@@ -22,12 +22,12 @@ export function UserProfile({ user }: { user: FullProfile }) {
             className="rounded-t-md"
           />
 
-          <div className="group absolute top-2 right-2 rounded-md bg-zinc-600/50 px-2 py-1.5">
+          <div className="group absolute top-2 right-2 rounded-md border border-zinc-600/50 bg-zinc-600/50 px-2 py-1.5 backdrop-blur-sm">
             <CopyLink
               url={`https://changelingvr.com/users/${user.username}`}
               className="flex flex-row items-center gap-2 text-sm font-medium group-hover:cursor-pointer"
             >
-              <p>Copy Link</p>
+              <span>Copy Link</span>
             </CopyLink>
           </div>
         </header>
