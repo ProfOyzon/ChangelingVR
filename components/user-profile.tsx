@@ -90,7 +90,10 @@ export function UserProfile({ user }: { user: FullProfile }) {
             <div className="flex flex-wrap gap-2" role="list" aria-label="Roles in the project">
               {user.roles.map((role) => (
                 <Badge key={role} role="listitem">
-                  {role.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  {role
+                    .split(' ')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')}
                 </Badge>
               ))}
             </div>
@@ -103,7 +106,10 @@ export function UserProfile({ user }: { user: FullProfile }) {
             <div className="flex flex-wrap gap-2" role="list" aria-label="Teams participated in">
               {user.teams.map((team) => (
                 <Badge key={team} role="listitem">
-                  {team.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  {team
+                    .split(' ')
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ')}
                 </Badge>
               ))}
             </div>
