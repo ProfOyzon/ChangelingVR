@@ -90,7 +90,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             <div className="flex flex-wrap gap-2" role="list" aria-label="Roles in the project">
               {user.roles.map((role) => (
                 <Badge key={role} role="listitem">
-                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                  {role.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 </Badge>
               ))}
             </div>
@@ -103,7 +103,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             <div className="flex flex-wrap gap-2" role="list" aria-label="Teams participated in">
               {user.teams.map((team) => (
                 <Badge key={team} role="listitem">
-                  {team.charAt(0).toUpperCase() + team.slice(1)}
+                  {team.split(' ').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                 </Badge>
               ))}
             </div>
@@ -138,7 +138,7 @@ function Badge({
   ...props
 }: { children: React.ReactNode } & React.HTMLAttributes<HTMLSpanElement>) {
   return (
-    <span className="rounded-full bg-blue-100 px-2 py-1 text-sm font-medium text-black" {...props}>
+    <span className="rounded-md bg-blue-100 px-2 py-1 text-sm font-medium text-black" {...props}>
       {children}
     </span>
   );
