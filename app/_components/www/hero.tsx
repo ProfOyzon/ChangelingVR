@@ -4,7 +4,7 @@ import { BackgroundVideo } from './background-video';
 
 export function HeroSection() {
   return (
-    <div className="relative flex h-[86svh] w-full items-center justify-center text-center">
+    <section className="relative flex h-[86svh] w-full items-center justify-center text-center">
       <BackgroundVideo />
 
       <div className="relative z-5 mx-auto max-w-2xl px-4">
@@ -20,9 +20,9 @@ export function HeroSection() {
           />
         </div>
 
-        <h3 className="mb-2 text-2xl font-light italic drop-shadow-md md:text-3xl">
+        <h1 className="mb-2 text-2xl font-light italic drop-shadow-md md:text-3xl">
           A VR Narrative Mystery
-        </h3>
+        </h1>
         <p className="mb-8 px-8 text-sm drop-shadow-md/100 md:text-base">
           An Original Production from the RIT School of Interactive Games and Media and College of
           Art and Design
@@ -38,6 +38,6 @@ export function HeroSection() {
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -67,7 +67,7 @@ export function Footer() {
     <footer className="bg-dune px-6 py-12 md:px-12" role="contentinfo">
       <div className="mx-auto flex flex-col gap-8">
         <div className="flex flex-col md:flex-row md:gap-8">
-          <div className="mb-8 flex-1 space-y-4 md:mb-0">
+          <section className="mb-8 flex-1 space-y-4 md:mb-0">
             <Link href="/" className="inline-block" aria-label="Home">
               <Image src="/logo.svg" alt="Changeling VR Logo" width={200} height={200} />
             </Link>
@@ -77,12 +77,21 @@ export function Footer() {
               and developers studying at the Rochester Institute of Technology School of Interactive
               Games and Media and College of Art and Design.
             </p>
-          </div>
+          </section>
 
           <div className="flex flex-1 flex-row gap-8">
             {NAV_SECTIONS.map((section) => (
-              <nav key={section.title} className="flex flex-1 flex-col items-center space-y-3">
-                <h4 className="text-light-mustard text-lg font-semibold">{section.title}</h4>
+              <nav
+                key={section.title}
+                className="flex flex-1 flex-col items-center space-y-3"
+                aria-labelledby={`nav-${section.title.toLowerCase()}`}
+              >
+                <h2
+                  id={`nav-${section.title.toLowerCase()}`}
+                  className="text-light-mustard text-lg font-semibold"
+                >
+                  {section.title}
+                </h2>
                 <ul className="space-y-2 text-center">
                   {section.links.map((link) => (
                     <li key={link.href}>
@@ -95,29 +104,35 @@ export function Footer() {
               </nav>
             ))}
 
-            <nav className="flex flex-1 flex-col items-center space-y-4">
-              <h4 className="text-light-mustard text-lg font-semibold">Connect</h4>
-              <div className="grid grid-cols-2 place-items-center gap-4">
+            <nav
+              className="flex flex-1 flex-col items-center space-y-4"
+              aria-labelledby="nav-connect"
+            >
+              <h2 id="nav-connect" className="text-light-mustard text-lg font-semibold">
+                Connect
+              </h2>
+              <ul className="grid grid-cols-2 place-items-center gap-4">
                 {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
-                  <a
-                    key={href}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClass}
-                    aria-label={label}
-                  >
-                    <Icon size={20} />
-                  </a>
+                  <li key={href}>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClass}
+                      aria-label={label}
+                    >
+                      <Icon size={20} />
+                    </a>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </nav>
           </div>
         </div>
 
-        <div className="border-t border-gray-400 pt-6 text-center text-sm">
-          © {currentYear} Changeling VR. All rights reserved.
-        </div>
+        <section className="border-t border-gray-400 pt-6 text-center text-sm">
+          <p>&copy; {currentYear} Changeling VR. All rights reserved.</p>
+        </section>
       </div>
     </footer>
   );

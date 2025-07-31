@@ -31,48 +31,48 @@ const presskitImages = [
 
 export function MarqueeComponent() {
   return (
-    <div className="mb-6 space-y-4">
+    <section className="mb-6 space-y-4" aria-label="Game artwork showcase">
       <Marquee>
         {creatureImages.map((img) => (
-          <div key={img} className="mx-4">
+          <figure key={img} className="mx-4">
             <Image
               src={`/media/creatures/${img}.png`}
-              alt={img}
+              alt={`Creature artwork: ${img}`}
               width={100}
               height={100}
               className="h-32 w-auto object-contain"
             />
-          </div>
+          </figure>
         ))}
       </Marquee>
 
       <Marquee reverse={true}>
         {doodleImages.map((img) => (
-          <div key={img} className="mx-4 bg-white">
+          <figure key={img} className="mx-4 bg-white">
             <Image
               src={`/media/doodles/${img}.png`}
-              alt={img}
+              alt={`Doodle artwork: ${img}`}
               width={100}
               height={100}
               className="h-32 w-auto object-contain"
             />
-          </div>
+          </figure>
         ))}
       </Marquee>
 
       <Marquee>
         {presskitImages.map((img) => (
-          <div key={img} className="mx-4">
+          <figure key={img} className="mx-4">
             <Image
               src={`/media/press/${img}.jpg`}
-              alt={img}
+              alt={`Game screenshot: ${img}`}
               width={100}
               height={100}
               className="h-32 w-auto object-contain"
             />
-          </div>
+          </figure>
         ))}
       </Marquee>
-    </div>
+    </section>
   );
 }

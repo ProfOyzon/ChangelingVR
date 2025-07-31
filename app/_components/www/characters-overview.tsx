@@ -17,9 +17,12 @@ type CharacterItemProps = {
 
 function CharacterItem({ character, index, isSelected, onSelect }: CharacterItemProps) {
   return (
-    <div
+    <button
       onClick={() => onSelect(index)}
-      role="button"
+      role="tab"
+      aria-selected={isSelected}
+      aria-controls={`character-panel-${index}`}
+      id={`character-${index}`}
       aria-label={`Select ${character.name}`}
       className={cn(
         'flex h-10 w-10 cursor-pointer items-center justify-center rounded-full transition-transform duration-300 md:h-12 md:w-12',
@@ -33,7 +36,7 @@ function CharacterItem({ character, index, isSelected, onSelect }: CharacterItem
         height={48}
         className="h-full w-full rounded-full object-cover"
       />
-    </div>
+    </button>
   );
 }
 
@@ -43,7 +46,11 @@ export function CharacterOverview() {
 
   return (
     <div className="mb-4">
-      <div className="my-4 flex flex-row flex-wrap gap-3 md:gap-4">
+      <div
+        className="my-4 flex flex-row flex-wrap gap-3 md:gap-4"
+        role="tablist"
+        aria-label="Character selection"
+      >
         {characters.map((character, index) => (
           <CharacterItem
             key={character.name}
@@ -54,7 +61,12 @@ export function CharacterOverview() {
           />
         ))}
       </div>
-      <div className="transition-opacity duration-300">
+      <div
+        className="transition-opacity duration-300"
+        role="tabpanel"
+        aria-labelledby={`character-${selectedCharacter}`}
+        id={`character-panel-${selectedCharacter}`}
+      >
         <h3 className="mb-2 text-2xl font-bold">{character?.name || 'Loading...'}</h3>
         <p className="line-clamp-2 text-base">{character?.bio || 'No details available'}</p>
       </div>

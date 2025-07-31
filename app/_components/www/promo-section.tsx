@@ -14,33 +14,38 @@ const promoImages: Record<string, StaticImageData> = {
 
 export function PromoSection() {
   return (
-    <div className="bg-light-mustard text-midnight mt-5 p-6">
+    <section className="bg-light-mustard text-midnight mt-5 p-6">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center">
-        <h1 className="mb-2 max-w-lg text-center text-3xl font-bold uppercase md:mb-4 md:text-5xl">
+        <h2 className="mb-2 max-w-lg text-center text-3xl font-bold uppercase md:mb-4 md:text-5xl">
           Discover your characters
-        </h1>
+        </h2>
         <p className="mb-4 text-base md:mb-6 md:text-lg">Explore and understand the characters</p>
 
         {/* Promo items */}
-        <div className="flex flex-col justify-evenly gap-6 md:flex-row">
+        <ul
+          className="flex flex-col justify-evenly gap-6 md:flex-row"
+          aria-label="Character promos"
+        >
           {promos.map((item) => (
-            <div key={item.title} className="flex flex-1 flex-col items-center rounded-md">
-              <div className="w-full mask-b-from-50%">
-                <Image
-                  src={promoImages[item.title]}
-                  alt={item.alt}
-                  className="h-full max-h-50 w-full rounded-md object-cover"
-                />
-              </div>
+            <li key={item.title} className="flex flex-1 flex-col items-center rounded-md">
+              <article>
+                <figure className="w-full mask-b-from-50%">
+                  <Image
+                    src={promoImages[item.title]}
+                    alt={item.alt}
+                    className="h-full max-h-50 w-full rounded-md object-cover"
+                  />
+                </figure>
 
-              <div className="w-full pt-0">
-                <h4 className="mb-1 text-xl font-bold md:text-2xl">{item.title}</h4>
-                <p className="text-base md:text-lg">{item.description}</p>
-              </div>
-            </div>
+                <div className="w-full pt-0">
+                  <h3 className="mb-1 text-xl font-bold md:text-2xl">{item.title}</h3>
+                  <p className="text-base md:text-lg">{item.description}</p>
+                </div>
+              </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
-    </div>
+    </section>
   );
 }

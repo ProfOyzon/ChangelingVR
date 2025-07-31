@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   description:
     'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
   keywords: ['changeling', 'vr', 'game', 'narrative', 'mystery', 'interactive', 'games', 'media'],
+  metadataBase: new URL('https://changelingvr.vercel.app'),
   openGraph: {
     title: 'Changeling VR - A Narrative Mystery',
     description:

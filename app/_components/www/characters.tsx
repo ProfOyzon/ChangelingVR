@@ -20,18 +20,18 @@ function CharacterSkeleton() {
 
 export function CharactersSection() {
   return (
-    <div className="bg-light-mustard text-midnight p-6">
+    <section className="bg-light-mustard text-midnight p-6">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-6 md:flex-row">
-        <div className="w-full">
+        <figure className="w-full">
           <Image
             src={LivingRoomWatercolor}
             alt="Living room watercolor background"
             className="h-auto w-full rounded-md object-cover"
           />
-        </div>
+        </figure>
 
         <div className="flex w-full flex-col items-start justify-between">
-          <h3 className="text-2xl font-semibold uppercase md:text-3xl">The Cast</h3>
+          <h2 className="text-2xl font-semibold uppercase md:text-3xl">The Cast</h2>
 
           <Suspense fallback={<CharacterSkeleton />}>
             <CharacterOverview />
@@ -47,6 +47,6 @@ export function CharactersSection() {
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
