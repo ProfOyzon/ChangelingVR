@@ -1,7 +1,7 @@
 import { FaEnvelope, FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa6';
 import Image from 'next/image';
 import { CopyLink } from '@/components/copy-link';
-import type { FullProfile, Profile, ProfileLink } from '@/lib/db/schema';
+import type { FullProfile, ProfileLink } from '@/lib/db/schema';
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <FaGithub className="size-6" />,
@@ -53,11 +53,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             aria-label="Social media links"
           >
             {user.links.map((link) => (
-              <SocialLink
-                key={link.platform}
-                link={link as ProfileLink}
-                user={user as unknown as Profile}
-              />
+              <SocialLink key={link.platform} link={link} user={user} />
             ))}
           </nav>
         )}
@@ -66,7 +62,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
       <section className="flex flex-1 flex-col gap-4 pb-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0">
         {user.bio && (
           <section>
-            <h2 className="sr-only">Biography</h2>
+            <h2 className="sr-only">About Me</h2>
             <p>{user.bio}</p>
           </section>
         )}
@@ -120,7 +116,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
   );
 }
 
-function SocialLink({ link, user }: { link: ProfileLink; user: Profile }) {
+function SocialLink({ link, user }: { link: ProfileLink; user: FullProfile }) {
   // Determine if the link is an email address
   const isEmail = link.platform === 'email';
 
