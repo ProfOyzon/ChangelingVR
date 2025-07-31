@@ -110,6 +110,7 @@ export type ResetToken = typeof resetTokens.$inferSelect;
 export type NewResetToken = typeof resetTokens.$inferInsert;
 export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
+export type FullProfile = Profile & { links: ProfileLink[] };
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',

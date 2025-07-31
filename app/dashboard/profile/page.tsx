@@ -8,6 +8,7 @@ const PLATFORM_VALUES = ['github', 'linkedin', 'email', 'website'] as const;
 
 export default async function GPage() {
   const links = await getProfileLinks();
+  if (!links) return;
 
   return (
     <div className="flex flex-col gap-6">

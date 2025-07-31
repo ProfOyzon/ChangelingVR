@@ -1,6 +1,6 @@
 'use server';
 
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
@@ -53,8 +53,15 @@ export async function getUserProfile() {
 
 // Fetches profile links table; requires session cookie
 export async function getProfileLinks() {
-  const user = await getUserProfile();
-  if (!user) return [];
+  const session = await getSession();
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
+    return [];
+  }
 
   return await db
     .select({
@@ -64,7 +71,7 @@ export async function getProfileLinks() {
     })
     .from(profileLinks)
     .leftJoin(profiles, eq(profileLinks.uuid, profiles.uuid))
-    .where(eq(profileLinks.uuid, user.uuid));
+    .where(eq(profileLinks.uuid, session.user.id));
 }
 
 // Fetches activity logs table; requires session cookie
@@ -105,9 +112,9 @@ export async function getResetToken(uuid: string) {
 
 // Fetches profile by username
 export async function getProfileByUsername(username: string) {
-  // To secure profile from username fetches, we do not return the UUID
   const profile = await db
     .select({
+      uuid: profiles.uuid,
       display_name: profiles.display_name,
       username: profiles.username,
       avatar_url: profiles.avatar_url,
@@ -125,7 +132,18 @@ export async function getProfileByUsername(username: string) {
     return null;
   }
 
-  return profile[0];
+  const { uuid, ...filtered } = profile[0];
+
+  const links = await db
+    .select({
+      platform: profileLinks.platform,
+      url: profileLinks.url,
+      visible: profileLinks.visible,
+    })
+    .from(profileLinks)
+    .where(and(eq(profileLinks.uuid, uuid), eq(profileLinks.visible, true)));
+
+  return { ...filtered, links };
 }
 
 // Fetches complete profiles table

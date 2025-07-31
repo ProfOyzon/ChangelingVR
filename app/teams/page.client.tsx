@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { ProfileCard } from '@/app/_components/teams/profile-card';
 import { Pagination } from '@/components/pagination';
+import type { Profile } from '@/lib/db/schema';
 import { profileOptions } from '@/lib/query-options';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -71,7 +72,7 @@ export default function TeamsPageClient() {
       ) : (
         <div className="mb-6 flex flex-wrap justify-center gap-6">
           {paginated.map((profile) => (
-            <ProfileCard key={profile.username} profile={profile} />
+            <ProfileCard key={profile.username} profile={profile as unknown as Profile} />
           ))}
         </div>
       )}

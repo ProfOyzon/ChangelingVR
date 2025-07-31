@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import type { PublicProfile } from '@/lib/db/schema';
+import type { Profile } from '@/lib/db/schema';
 
 export const ProfileCard = memo(ProfileCardComponent);
 
-function ProfileCardComponent({ profile }: { profile: PublicProfile }) {
+function ProfileCardComponent({ profile }: { profile: Profile }) {
   return (
     <div className="bg-steel/50 hover:bg-steel/75 relative flex h-64 w-40 max-w-40 min-w-40 flex-1 flex-col rounded-md backdrop-blur-sm transition-colors duration-300">
       <Link href={`/users/${profile.username}`} className="flex h-full cursor-pointer flex-col">

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Activity,
@@ -14,7 +15,6 @@ import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 import { getProfileLinks, getUserProfile } from '@/lib/db/queries';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 
 function randomHeading() {
   const headings = [
