@@ -12,8 +12,8 @@ const iconMap: Record<string, React.ReactNode> = {
 
 export function UserProfile({ user }: { user: FullProfile }) {
   return (
-    <article className="bg-dune mx-auto flex w-full max-w-4xl flex-col rounded-md p-6 md:flex-row md:gap-6 md:p-12 md:pb-0">
-      <aside className="relative flex flex-1 flex-col space-y-6 rounded-t-md bg-zinc-600/50 p-6 pt-20">
+    <article className="bg-dune relative mx-auto flex w-full max-w-4xl flex-col rounded-md p-6 md:flex-row md:gap-6 md:p-12 md:pb-0">
+      <aside className="relative z-5 flex flex-1 flex-col space-y-6 rounded-t-md bg-zinc-600/50 p-6 pt-20">
         <header className="absolute top-0 left-0 h-40 w-full">
           <Image
             src="/background/outside_blurred.webp"
@@ -59,7 +59,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
         )}
       </aside>
 
-      <section className="flex flex-1 flex-col gap-4 pb-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0">
+      <section className="z-5 flex flex-1 flex-col gap-4 pb-4 max-md:bg-zinc-600/50 max-md:p-6 max-md:pt-0">
         {user.bio && (
           <section>
             <h2 className="sr-only">About Me</h2>
@@ -112,6 +112,16 @@ export function UserProfile({ user }: { user: FullProfile }) {
           </section>
         )}
       </section>
+
+      <figure className="absolute right-6 bottom-6 opacity-25">
+        <Image
+          src="/ChangelingSticker.png"
+          alt="Profile background"
+          width={128}
+          height={128}
+          className="size-32"
+        />
+      </figure>
     </article>
   );
 }
