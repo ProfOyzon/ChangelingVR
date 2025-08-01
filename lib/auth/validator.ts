@@ -34,7 +34,7 @@ export function processFormData(formData: FormData) {
 }
 
 export const zRegisterSchema = z.object({
-  email: z.email().trim().endsWith('@rit.edu', { error: 'Email must be a RIT email (@rit.edu)' }),
+  email: z.email().trim(),
   password: z
     .string()
     .min(6, { error: 'Password must be at least 6 characters long' })
