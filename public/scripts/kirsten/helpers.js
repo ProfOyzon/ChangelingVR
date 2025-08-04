@@ -65,8 +65,8 @@ function ImportGLTFModelStill(
       // Handle errors.
     },
     undefined,
-    function (error) {
-      console.error(error);
+    function () {
+      // Do nothing
     },
   );
 }

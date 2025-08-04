@@ -365,7 +365,6 @@ class Interactable extends Platform {
       switch (word.text) {
         case 'things.':
           let newPlatform = new Platform(scene, 750, 350, 100, 50, this.landingSound);
-          console.log(newPlatform.landingSound);
           platforms.push(newPlatform);
           if (
             this.x < player.x &&

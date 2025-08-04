@@ -94,7 +94,6 @@ function initializeCharacters() {
 ///////////////////////////
 function initialInitCharacters() {
   setTops();
-  console.log(tops);
   updateIndex();
   setTimeout(snapScroll, 2000);
 

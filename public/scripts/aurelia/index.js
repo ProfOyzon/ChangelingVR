@@ -182,8 +182,7 @@ function onFileClick(e) {
     cfBody.innerHTML = caseFileData[e.target.id].right;
     shufflePaper.play();
     currentFile = e.target.id;
-    console.log('set currentFile = ' + e.target.id);
   } else {
-    console.log('currentFile is already set to = ' + e.target.id);
+    // If the current file is already set to the target file, do nothing
   }
 }

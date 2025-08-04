@@ -161,7 +161,7 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
   };
 
   onPointerlockError = () => {
-    console.error('PointerLockControlsCannon: Unable to use Pointer Lock API');
+    // Do nothing
   };
 
   onMouseMove = (event) => {
