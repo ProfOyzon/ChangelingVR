@@ -251,12 +251,17 @@ export const updateProfile = validatedActionWithUser(
   zUpdateProfileSchema,
   async (data, session) => {
     try {
-      await Promise.all([
-        db.update(profiles).set(data).where(eq(profiles.uuid, session.user.id)),
+      const [profile] = await Promise.all([
+        db
+          .update(profiles)
+          .set(data)
+          .where(eq(profiles.uuid, session.user.id))
+          .returning({ username: profiles.username }),
         logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
       ]);
 
       revalidateTag('profiles');
+      revalidatePath(`/users/${profile[0].username}`);
     } catch {
       // It failed, client will handle the error
     }

@@ -122,7 +122,7 @@ export async function getActivityLogs() {
 }
 
 // Fetches profile by username
-export async function getProfileByUsername(username: string) {
+export const getProfileByUsername = cache(async (username: string) => {
   const profile = await db
     .select({
       uuid: profiles.uuid,
@@ -155,7 +155,7 @@ export async function getProfileByUsername(username: string) {
     .where(and(eq(profileLinks.uuid, uuid), eq(profileLinks.visible, true)));
 
   return { ...filtered, links };
-}
+});
 
 // Fetches complete profiles table
 export async function getAllProfiles(): Promise<FullProfile[]> {

@@ -6,6 +6,10 @@ import { UserProfile } from '@/components/user-profile';
 import { getProfileByUsername } from '@/lib/db/queries';
 import type { FullProfile } from '@/lib/db/schema';
 
+// Cache this page for 1 day since user profiles don't change frequently
+// This is invalidated when the updateProfile action in lib/auth/actions.ts is called
+export const revalidate = 86400;
+
 export async function generateMetadata({
   params,
 }: {
