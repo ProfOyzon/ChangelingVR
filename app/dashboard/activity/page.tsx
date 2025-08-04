@@ -60,6 +60,7 @@ function formatAction(action: ActivityType): string {
 
 export default async function ActivityPage() {
   const logs = await getActivityLogs();
+  if (!logs) return;
 
   return (
     <Fragment>

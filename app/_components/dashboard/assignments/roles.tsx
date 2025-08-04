@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useProfileMutation } from '@/hooks/use-profile';
 import { processFormData, processZodError, zRolesSchema } from '@/lib/auth/validator';
-import type { Profile } from '@/lib/db/schema';
+import type { PublicProfile } from '@/lib/db/schema';
 
 const ROLE_VALUES = [
   'Programmer',
@@ -28,7 +28,7 @@ const ROLE_VALUES = [
   'Lead',
 ];
 
-export function RolesSection({ profile }: { profile: Profile }) {
+export function RolesSection({ profile }: { profile: PublicProfile }) {
   const [roles, setRoles] = useState<string[]>(profile.roles || []);
   const mutation = useProfileMutation();
 

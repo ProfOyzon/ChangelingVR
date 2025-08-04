@@ -1,12 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { updateProfile } from '../lib/auth/actions';
 import type { ActionState } from '../lib/auth/middleware';
-import { getUserProfile } from '../lib/db/queries';
+import { getProfile } from '../lib/db/queries';
 
 export function useProfileQuery() {
   return useQuery({
     queryKey: ['profiles'],
-    queryFn: getUserProfile,
+    queryFn: getProfile,
     staleTime: 0,
     meta: {
       tags: ['profiles'],

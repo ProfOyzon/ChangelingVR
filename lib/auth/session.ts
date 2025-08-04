@@ -15,7 +15,7 @@ export async function comparePassword(password: string, hash: string) {
   return await compare(password, hash);
 }
 
-type SessionData = {
+export type SessionData = {
   user: { id: string };
   expires: string;
 };

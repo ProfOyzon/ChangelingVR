@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useProfileMutation } from '@/hooks/use-profile';
 import { processFormData, processZodError, zTeamsSchema } from '@/lib/auth/validator';
-import type { Profile } from '@/lib/db/schema';
+import type { PublicProfile } from '@/lib/db/schema';
 
 const TEAM_VALUES = [
   'Development',
@@ -23,7 +23,7 @@ const TEAM_VALUES = [
   'Production',
 ] as const;
 
-export function TeamsSection({ profile }: { profile: Profile }) {
+export function TeamsSection({ profile }: { profile: PublicProfile }) {
   const [teams, setTeams] = useState<string[]>(profile.teams || []);
   const mutation = useProfileMutation();
 

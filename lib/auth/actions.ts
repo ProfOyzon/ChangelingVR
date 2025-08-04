@@ -18,7 +18,7 @@ import {
   zUpdateProfileSchema,
 } from '@/lib/auth/validator';
 import { db } from '@/lib/db';
-import { getUserProfile } from '@/lib/db/queries';
+import { getProfile } from '@/lib/db/queries';
 import {
   ActivityType,
   type NewActivityLog,
@@ -238,7 +238,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
  * Logs the user out and redirects to the home page
  */
 export async function logout() {
-  const user = (await getUserProfile()) as Profile;
+  const user = (await getProfile()) as Profile;
   await logActivity(user.uuid, ActivityType.SIGN_OUT);
   (await cookies()).delete('session');
   redirect('/auth/login');
@@ -247,28 +247,31 @@ export async function logout() {
 /**
  * Validates the update profile form data and updates the user's profile
  */
-export const updateProfile = validatedActionWithUser(zUpdateProfileSchema, async (data, user) => {
-  try {
-    await Promise.all([
-      db.update(profiles).set(data).where(eq(profiles.uuid, user.uuid)),
-      logActivity(user.uuid, ActivityType.UPDATE_ACCOUNT),
-    ]);
+export const updateProfile = validatedActionWithUser(
+  zUpdateProfileSchema,
+  async (data, session) => {
+    try {
+      await Promise.all([
+        db.update(profiles).set(data).where(eq(profiles.uuid, session.user.id)),
+        logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
+      ]);
 
-    revalidateTag('profiles');
-  } catch {
-    // It failed, client will handle the error
-  }
-});
+      revalidateTag('profiles');
+    } catch {
+      // It failed, client will handle the error
+    }
+  },
+);
 
 export const updateProfileLink = validatedActionWithUser(
   zUpdateProfileLinkSchema,
-  async (data, user) => {
+  async (data, session) => {
     try {
       await Promise.all([
         db
           .insert(profileLinks)
           .values({
-            uuid: user.uuid,
+            uuid: session.user.id,
             platform: data.platform,
             url: data.url,
             visible: data.visible,
@@ -280,7 +283,7 @@ export const updateProfileLink = validatedActionWithUser(
               visible: data.visible,
             },
           }),
-        logActivity(user.uuid, ActivityType.UPDATE_ACCOUNT),
+        logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
       ]);
 
       revalidateTag('profiles');
@@ -291,13 +294,15 @@ export const updateProfileLink = validatedActionWithUser(
   },
 );
 
-export const deleteProfileLink = validatedActionWithUser(zPlatformSchema, async (data, user) => {
+export const deleteProfileLink = validatedActionWithUser(zPlatformSchema, async (data, session) => {
   try {
     await Promise.all([
       db
         .delete(profileLinks)
-        .where(and(eq(profileLinks.uuid, user.uuid), eq(profileLinks.platform, data.platform))),
-      logActivity(user.uuid, ActivityType.UPDATE_ACCOUNT),
+        .where(
+          and(eq(profileLinks.uuid, session.user.id), eq(profileLinks.platform, data.platform)),
+        ),
+      logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
     ]);
 
     revalidateTag('profiles');

@@ -1,24 +1,31 @@
+import { Suspense } from 'react';
+import { BioSection } from '@/app/_components/dashboard/profile/bio';
 import { LinkCard } from '@/app/_components/dashboard/profile/link-card';
 import { Separator } from '@/components/ui/separator';
-import { getProfileLinks } from '@/lib/db/queries';
-import type { ProfileLink } from '@/lib/db/schema';
-import GClientPage from './page.client';
+import { getFullProfile } from '@/lib/db/queries';
+import type { FullProfile } from '@/lib/db/schema';
 
 const PLATFORM_VALUES = ['github', 'linkedin', 'email', 'website'] as const;
 
-export default async function GPage() {
-  const links = await getProfileLinks();
-  if (!links) return;
+export default async function ProfilePage() {
+  const profile = (await getFullProfile()) as FullProfile;
+  if (!profile) return;
 
   return (
     <div className="flex flex-col gap-6">
-      <GClientPage />
+      <Suspense fallback={<div>Loading...</div>}>
+        <BioSection profile={profile} />
+      </Suspense>
+
       <Separator />
+
       <h1 className="text-2xl font-bold">Social Links</h1>
-      {PLATFORM_VALUES.map((platform) => {
-        const link = links.find((l) => l.platform === platform);
-        return <LinkCard key={platform} platform={platform} link={link as ProfileLink} />;
-      })}
+      <Suspense fallback={<div>Loading...</div>}>
+        {PLATFORM_VALUES.map((platform) => {
+          const link = profile.links.find((l) => l.platform === platform);
+          return <LinkCard key={platform} platform={platform} link={link} />;
+        })}
+      </Suspense>
     </div>
   );
 }

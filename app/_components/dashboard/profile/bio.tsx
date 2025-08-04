@@ -9,9 +9,9 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useProfileMutation } from '@/hooks/use-profile';
 import { processFormData, processZodError, zBioSchema } from '@/lib/auth/validator';
-import type { Profile } from '@/lib/db/schema';
+import type { FullProfile } from '@/lib/db/schema';
 
-export function BioSection({ profile }: { profile: Profile }) {
+export function BioSection({ profile }: { profile: FullProfile }) {
   const [bio, setBio] = useState<string>(profile.bio || '');
   const mutation = useProfileMutation();
 

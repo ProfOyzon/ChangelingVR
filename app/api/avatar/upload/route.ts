@@ -25,24 +25,25 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
   }
 
-  // UUID mismatch
-  if (session.user.id !== filename.split('.')[0]) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
     // Get current avatar URL before updating
-    const uuid = filename.split('.')[0];
+    const username = filename.split('.')[0];
     const profile = await db
       .select({
+        uuid: profiles.uuid,
         avatar_url: profiles.avatar_url,
       })
       .from(profiles)
-      .where(eq(profiles.uuid, uuid));
+      .where(eq(profiles.username, username));
 
     // Check if profile exists
     if (!profile || profile.length === 0) {
       return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+    }
+
+    // UUID mismatch
+    if (profile[0].uuid !== session.user.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Delete old blob if it exists
@@ -58,8 +59,8 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     // Update user's avatar in the database
     await Promise.all([
-      db.update(profiles).set({ avatar_url: blob.url }).where(eq(profiles.uuid, uuid)),
-      logActivity(uuid, ActivityType.UPDATE_ACCOUNT),
+      db.update(profiles).set({ avatar_url: blob.url }).where(eq(profiles.uuid, profile[0].uuid)),
+      logActivity(profile[0].uuid, ActivityType.UPDATE_ACCOUNT),
     ]);
 
     return NextResponse.json(blob);

@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { eq, lt } from 'drizzle-orm';
 import { db } from '@/lib/db';
-import { cron } from '@/lib/db/schema';
+import { resetTokens } from '@/lib/db/schema';
 
-// This route is used to ping Supabase from Vercel
-// Supabase free tier requires activity every week
+// This route is used to clean up any expired data in the database
 // Currently we trigger this every day at midnight (vercel.json)
 
 export async function GET(request: NextRequest) {
@@ -14,13 +14,24 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // DEPENDING ON SIZE OF `activity_logs` TABLE, WE MAY NEED TO CLEAN UP OLD DATA
+  // FOR NOW WE'RE ONLY CLEANING UP `reset_tokens` TABLE
   try {
-    // Ping Supabase to check if the connection is working
-    // cron table contains 1 row of dummy data
-    const data = await db.select().from(cron);
+    // Get all expired reset tokens
+    const expiredResetTokens = await db
+      .select({ token: resetTokens.token })
+      .from(resetTokens)
+      .where(lt(resetTokens.expires_at, new Date()));
 
-    return NextResponse.json(data, { status: 200 });
+    if (expiredResetTokens.length > 0) {
+      expiredResetTokens.forEach(async (token) => {
+        // Delete all expired reset tokens
+        await db.delete(resetTokens).where(eq(resetTokens.token, token.token));
+      });
+    }
+
+    return NextResponse.json({ success: 'Cron job completed' }, { status: 200 });
   } catch {
-    return NextResponse.json({ error: 'Failed to ping Supabase' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to clean up expired data' }, { status: 500 });
   }
 }

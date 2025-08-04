@@ -18,7 +18,13 @@ const iconMap: Record<string, React.ReactNode> = {
   website: <FaGlobe className="size-5" />,
 };
 
-export function LinkCard({ platform, link }: { platform: string; link?: ProfileLink }) {
+export function LinkCard({
+  platform,
+  link,
+}: {
+  platform: string;
+  link?: Omit<ProfileLink, 'uuid'>;
+}) {
   const [url, setUrl] = useState(link?.url || '');
   const [visible, setVisible] = useState(link?.visible ?? true);
 

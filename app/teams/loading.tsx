@@ -1,11 +1,10 @@
 export default function Loading() {
   return (
-    <div className="mx-auto animate-pulse p-6">
-      <div className="bg-steel/50 mx-auto mb-4 h-10 w-sm rounded-md backdrop-blur-sm"></div>
-      <div className="bg-steel/50 mx-auto mb-6 h-10 w-xl rounded-md backdrop-blur-sm"></div>
-      <div className="bg-steel/50 mx-auto mb-6 h-10 w-lg rounded-md backdrop-blur-sm"></div>
-
-      <div className="bg-steel/50 h-150 w-full rounded-md backdrop-blur-sm"></div>
+    <div className="mx-auto my-4 flex w-full max-w-7xl flex-col items-center justify-center gap-6 p-6">
+      <div className="h-12 w-96 animate-pulse rounded-md bg-gray-700" />
+      <div className="h-12 w-full max-w-2xl animate-pulse rounded-md bg-gray-700" />
+      <div className="h-12 w-full max-w-xs animate-pulse rounded-md bg-gray-700" />
+      <div className="h-96 w-full animate-pulse rounded-md bg-gray-700" />
     </div>
   );
 }

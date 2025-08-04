@@ -9,11 +9,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useProfileMutation } from '@/hooks/use-profile';
-import type { Profile } from '@/lib/db/schema';
+import type { PublicProfile } from '@/lib/db/schema';
 import { resizeAndConvertToWebP } from '@/lib/process-avatar';
 import type { PutBlobResult } from '@vercel/blob';
 
-export function AvatarSection({ profile }: { profile: Profile }) {
+export function AvatarSection({ profile }: { profile: PublicProfile }) {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState(profile.avatar_url ?? '/placeholder.png');
   const mutation = useProfileMutation();
@@ -26,7 +26,7 @@ export function AvatarSection({ profile }: { profile: Profile }) {
     const file = e.target.files?.[0];
     if (file) {
       const processedBlob = await resizeAndConvertToWebP(file);
-      setAvatarFile(new File([processedBlob], profile.uuid, { type: 'image/webp' }));
+      setAvatarFile(new File([processedBlob], profile.username, { type: 'image/webp' }));
       setAvatarPreview(URL.createObjectURL(processedBlob));
     }
   };

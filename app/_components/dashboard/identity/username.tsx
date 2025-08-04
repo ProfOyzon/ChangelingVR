@@ -8,25 +8,27 @@ import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { useProfileMutation } from '@/hooks/use-profile';
-import { processFormData, processZodError, zDisplayNameSchema } from '@/lib/auth/validator';
-import type { Profile } from '@/lib/db/schema';
+import { processFormData, processZodError, zUsernameSchema } from '@/lib/auth/validator';
+import type { PublicProfile } from '@/lib/db/schema';
 
-export function DisplayNameSection({ profile }: { profile: Profile }) {
-  const [displayName, setDisplayName] = useState(profile.display_name ?? '');
+export function UsernameSection({ profile }: { profile: PublicProfile }) {
+  const [username, setUsername] = useState(profile.username);
   const mutation = useProfileMutation();
 
-  const handleDisplayNameSubmit = (e: React.FormEvent) => {
+  const handleUsernameSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // If the username is the same as the current username, do nothing
     const formData = new FormData(e.target as HTMLFormElement);
-    if (formData.get('display_name') === profile.display_name) return;
+    if (formData.get('username') === profile.username) return;
 
-    const result = zDisplayNameSchema.safeParse(processFormData(formData));
+    // Validate form data
+    const result = zUsernameSchema.safeParse(processFormData(formData));
     if (result.success) {
       toast.promise(mutation.mutateAsync(formData), {
-        loading: 'Updating display name...',
-        success: 'Display name updated successfully',
-        error: 'Failed to update display name',
+        loading: 'Updating username...',
+        success: 'Username updated successfully',
+        error: 'Failed to update username',
       });
     } else {
       toast.error(processZodError(result.error).split(';').join('\n'));
@@ -34,24 +36,24 @@ export function DisplayNameSection({ profile }: { profile: Profile }) {
   };
 
   return (
-    <form onSubmit={handleDisplayNameSubmit}>
+    <form onSubmit={handleUsernameSubmit}>
       <Card className="py-4">
         <CardContent className="flex flex-col gap-4 px-4">
-          <CardTitle className="text-xl font-bold">Display Name</CardTitle>
+          <CardTitle className="text-xl font-bold">Username</CardTitle>
           <CardDescription className="text-muted-foreground text-sm">
-            Please enter your full name, or a display name you are comfortable with.
+            This is your URL namespace within Changeling VR.
           </CardDescription>
           <Input
-            name="display_name"
-            maxLength={30}
+            name="username"
+            maxLength={15}
             className="w-[300px]"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <Separator />
           <CardFooter className="flex justify-between p-0">
-            <p className="text-muted-foreground text-sm">Please use 30 characters at maximum.</p>
+            <p className="text-muted-foreground text-sm">Please use 15 characters at maximum.</p>
             <Button type="submit" disabled={mutation.isPending}>
               {mutation.isPending ? (
                 <div className="flex items-center gap-2">

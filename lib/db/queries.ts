@@ -1,33 +1,14 @@
 'use server';
 
-import { and, desc, eq } from 'drizzle-orm';
+import { cache } from 'react';
+import { and, count, desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
-import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
-
-// Fetches member table; requires session cookie
-export async function getUserMember() {
-  const session = await getSession();
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
-    return null;
-  }
-
-  const user = await db.select().from(members).where(eq(members.uuid, session.user.id)).limit(1);
-
-  if (user.length === 0) {
-    return null;
-  }
-
-  return user[0];
-}
+import { activityLogs, members, profileLinks, profiles } from './schema';
+import type { FullProfile } from './schema';
 
 // Fetches profile table; requires session cookie
-export async function getUserProfile() {
+export async function getProfile() {
   const session = await getSession();
   if (
     !session ||
@@ -39,7 +20,16 @@ export async function getUserProfile() {
   }
 
   const profile = await db
-    .select()
+    .select({
+      username: profiles.username,
+      display_name: profiles.display_name,
+      avatar_url: profiles.avatar_url,
+      bio: profiles.bio,
+      terms: profiles.terms,
+      teams: profiles.teams,
+      roles: profiles.roles,
+      bg_color: profiles.bg_color,
+    })
     .from(profiles)
     .where(eq(profiles.uuid, session.user.id))
     .limit(1);
@@ -51,8 +41,8 @@ export async function getUserProfile() {
   return profile[0];
 }
 
-// Fetches profile links table; requires session cookie
-export async function getProfileLinks() {
+// Fetches full profile table; requires session cookie
+export async function getFullProfile() {
   const session = await getSession();
   if (
     !session ||
@@ -60,24 +50,54 @@ export async function getProfileLinks() {
     typeof session.user.id !== 'string' ||
     new Date(session.expires) < new Date()
   ) {
-    return [];
+    return null;
   }
 
-  return await db
+  const profile = await db
+    .select({
+      uuid: profiles.uuid,
+      username: profiles.username,
+      display_name: profiles.display_name,
+      avatar_url: profiles.avatar_url,
+      bio: profiles.bio,
+      terms: profiles.terms,
+      teams: profiles.teams,
+      roles: profiles.roles,
+      bg_color: profiles.bg_color,
+    })
+    .from(profiles)
+    .where(eq(profiles.uuid, session.user.id))
+    .limit(1);
+
+  if (!profile || profile.length === 0) {
+    return null;
+  }
+
+  const { uuid, ...filtered } = profile[0];
+
+  const links = await db
     .select({
       platform: profileLinks.platform,
       url: profileLinks.url,
       visible: profileLinks.visible,
     })
     .from(profileLinks)
-    .leftJoin(profiles, eq(profileLinks.uuid, profiles.uuid))
     .where(eq(profileLinks.uuid, session.user.id));
+
+  return { ...filtered, links };
 }
 
 // Fetches activity logs table; requires session cookie
 export async function getActivityLogs() {
-  const user = await getUserProfile();
-  if (!user) return [];
+  const session = await getSession();
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
+    return null;
+  }
 
   return await db
     .select({
@@ -96,18 +116,9 @@ export async function getActivityLogs() {
     })
     .from(activityLogs)
     .leftJoin(members, eq(activityLogs.uuid, members.uuid))
-    .where(eq(activityLogs.uuid, user.uuid))
+    .where(eq(activityLogs.uuid, session.user.id))
     .orderBy(desc(activityLogs.timestamp))
     .limit(10);
-}
-
-// Fetches reset token that matches the UUID
-export async function getResetToken(uuid: string) {
-  return await db
-    .select({ token: resetTokens.token, expires_at: resetTokens.expires_at })
-    .from(resetTokens)
-    .where(eq(resetTokens.uuid, uuid))
-    .limit(1);
 }
 
 // Fetches profile by username
@@ -147,7 +158,7 @@ export async function getProfileByUsername(username: string) {
 }
 
 // Fetches complete profiles table
-export async function getCompleteProfiles() {
+export async function getAllProfiles(): Promise<FullProfile[]> {
   const profilesData = await db
     .select({
       uuid: profiles.uuid,
@@ -162,22 +173,97 @@ export async function getCompleteProfiles() {
     })
     .from(profiles);
 
-  if (!profilesData) return [];
+  if (!profilesData || profilesData.length === 0) return [];
 
-  const linksData = await db
+  // Get all profile links for all profiles
+  const allLinks = await db
     .select({
       uuid: profileLinks.uuid,
       platform: profileLinks.platform,
       url: profileLinks.url,
       visible: profileLinks.visible,
     })
-    .from(profileLinks);
+    .from(profileLinks)
+    .where(eq(profileLinks.visible, true));
 
-  // Remove uuid from both profile and links before returning
-  const filteredData = profilesData.map(({ uuid, ...profile }) => ({
-    ...profile,
-    links: linksData.filter((link) => link.uuid === uuid).map(({ uuid, ...rest }) => rest),
-  }));
+  // Group links by profile UUID
+  const linksByProfile = allLinks.reduce(
+    (acc, link) => {
+      if (!acc[link.uuid]) {
+        acc[link.uuid] = [];
+      }
+      acc[link.uuid].push({
+        platform: link.platform,
+        url: link.url,
+        visible: link.visible,
+      });
+      return acc;
+    },
+    {} as Record<string, { platform: string; url: string; visible: boolean }[]>,
+  );
 
-  return filteredData;
+  // Map profiles to FullProfile objects
+  return profilesData.map((profile) => {
+    const { uuid, ...profileData } = profile;
+    return {
+      ...profileData,
+      links: linksByProfile[uuid] || [],
+    };
+  });
 }
+
+// 4 columns in a 1440px screen (according to Thaw Thaw, this is standard)
+const PAGE_SIZE = 28;
+
+/**
+ * Returns the number of pages for a given query
+ * @param query - The query to search for
+ * @returns The number of pages
+ */
+export const getProfilePages = cache(async (query: string) => {
+  const result = await db
+    .select({ value: count() })
+    .from(profiles)
+    .where(ilike(profiles.display_name, `%${query}%`));
+
+  return Math.ceil((result[0]?.value || 0) / PAGE_SIZE);
+});
+
+/**
+ * Returns the profiles for a given query and page
+ * @param query - The query to search for
+ * @param page - The page number
+ * @returns The profiles
+ */
+export const getFilteredProfiles = cache(async (query: string, page: number) => {
+  const result = await db
+    .select({
+      username: profiles.username,
+      display_name: profiles.display_name,
+      avatar_url: profiles.avatar_url,
+      bio: profiles.bio,
+      terms: profiles.terms,
+      teams: profiles.teams,
+      roles: profiles.roles,
+      bg_color: profiles.bg_color,
+    })
+    .from(profiles)
+    .where(
+      and(
+        // Match display name
+        ilike(profiles.display_name, `%${query}%`),
+        // Ensure display name is not null or empty
+        sql`${profiles.display_name} IS NOT NULL AND ${profiles.display_name} != ''`,
+      ),
+    )
+    .orderBy(
+      // Prioritize profiles with the most terms
+      sql`COALESCE((SELECT MAX(x) FROM unnest(${profiles.terms}) AS x), 0) DESC`,
+      // Sort by display name alphabetically
+      profiles.display_name,
+    )
+    .limit(PAGE_SIZE)
+    .offset((page - 1) * PAGE_SIZE);
+
+  return result;
+});

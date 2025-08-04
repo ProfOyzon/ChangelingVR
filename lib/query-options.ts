@@ -1,4 +1,4 @@
-import { getCompleteProfiles } from '@/lib/db/queries';
+import { getAllProfiles } from '@/lib/db/queries';
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 /**
@@ -11,7 +11,7 @@ import { keepPreviousData, queryOptions } from '@tanstack/react-query';
  */
 export const profileOptions = queryOptions({
   queryKey: ['profiles'],
-  queryFn: getCompleteProfiles,
+  queryFn: getAllProfiles,
   staleTime: 60 * 60 * 1000, // 1 hour
   placeholderData: keepPreviousData,
 });

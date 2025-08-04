@@ -1,7 +1,7 @@
 import { FaEnvelope, FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa6';
 import Image from 'next/image';
 import { CopyLink } from '@/components/copy-link';
-import type { FullProfile, ProfileLink } from '@/lib/db/schema';
+import type { FullProfile } from '@/lib/db/schema';
 
 const iconMap: Record<string, React.ReactNode> = {
   github: <FaGithub className="size-6" />,
@@ -53,7 +53,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             aria-label="Social media links"
           >
             {user.links.map((link) => (
-              <SocialLink key={link.platform} link={link} user={user} />
+              <SocialLink key={link.platform} profile={user} platform={link.platform} />
             ))}
           </nav>
         )}
@@ -126,9 +126,12 @@ export function UserProfile({ user }: { user: FullProfile }) {
   );
 }
 
-function SocialLink({ link, user }: { link: ProfileLink; user: FullProfile }) {
+function SocialLink({ profile, platform }: { profile: FullProfile; platform: string }) {
+  const link = profile.links.find((link) => link.platform === platform);
+  if (!link) return null;
+
   // Determine if the link is an email address
-  const isEmail = link.platform === 'email';
+  const isEmail = platform === 'email';
 
   return (
     <a
@@ -138,8 +141,8 @@ function SocialLink({ link, user }: { link: ProfileLink; user: FullProfile }) {
       className="flex flex-1 flex-col items-center justify-center rounded-md bg-zinc-900/50 p-2 transition-colors hover:bg-zinc-900/75"
       aria-label={
         isEmail
-          ? `Send email to ${user.display_name || user.username}`
-          : `Visit ${user.display_name || user.username}'s ${link.platform} profile`
+          ? `Send email to ${profile.display_name || profile.username}`
+          : `Visit ${profile.display_name || profile.username}'s ${link.platform} profile`
       }
     >
       <span className="flex flex-row items-center justify-center gap-2">

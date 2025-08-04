@@ -102,15 +102,17 @@ export type Cron = typeof cron.$inferSelect;
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
 export type Profile = typeof profiles.$inferSelect;
-export type PublicProfile = Omit<Profile, 'uuid'>;
 export type NewProfile = typeof profiles.$inferInsert;
+export type PublicProfile = Omit<Profile, 'uuid'>;
 export type ProfileLink = typeof profileLinks.$inferSelect;
 export type NewProfileLink = typeof profileLinks.$inferInsert;
+export type PublicProfileLink = Omit<ProfileLink, 'uuid'>;
 export type ResetToken = typeof resetTokens.$inferSelect;
 export type NewResetToken = typeof resetTokens.$inferInsert;
 export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
-export type FullProfile = Profile & { links: ProfileLink[] };
+// Full profile is used for displaying profile data which omits the uuid from both tables
+export type FullProfile = PublicProfile & { links: PublicProfileLink[] };
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',

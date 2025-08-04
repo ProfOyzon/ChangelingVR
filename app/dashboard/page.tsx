@@ -13,7 +13,8 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { getProfileLinks, getUserProfile } from '@/lib/db/queries';
+import { getFullProfile } from '@/lib/db/queries';
+import type { FullProfile } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
 
 function randomHeading() {
@@ -69,9 +70,8 @@ function QuickActions(action: {
 }
 
 export default async function DashboardPage() {
-  const [profile, links] = await Promise.all([getUserProfile(), getProfileLinks()]);
-
-  if (!profile || !links) {
+  const profile = (await getFullProfile()) as FullProfile;
+  if (!profile) {
     return <div>Profile not found</div>;
   }
 
@@ -82,7 +82,11 @@ export default async function DashboardPage() {
     { key: 'roles', label: 'Select Roles', completed: !!profile.roles && profile.roles.length > 0 },
     { key: 'teams', label: 'Join Teams', completed: !!profile.teams && profile.teams.length > 0 },
     { key: 'terms', label: 'Choose Terms', completed: !!profile.terms && profile.terms.length > 0 },
-    { key: 'links', label: 'Add Social Links', completed: !!links && links.length > 0 },
+    {
+      key: 'links',
+      label: 'Add Social Links',
+      completed: !!profile.links && profile.links.length > 0,
+    },
   ];
 
   const completedItems = completionItems.filter((item) => item.completed).length;

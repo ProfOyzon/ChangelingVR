@@ -1,21 +1,10 @@
 import { UserProfile } from '@/components/user-profile';
-import { getProfileLinks, getUserProfile } from '@/lib/db/queries';
-import type { FullProfile, Profile, ProfileLink } from '@/lib/db/schema';
+import { getFullProfile } from '@/lib/db/queries';
+import type { FullProfile } from '@/lib/db/schema';
 
 export default async function PreviewPage() {
-  const [user, links] = await Promise.all([
-    getUserProfile() as Promise<Profile | null>,
-    getProfileLinks() as Promise<ProfileLink[] | null>,
-  ]);
-
-  if (!user || !links) {
-    return <div>User not found</div>;
-  }
-
-  const profile = {
-    ...user,
-    links: links,
-  } as FullProfile;
+  const profile = (await getFullProfile()) as FullProfile;
+  if (!profile) return;
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4 text-gray-100">

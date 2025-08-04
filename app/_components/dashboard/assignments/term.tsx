@@ -10,13 +10,13 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useProfileMutation } from '@/hooks/use-profile';
 import { processFormData, processZodError, zTermsSchema } from '@/lib/auth/validator';
-import type { Profile } from '@/lib/db/schema';
+import type { PublicProfile } from '@/lib/db/schema';
 
 const years = [...Array(new Date().getFullYear() - 2019)].map(
   (_, i) => new Date().getFullYear() - i,
 );
 
-export function TermsSection({ profile }: { profile: Profile }) {
+export function TermsSection({ profile }: { profile: PublicProfile }) {
   const [terms, setTerms] = useState<number[]>(profile.terms || []);
   const mutation = useProfileMutation();
 

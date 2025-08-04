@@ -1,6 +1,5 @@
 import { z } from 'zod/v4';
-import { getUserProfile } from '@/lib/db/queries';
-import type { Profile } from '../db/schema';
+import { type SessionData, getSession } from './session';
 import { processFormData, processZodError } from './validator';
 
 export type ActionState = {
@@ -33,23 +32,28 @@ export function validatedAction<S extends z.ZodType<any, any>, T>(
 
 type ValidatedActionWithUserFunction<S extends z.ZodType<any, any>, T> = (
   data: z.infer<S>,
-  user: Profile,
+  session: SessionData,
 ) => Promise<T>;
 
 /**
  * Validates the form data and returns the data
  * @param schema - The Zod schema
  * @param action - The action to perform
- * @returns The resulting data of the action
+ * @returns The resulting data of the action with the session data
  */
 export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
   schema: S,
   action: ValidatedActionWithUserFunction<S, T>,
 ) {
   return async (prevState: ActionState, formData: FormData) => {
-    const user = await getUserProfile();
-    if (!user) {
-      throw new Error('User is not authenticated');
+    const session = await getSession();
+    if (
+      !session ||
+      !session.user ||
+      typeof session.user.id !== 'string' ||
+      new Date(session.expires) < new Date()
+    ) {
+      return { error: 'You are not authenticated' };
     }
 
     const result = schema.safeParse(processFormData(formData));
@@ -57,6 +61,6 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
       return { error: processZodError(result.error) };
     }
 
-    return action(result.data, user);
+    return action(result.data, session);
   };
 }
