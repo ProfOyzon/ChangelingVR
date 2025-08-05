@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { eq, lt } from 'drizzle-orm';
+import { lt } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { resetTokens } from '@/lib/db/schema';
 
@@ -17,20 +17,11 @@ export async function GET(request: NextRequest) {
   // DEPENDING ON SIZE OF `activity_logs` TABLE, WE MAY NEED TO CLEAN UP OLD DATA
   // FOR NOW WE'RE ONLY CLEANING UP `reset_tokens` TABLE
   try {
-    // Get all expired reset tokens
-    const expiredResetTokens = await db
-      .select({ token: resetTokens.token })
-      .from(resetTokens)
-      .where(lt(resetTokens.expires_at, new Date()));
+    // Delete all expired reset tokens
+    await db.delete(resetTokens).where(lt(resetTokens.expires_at, new Date()));
 
-    if (expiredResetTokens.length > 0) {
-      expiredResetTokens.forEach(async (token) => {
-        // Delete all expired reset tokens
-        await db.delete(resetTokens).where(eq(resetTokens.token, token.token));
-      });
-    }
-
-    return NextResponse.json({ success: 'Cron job completed' }, { status: 200 });
+    // Success response
+    return NextResponse.json({ success: 'Cleanup complete' }, { status: 200 });
   } catch {
     return NextResponse.json({ error: 'Failed to clean up expired data' }, { status: 500 });
   }

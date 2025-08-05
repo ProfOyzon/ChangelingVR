@@ -55,7 +55,7 @@ export default async function UserPage({ params }: { params: Promise<{ username:
 
   return (
     <div className="relative flex min-h-[calc(100vh-10rem)] w-full items-center justify-center p-6">
-      <UserProfile user={user as FullProfile} />
+      <UserProfile user={user} />
       <div className="absolute top-4 left-4">
         <Link
           href="/teams"

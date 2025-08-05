@@ -32,7 +32,7 @@ export function RolesSection({ profile }: { profile: PublicProfile }) {
   const [roles, setRoles] = useState<string[]>(profile.roles || []);
   const mutation = useProfileMutation();
 
-  const handleTermsSubmit = (e: React.FormEvent) => {
+  const handleRolesSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (roles === profile.roles) return;
 
@@ -54,7 +54,7 @@ export function RolesSection({ profile }: { profile: PublicProfile }) {
   };
 
   return (
-    <form onSubmit={handleTermsSubmit}>
+    <form onSubmit={handleRolesSubmit}>
       <Card className="py-4">
         <CardContent className="flex flex-col gap-4 px-4">
           <CardTitle className="text-xl font-bold">Roles</CardTitle>

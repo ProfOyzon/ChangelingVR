@@ -27,7 +27,7 @@ export function TeamsSection({ profile }: { profile: PublicProfile }) {
   const [teams, setTeams] = useState<string[]>(profile.teams || []);
   const mutation = useProfileMutation();
 
-  const handleTermsSubmit = (e: React.FormEvent) => {
+  const handleTeamsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (teams === profile.teams) return;
 
@@ -49,7 +49,7 @@ export function TeamsSection({ profile }: { profile: PublicProfile }) {
   };
 
   return (
-    <form onSubmit={handleTermsSubmit}>
+    <form onSubmit={handleTeamsSubmit}>
       <Card className="py-4">
         <CardContent className="flex flex-col gap-4 px-4">
           <CardTitle className="text-xl font-bold">Teams</CardTitle>
