@@ -13,17 +13,17 @@ const sidebarContactInfo = [
     value: '555-824-2345',
   },
   {
-    icon: '/media/experiences/aurelia/homeIcon.png',
+    icon: '/media/experiences/aurelia/HomeIcon.png',
     label: 'Address',
     value: '123 Fake Loc\nNew York, NY\n1234-5678',
   },
   {
-    icon: '/media/experiences/aurelia/mailIcon.png',
+    icon: '/media/experiences/aurelia/MailIcon.png',
     label: 'Email',
     value: 'Awalker@dreams.com',
   },
   {
-    icon: '/media/experiences/aurelia/scryglass.png',
+    icon: '/media/experiences/aurelia/Scryglass.png',
     label: 'Scryglass',
     value: '🜀 - 🜚 - 🝒 - 🜛 - 🝆 - 🜾',
   },
@@ -70,9 +70,9 @@ export default async function Aurelia({ searchParams }: { searchParams: Promise<
 
   return (
     <div className="flex flex-row bg-[#171a21]">
-      <div className="hidden h-[calc(100svh-4rem)] w-64 flex-col justify-start gap-4 border-r-4 border-[saddlebrown] p-4 md:flex">
+      <div className="hidden h-[calc(100svh-4rem)] w-64 flex-col justify-start gap-4 overflow-scroll border-r-4 border-[saddlebrown] p-4 md:flex">
         <Image
-          src="/media/experiences/aurelia/pfp.png"
+          src="/aurelia.png"
           alt="Logo"
           width={100}
           height={160}
