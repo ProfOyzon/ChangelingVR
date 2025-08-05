@@ -5,11 +5,7 @@ import { FaBars, FaX } from 'react-icons/fa6';
 import { Button } from './button';
 import type { NavItem } from './header';
 
-type MobileMenuProps = {
-  items: NavItem[];
-};
-
-export function MobileMenu({ items }: MobileMenuProps) {
+export function MobileMenu({ items }: { items: NavItem[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -30,23 +26,6 @@ export function MobileMenu({ items }: MobileMenuProps) {
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
-  // Close menu on escape key
-  useEffect(() => {
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        closeMenu();
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen]);
 

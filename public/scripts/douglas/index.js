@@ -143,8 +143,8 @@ const setupScene = (scene) => {
   // load buttons
   const restartButton = new CustomButton({
     stage: scene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/restart_alt_2.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/restart_alt_hover_2.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/restart_alt_2.png'),
+    clearHoverTexture: Texture.from('/media/experiences/douglas/buttons/restart_alt_hover_2.png'),
     x: 790,
     y: 25,
     unlocked: true,
@@ -159,8 +159,8 @@ const setupScene = (scene) => {
 
   const backButton = new CustomButton({
     stage: scene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/back_alt_2.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/back_alt_hover_2.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/back_alt_2.png'),
+    clearHoverTexture: Texture.from('/media/experiences/douglas/buttons/back_alt_hover_2.png'),
     x: 830,
     y: 25,
     unlocked: true,
@@ -177,7 +177,7 @@ const setupScene = (scene) => {
   });
   const leftButton = new Button(
     scene,
-    Texture.from('/experiences/douglas/left.png'),
+    Texture.from('/media/experiences/douglas/left.png'),
     150,
     625,
     true,
@@ -199,7 +199,7 @@ const setupScene = (scene) => {
   });
   const rightButton = new Button(
     scene,
-    Texture.from('/experiences/douglas/right.png'),
+    Texture.from('/media/experiences/douglas/right.png'),
     700,
     625,
     true,
@@ -221,7 +221,7 @@ const setupScene = (scene) => {
   });
   const jumpButton = new Button(
     scene,
-    Texture.from('/experiences/douglas/jump.png'),
+    Texture.from('/media/experiences/douglas/jump.png'),
     425,
     625,
     true,
@@ -475,7 +475,7 @@ Now that I've calmed down, let's go over this again.
 Maybe reading this with a clear mind will help me.`,
 	35, 450, 250, true);
 	*/
-  const menuImage = new Sprite(Texture.from('/experiences/douglas/doodlev3.png'));
+  const menuImage = new Sprite(Texture.from('/media/experiences/douglas/doodlev3.png'));
   menuImage.x = 450;
   menuImage.y = 275;
   menuImage.anchor.set(0.5);
@@ -485,8 +485,8 @@ Maybe reading this with a clear mind will help me.`,
   // add buttons
   const startButton = new CustomButton({
     stage: introScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/menu/start.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/menu/start_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/menu/start.png'),
+    clearHoverTexture: Texture.from('/media/experiences/douglas/buttons/menu/start_hover.png'),
     x: 275,
     y: 525,
     unlocked: true,
@@ -494,8 +494,10 @@ Maybe reading this with a clear mind will help me.`,
   });
   const instructionsButton = new CustomButton({
     stage: introScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/menu/instructions.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/menu/instructions_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/menu/instructions.png'),
+    clearHoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/menu/instructions_hover.png',
+    ),
     x: 575,
     y: 525,
     unlocked: true,
@@ -527,7 +529,7 @@ const loadInstructions = () => {
   // writeText(instructScene, "Press 'R' to restart the level.", 25, 60, 460, false);
   // writeText(instructScene, "Press 'Esc' to quit the level.", 25, 60, 540, false);
   let walkControls = new Sprite(
-    Texture.from('/experiences/douglas/instructions/controls/horizontal_movement.png'),
+    Texture.from('/media/experiences/douglas/instructions/controls/horizontal_movement.png'),
   );
   walkControls.anchor.set(0.5);
   // walkControls.width = 400;
@@ -537,7 +539,7 @@ const loadInstructions = () => {
   instructScene.addChild(walkControls);
 
   let jumpControls = new Sprite(
-    Texture.from('/experiences/douglas/instructions/controls/jump.png'),
+    Texture.from('/media/experiences/douglas/instructions/controls/jump.png'),
   );
   jumpControls.anchor.set(0.5);
   jumpControls.x = 650;
@@ -547,8 +549,8 @@ const loadInstructions = () => {
   // add button
   const backButton = new CustomButton({
     stage: instructScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/back.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/back_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/back.png'),
+    clearHoverTexture: Texture.from('/media/experiences/douglas/buttons/back_hover.png'),
     x: 425,
     y: 575,
     unlocked: true,
@@ -573,11 +575,11 @@ const loadMenu = () => {
 
   level1Button = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/tutorial/base.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/tutorial/hover.png'),
-    clearTexture: Texture.from('/experiences/douglas/buttons/levels/tutorial/cleared.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/tutorial/base.png'),
+    hoverTexture: Texture.from('/media/experiences/douglas/buttons/levels/tutorial/hover.png'),
+    clearTexture: Texture.from('/media/experiences/douglas/buttons/levels/tutorial/cleared.png'),
     clearHoverTexture: Texture.from(
-      '/experiences/douglas/buttons/levels/tutorial/cleared_hover.png',
+      '/media/experiences/douglas/buttons/levels/tutorial/cleared_hover.png',
     ),
     x: 450,
     y: 185,
@@ -589,11 +591,13 @@ const loadMenu = () => {
   });
   level2Button = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/baby/locked.png'),
-    unlockedTexture: Texture.from('/experiences/douglas/buttons/levels/baby/unlocked.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/baby/unlocked_hover.png'),
-    clearTexture: Texture.from('/experiences/douglas/buttons/levels/baby/cleared.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/levels/baby/cleared_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/baby/locked.png'),
+    unlockedTexture: Texture.from('/media/experiences/douglas/buttons/levels/baby/unlocked.png'),
+    hoverTexture: Texture.from('/media/experiences/douglas/buttons/levels/baby/unlocked_hover.png'),
+    clearTexture: Texture.from('/media/experiences/douglas/buttons/levels/baby/cleared.png'),
+    clearHoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/baby/cleared_hover.png',
+    ),
     x: 125,
     y: 330,
   });
@@ -602,11 +606,13 @@ const loadMenu = () => {
   });
   level3Button = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/dad/locked.png'),
-    unlockedTexture: Texture.from('/experiences/douglas/buttons/levels/dad/unlocked.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/dad/unlocked_hover.png'),
-    clearTexture: Texture.from('/experiences/douglas/buttons/levels/dad/cleared.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/levels/dad/cleared_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/dad/locked.png'),
+    unlockedTexture: Texture.from('/media/experiences/douglas/buttons/levels/dad/unlocked.png'),
+    hoverTexture: Texture.from('/media/experiences/douglas/buttons/levels/dad/unlocked_hover.png'),
+    clearTexture: Texture.from('/media/experiences/douglas/buttons/levels/dad/cleared.png'),
+    clearHoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/dad/cleared_hover.png',
+    ),
     x: 325,
     y: 330,
   });
@@ -617,11 +623,13 @@ const loadMenu = () => {
 
   level4Button = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/mom/locked.png'),
-    unlockedTexture: Texture.from('/experiences/douglas/buttons/levels/mom/unlocked.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/mom/unlocked_hover.png'),
-    clearTexture: Texture.from('/experiences/douglas/buttons/levels/mom/cleared.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/levels/mom/cleared_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/mom/locked.png'),
+    unlockedTexture: Texture.from('/media/experiences/douglas/buttons/levels/mom/unlocked.png'),
+    hoverTexture: Texture.from('/media/experiences/douglas/buttons/levels/mom/unlocked_hover.png'),
+    clearTexture: Texture.from('/media/experiences/douglas/buttons/levels/mom/cleared.png'),
+    clearHoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/mom/cleared_hover.png',
+    ),
     x: 525,
     y: 330,
   });
@@ -630,12 +638,16 @@ const loadMenu = () => {
   });
   level5Button = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/daughter/locked.png'),
-    unlockedTexture: Texture.from('/experiences/douglas/buttons/levels/daughter/unlocked.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/daughter/unlocked_hover.png'),
-    clearTexture: Texture.from('/experiences/douglas/buttons/levels/daughter/cleared.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/daughter/locked.png'),
+    unlockedTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/daughter/unlocked.png',
+    ),
+    hoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/daughter/unlocked_hover.png',
+    ),
+    clearTexture: Texture.from('/media/experiences/douglas/buttons/levels/daughter/cleared.png'),
     clearHoverTexture: Texture.from(
-      '/experiences/douglas/buttons/levels/daughter/cleared_hover.png',
+      '/media/experiences/douglas/buttons/levels/daughter/cleared_hover.png',
     ),
     x: 725,
     y: 330,
@@ -645,12 +657,16 @@ const loadMenu = () => {
   });
   level6Button = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/reflection/locked.png'),
-    unlockedTexture: Texture.from('/experiences/douglas/buttons/levels/reflection/unlocked.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/reflection/unlocked_hover.png'),
-    clearTexture: Texture.from('/experiences/douglas/buttons/levels/reflection/cleared.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/reflection/locked.png'),
+    unlockedTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/reflection/unlocked.png',
+    ),
+    hoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/reflection/unlocked_hover.png',
+    ),
+    clearTexture: Texture.from('/media/experiences/douglas/buttons/levels/reflection/cleared.png'),
     clearHoverTexture: Texture.from(
-      '/experiences/douglas/buttons/levels/reflection/cleared_hover.png',
+      '/media/experiences/douglas/buttons/levels/reflection/cleared_hover.png',
     ),
     x: 450,
     y: 505,
@@ -662,9 +678,11 @@ const loadMenu = () => {
   });
   endButton = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/levels/ending/locked.png'),
-    unlockedTexture: Texture.from('/experiences/douglas/buttons/levels/ending/unlocked.png'),
-    hoverTexture: Texture.from('/experiences/douglas/buttons/levels/ending/unlocked_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/levels/ending/locked.png'),
+    unlockedTexture: Texture.from('/media/experiences/douglas/buttons/levels/ending/unlocked.png'),
+    hoverTexture: Texture.from(
+      '/media/experiences/douglas/buttons/levels/ending/unlocked_hover.png',
+    ),
     x: 450,
     y: 600,
   });
@@ -677,8 +695,8 @@ const loadMenu = () => {
 
   const backButton = new CustomButton({
     stage: menuScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/back.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/back_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/back.png'),
+    clearHoverTexture: Texture.from('/media/experiences/douglas/buttons/back_hover.png'),
     x: 100,
     y: 75,
     unlocked: true,
@@ -699,7 +717,7 @@ const loadLevel1 = () => {
   setupScene(levelScene);
   let signWidth = 75;
   let arrowSign = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-1/continue.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-1/continue.png'),
   );
   arrowSign.anchor.set(0.5, 1);
   arrowSign.x = 700;
@@ -713,7 +731,7 @@ const loadLevel1 = () => {
   // writeText(levelScene, 'Land on the finish block to progress.', 25, 100, 300, false, 0xAAAAAA);
   // writeText(levelScene, 'Drag and drop words onto red objects for unique effects.', 25, 100, 450, false, 0xAAAAAA);
   let jumpSign = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-1/jump_alt.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-1/jump_alt.png'),
   );
   jumpSign.anchor.set(0.5, 1);
   jumpSign.x = 250;
@@ -723,7 +741,7 @@ const loadLevel1 = () => {
   levelScene.addChild(jumpSign);
 
   let dragSign = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-1/word_drag.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-1/word_drag.png'),
   );
   dragSign.anchor.set(0.5, 1);
   dragSign.x = 225;
@@ -792,7 +810,7 @@ const loadLevel1 = () => {
   writeText(levelScene, 'Word Bank', 30, 25, 510, false);
 
   // load finish
-  finishFlag = new Sprite(Texture.from('/experiences/douglas/flag.png'));
+  finishFlag = new Sprite(Texture.from('/media/experiences/douglas/flag.png'));
   finishFlag.anchor.set(0.5, 1);
   finishFlag.x = 610;
   finishFlag.y = 300;
@@ -895,7 +913,7 @@ const loadLevel2 = () => {
   writeText(levelScene, 'Word Bank', 30, 25, 510, false);
 
   // load finish
-  finishFlag = new Sprite(Texture.from('/experiences/douglas/flag.png'));
+  finishFlag = new Sprite(Texture.from('/media/experiences/douglas/flag.png'));
   finishFlag.anchor.set(0.5, 1);
   finishFlag.x = 60;
   finishFlag.y = 450;
@@ -967,7 +985,7 @@ const loadLevel2 = () => {
       height: 50,
       text: '',
       correct: 'erase',
-      texture: '/experiences/douglas/rip2.png',
+      texture: '/media/experiences/douglas/rip2.png',
       eraseSound: sounds.eraseSound,
     }),
     new Interactable({
@@ -978,7 +996,7 @@ const loadLevel2 = () => {
       height: 50,
       text: '',
       correct: 'erase',
-      texture: '/experiences/douglas/rip3.png',
+      texture: '/media/experiences/douglas/rip3.png',
       eraseSound: sounds.eraseSound,
     }),
     new Interactable({
@@ -989,13 +1007,13 @@ const loadLevel2 = () => {
       height: 50,
       text: '',
       correct: 'erase',
-      texture: '/experiences/douglas/rip4.png',
+      texture: '/media/experiences/douglas/rip4.png',
       eraseSound: sounds.eraseSound,
     }),
   ];
 
   // cutoff
-  const rip = Sprite.from('/experiences/douglas/rip1.png');
+  const rip = Sprite.from('/media/experiences/douglas/rip1.png');
   rip.x = 762.5;
   rip.anchor.x = 0.5;
   levelScene.addChild(rip);
@@ -1018,7 +1036,7 @@ const loadLevel3 = () => {
   // instruction text
 
   let hint = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-3/hint.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-3/hint.png'),
   );
   hint.anchor.set(0.5, 1);
   hint.x = 450;
@@ -1095,7 +1113,7 @@ const loadLevel3 = () => {
   writeText(levelScene, 'Word Bank', 30, 25, 510, false);
 
   // load finish
-  finishFlag = new Sprite(Texture.from('/experiences/douglas/flag.png'));
+  finishFlag = new Sprite(Texture.from('/media/experiences/douglas/flag.png'));
   finishFlag.anchor.set(0.5, 1);
   finishFlag.x = 760;
   finishFlag.y = 400;
@@ -1228,7 +1246,7 @@ const loadLevel4 = () => {
   writeText(levelScene, 'Word Bank', 30, 25, 460, false);
 
   // load finish
-  finishFlag = new Sprite(Texture.from('/experiences/douglas/flag.png'));
+  finishFlag = new Sprite(Texture.from('/media/experiences/douglas/flag.png'));
   finishFlag.anchor.set(0.5, 1);
   finishFlag.x = 760;
   finishFlag.y = 325;
@@ -1273,7 +1291,7 @@ const loadLevel4 = () => {
     }),
   ];
   let shrinkHint = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-4/shrink.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-4/shrink.png'),
   );
   shrinkHint.anchor.set(0.5, 1);
   shrinkHint.x = 500;
@@ -1282,7 +1300,7 @@ const loadLevel4 = () => {
   shrinkHint.height = 83;
   levelScene.addChild(shrinkHint);
   let growHint = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-4/grow.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-4/grow.png'),
   );
   growHint.anchor.set(0.5, 1);
   growHint.x = 200;
@@ -1291,7 +1309,7 @@ const loadLevel4 = () => {
   growHint.height = 83;
   levelScene.addChild(growHint);
   let normalHint = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-4/normal.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-4/normal.png'),
   );
   normalHint.anchor.set(0.5, 1);
   normalHint.x = 325;
@@ -1389,7 +1407,7 @@ const loadLevel5 = () => {
   writeText(levelScene, 'Word Bank', 30, 25, 460, false);
 
   // load finish
-  finishFlag = new Sprite(Texture.from('/experiences/douglas/flag.png'));
+  finishFlag = new Sprite(Texture.from('/media/experiences/douglas/flag.png'));
   finishFlag.anchor.set(0.5, 1);
   finishFlag.x = 760;
   finishFlag.y = 400;
@@ -1405,7 +1423,7 @@ const loadLevel5 = () => {
       width: 75,
       height: 75,
       correct: 'redbluegreen',
-      texture: '/experiences/douglas/paint1_alt.png',
+      texture: '/media/experiences/douglas/paint1_alt.png',
       green: '00',
       blue: '00',
       paintSound: sounds.paintSound,
@@ -1417,7 +1435,7 @@ const loadLevel5 = () => {
       width: 75,
       height: 75,
       correct: 'redbluegreen',
-      texture: '/experiences/douglas/paint2_alt.png',
+      texture: '/media/experiences/douglas/paint2_alt.png',
       red: '00',
       paintSound: sounds.paintSound,
     }),
@@ -1428,7 +1446,7 @@ const loadLevel5 = () => {
       width: 75,
       height: 75,
       correct: 'redbluegreen',
-      texture: '/experiences/douglas/paint3_alt.png',
+      texture: '/media/experiences/douglas/paint3_alt.png',
       green: '00',
       paintSound: sounds.paintSound,
     }),
@@ -1439,7 +1457,7 @@ const loadLevel5 = () => {
       width: 75,
       height: 75,
       correct: 'redbluegreen',
-      texture: '/experiences/douglas/paint4.png',
+      texture: '/media/experiences/douglas/paint4.png',
       red: '00',
       paintSound: sounds.paintSound,
     }),
@@ -1457,7 +1475,7 @@ const loadLevel5 = () => {
 
   // load helpers
   const helpers = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-5/color_wheel.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-5/color_wheel.png'),
   );
   helpers.x = 675;
   helpers.y = 460;
@@ -1473,7 +1491,7 @@ const loadLevel6 = () => {
   // instruction text
   // writeText(levelScene, 'The player on the right mirrors your movement.', 25, 250, 25, false, 0xAAAAAA);
   // writeText(levelScene, 'Both players must reach the center to proceed.', 25, 175, 125, false, 0xAAAAAA);
-  let seam = new Sprite(Texture.from('/experiences/douglas/seam.png'));
+  let seam = new Sprite(Texture.from('/media/experiences/douglas/seam.png'));
   seam.anchor.set(0.5, 0);
   seam.x = 450;
   seam.y = 0;
@@ -1481,7 +1499,7 @@ const loadLevel6 = () => {
   levelScene.addChild(seam);
 
   let mirrorSign = new Sprite(
-    Texture.from('/experiences/douglas/instructions/gameplay/level-6/instructions.png'),
+    Texture.from('/media/experiences/douglas/instructions/gameplay/level-6/instructions.png'),
   );
   mirrorSign.anchor.set(0.5, 1);
   mirrorSign.x = 450;
@@ -1579,7 +1597,7 @@ const loadLevel6 = () => {
   ];
 
   // load finish
-  finishFlag = new Sprite(Texture.from('/experiences/douglas/flag.png'));
+  finishFlag = new Sprite(Texture.from('/media/experiences/douglas/flag.png'));
   finishFlag.anchor.set(0.5, 1);
   finishFlag.x = 410;
   finishFlag.y = 550;
@@ -1664,7 +1682,7 @@ Will Dad go back to normal if we don't get Tobi back?`,
   );
 
   // add ending picture
-  const endPicture = new Sprite(Texture.from('/experiences/douglas/ending.png'));
+  const endPicture = new Sprite(Texture.from('/media/experiences/douglas/ending.png'));
   endPicture.anchor.set(0.5);
   endPicture.x = 425;
   endPicture.y = 200;
@@ -1673,8 +1691,8 @@ Will Dad go back to normal if we don't get Tobi back?`,
   // add button
   const backButton = new CustomButton({
     stage: endingScene,
-    baseTexture: Texture.from('/experiences/douglas/buttons/back.png'),
-    clearHoverTexture: Texture.from('/experiences/douglas/buttons/back_hover.png'),
+    baseTexture: Texture.from('/media/experiences/douglas/buttons/back.png'),
+    clearHoverTexture: Texture.from('/media/experiences/douglas/buttons/back_hover.png'),
     x: 425,
     y: 612.5,
     unlocked: true,
@@ -1693,9 +1711,9 @@ const init = async () => {
   // create application
   app = new Application({ width: 850, height: 650, backgroundColor: 0xffffff });
   //Load in player animated sprites.
-  idleSprites = await Assets.load('/experiences/douglas/player/idle/idle.json');
-  walkSprites = await Assets.load('/experiences/douglas/player/walk/walk.json');
-  jumpSprites = await Assets.load('/experiences/douglas/player/jump/jump.json');
+  idleSprites = await Assets.load('/media/experiences/douglas/player/idle/idle.json');
+  walkSprites = await Assets.load('/media/experiences/douglas/player/walk/walk.json');
+  jumpSprites = await Assets.load('/media/experiences/douglas/player/jump/jump.json');
   //Load in audio assets.
 
   sounds.menuMusic.play();

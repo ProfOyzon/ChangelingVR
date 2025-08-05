@@ -3,7 +3,13 @@ import promosData from '@/lib/data/promos.json';
 import AMothersFear from '@/public/media/press/angela_fear.png';
 import DougiesDrawing from '@/public/media/press/dougie_doodle.png';
 import TheTouchOfMemory from '@/public/media/press/memory_touch.png';
-import type { Promo } from '@/types';
+
+type Promo = {
+  title: string;
+  description: string;
+  image: string;
+  alt: string;
+};
 
 const promos = promosData as Promo[];
 const promoImages: Record<string, StaticImageData> = {

@@ -1,10 +1,19 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Script from 'next/script';
+import charactersData from '@/lib/data/characters.json';
+import type { Character } from '@/types';
 import './dylan.css';
 
-export const metadata: Metadata = {
-  title: 'Dylan',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const character = (charactersData as Character[]).find((c) => c.id === 'dylan');
+  if (!character) return notFound();
+
+  return {
+    title: character.name,
+    description: character.bio,
+  };
+}
 
 export default function Dylan() {
   return (

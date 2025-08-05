@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/button';
-import LivingRoomWatercolor from '@/public/background/living_room_watercolor.png';
+import LivingRoomWatercolor from '@/public/media/background/living_room_watercolor.png';
 import { CharacterOverview } from './characters-overview';
 
 function CharacterSkeleton() {

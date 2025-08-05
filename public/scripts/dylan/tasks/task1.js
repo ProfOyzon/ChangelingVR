@@ -34,12 +34,12 @@ function initTask1(app, stats) {
 
   let dragTarget = null;
   let ingredientCount = 0;
-  const potBottomT = Texture.from('/experiences/dylan/potBottom.png');
-  const potText = Texture.from('/experiences/dylan/pot.png');
+  const potBottomT = Texture.from('/media/experiences/dylan/potBottom.png');
+  const potText = Texture.from('/media/experiences/dylan/pot.png');
 
   // Ingredients
   const onion = createIngredient(
-    Texture.from('/experiences/dylan/onion.png'),
+    Texture.from('/media/experiences/dylan/onion.png'),
     false,
     true,
     100 + Math.floor(Math.random() * 550),
@@ -47,7 +47,7 @@ function initTask1(app, stats) {
     0.15,
   );
   const greenOnion = createIngredient(
-    Texture.from('/experiences/dylan/greenOnion.png'),
+    Texture.from('/media/experiences/dylan/greenOnion.png'),
     false,
     false,
     app.screen.width - (Math.floor(Math.random() * 400) + 215) - app.screen.width / 100,
@@ -55,7 +55,7 @@ function initTask1(app, stats) {
     0.3,
   );
   const flour = createIngredient(
-    Texture.from('/experiences/dylan/flour.png'),
+    Texture.from('/media/experiences/dylan/flour.png'),
     false,
     false,
     400 + Math.floor(Math.random() * 400),
@@ -63,7 +63,7 @@ function initTask1(app, stats) {
     0.35,
   );
   const beef = createIngredient(
-    Texture.from('/experiences/dylan/beef.png'),
+    Texture.from('/media/experiences/dylan/beef.png'),
     false,
     true,
     app.screen.width - (Math.floor(Math.random() * 325) + 95) - app.screen.width / 100,
@@ -71,7 +71,7 @@ function initTask1(app, stats) {
     0.25,
   );
   const apple = createIngredient(
-    Texture.from('/experiences/dylan/apple.png'),
+    Texture.from('/media/experiences/dylan/apple.png'),
     false,
     false,
     400 + Math.floor(Math.random() * 300),
@@ -79,7 +79,7 @@ function initTask1(app, stats) {
     0.2,
   ); // same column as flour
   const carrot = createIngredient(
-    Texture.from('/experiences/dylan/carrot.png'),
+    Texture.from('/media/experiences/dylan/carrot.png'),
     false,
     true,
     app.screen.width - (Math.floor(Math.random() * 300) + 215) - app.screen.width / 100,
@@ -87,7 +87,7 @@ function initTask1(app, stats) {
     0.2,
   ); // same row as tomato
   const tomato = createIngredient(
-    Texture.from('/experiences/dylan/tomato.png'),
+    Texture.from('/media/experiences/dylan/tomato.png'),
     false,
     true,
     app.screen.width - (Math.floor(Math.random() * 400) + 85) - app.screen.width / 100,
@@ -96,7 +96,7 @@ function initTask1(app, stats) {
   ); // same column as beef
 
   // Background
-  const background = Texture.from('/experiences/dylan/cookingBackground.png');
+  const background = Texture.from('/media/experiences/dylan/cookingBackground.png');
   const backgroundSprite = new Sprite(background);
   backgroundSprite.anchor.set(0.5);
   backgroundSprite.position.set(app.screen.width / 2, app.screen.height / 2);
@@ -111,7 +111,7 @@ function initTask1(app, stats) {
   task.container.y = -app.screen.height / 2;
 
   // Recipe list
-  const recipeList = Texture.from('/experiences/dylan/recipeList.png');
+  const recipeList = Texture.from('/media/experiences/dylan/recipeList.png');
   const recipeSprite = new Sprite(recipeList);
   recipeSprite.anchor.set(0.5);
   recipeSprite.width = 250;

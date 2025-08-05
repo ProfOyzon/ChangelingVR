@@ -11,10 +11,3 @@ export type Character = {
   hobby: string[];
   prop: string[];
 };
-
-export type Promo = {
-  title: string;
-  description: string;
-  image: string;
-  alt: string;
-};

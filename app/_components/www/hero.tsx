@@ -10,7 +10,7 @@ export function HeroSection() {
       <div className="relative z-5 mx-auto max-w-2xl px-4">
         <div className="px-8 brightness-110 drop-shadow-md">
           <Image
-            src="/logo.svg"
+            src="/logo-with-name.svg"
             alt="Changeling VR Logo"
             width={800}
             height={200}

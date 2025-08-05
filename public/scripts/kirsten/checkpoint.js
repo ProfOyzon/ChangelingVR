@@ -41,7 +41,7 @@ class Teleporter {
       position.x,
       position.y,
       position.z,
-      '/experiences/kirsten/portal.png',
+      '/media/experiences/kirsten/portal.png',
       10,
       10,
       rotation.x,

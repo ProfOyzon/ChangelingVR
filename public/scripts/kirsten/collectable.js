@@ -17,7 +17,7 @@ class Collectable {
       x,
       y + 1,
       z,
-      '/experiences/kirsten/spark_of_magic2.0.png',
+      '/media/experiences/kirsten/spark_of_magic2.0.png',
       3,
       3,
     );

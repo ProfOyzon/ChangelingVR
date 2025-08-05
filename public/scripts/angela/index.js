@@ -122,13 +122,13 @@ app.stage.addChild(playingContainer);
 app.stage.addChild(finishedContainer);
 
 // onboarding background
-const onboardingBg = new Sprite(Texture.from('/experiences/angela/angelaBackground.png'));
+const onboardingBg = new Sprite(Texture.from('/media/experiences/angela/angelaBackground.png'));
 onboardingBg.width = screenWidth;
 onboardingBg.height = screenHeight;
 onboardingContainer.addChild(onboardingBg);
 
 // rule background
-const ruleBg = new Sprite(Texture.from('/experiences/angela/angelaRules.png')); // black bg
+const ruleBg = new Sprite(Texture.from('/media/experiences/angela/angelaRules.png')); // black bg
 ruleBg.width = screenWidth;
 ruleBg.height = screenHeight;
 ruleContainer.addChild(ruleBg);

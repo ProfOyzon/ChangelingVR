@@ -80,7 +80,7 @@ if (app.renderer.height > app.renderer.width + 200) {
 
 //initialize graphics
 //Menu
-let menuTexture = Texture.from('/experiences/tobi/menu.png');
+let menuTexture = Texture.from('/media/experiences/tobi/menu.png');
 let menuBG = new Sprite(menuTexture);
 menuBG.width = width;
 menuBG.height = height;
@@ -88,7 +88,7 @@ menuBG.position.set(-width / 2, -height / 2);
 menu.addChild(menuBG);
 
 //Start button--this transitions to the rules display
-let startTexture = Texture.from('/experiences/tobi/start.png');
+let startTexture = Texture.from('/media/experiences/tobi/start.png');
 let startButton = new Sprite(startTexture);
 startButton.anchor.set(0.5, 0.5);
 startButton.width = 295;
@@ -99,7 +99,7 @@ startButton.on('pointerdown', showRules);
 menu.addChild(startButton);
 
 //Rules
-let rulesTexture = Texture.from('/experiences/tobi/rules.png');
+let rulesTexture = Texture.from('/media/experiences/tobi/rules.png');
 let rules = new Sprite(rulesTexture);
 rules.anchor.set(0.5, 0.5);
 rules.position.set(0, 0);
@@ -109,7 +109,7 @@ menu.addChild(rules);
 rules.visible = false;
 
 //Play button--this starts the game
-let playTexture = Texture.from('/experiences/tobi/play.png');
+let playTexture = Texture.from('/media/experiences/tobi/play.png');
 let playButton = new Sprite(playTexture);
 playButton.anchor.set(0.5, 0.5);
 playButton.width = 166;
@@ -122,31 +122,31 @@ playButton.visible = false;
 
 //Room backgrounds
 //living room
-let livingRoomTexture = Texture.from('/experiences/tobi/livingRoom.png');
+let livingRoomTexture = Texture.from('/media/experiences/tobi/livingRoom.png');
 let livingRoomBG = new Sprite(livingRoomTexture);
 livingRoom.addChild(livingRoomBG);
 backgrounds.push(livingRoomBG);
 
 //kitchen TODO: final texture
-let kitchenTexture = Texture.from('/experiences/tobi/kitchen.png');
+let kitchenTexture = Texture.from('/media/experiences/tobi/kitchen.png');
 let kitchenBG = new Sprite(kitchenTexture);
 kitchen.addChild(kitchenBG);
 backgrounds.push(kitchenBG);
 
 //playroom
-let playroomTexture = Texture.from('/experiences/tobi/playroom.png');
+let playroomTexture = Texture.from('/media/experiences/tobi/playroom.png');
 let playroomBG = new Sprite(playroomTexture);
 playroom.addChild(playroomBG);
 backgrounds.push(playroomBG);
 
 //crib
-let cribTexture = Texture.from('/experiences/tobi/crib.png');
+let cribTexture = Texture.from('/media/experiences/tobi/crib.png');
 let cribBG = new Sprite(cribTexture);
 crib.addChild(cribBG);
 backgrounds.push(cribBG);
 
 //taken
-let takenScreen = Texture.from('/experiences/tobi/takenFirst.png');
+let takenScreen = Texture.from('/media/experiences/tobi/takenFirst.png');
 let takenBG = new Sprite(takenScreen);
 taken.addChild(takenBG);
 backgrounds.push(takenBG);
@@ -161,7 +161,7 @@ for (let i = 0; i < backgrounds.length; i++) {
 }
 
 //Continue button
-let continueTexture = Texture.from('/experiences/tobi/next.png');
+let continueTexture = Texture.from('/media/experiences/tobi/next.png');
 let continueButton = new Sprite(continueTexture);
 continueButton.anchor.set(0.5, 1);
 continueButton.width = 158;
@@ -173,7 +173,7 @@ livingRoom.addChild(continueButton);
 
 //B&W item sprites--these are hidden on the page for the player to find
 //living room item
-let lrObjectTexture = Texture.from('/experiences/tobi/bookBW.png');
+let lrObjectTexture = Texture.from('/media/experiences/tobi/bookBW.png');
 let livingRoomObject = new Sprite(lrObjectTexture);
 livingRoomObject.width = width / 12;
 livingRoomObject.height = height / 6;
@@ -183,7 +183,7 @@ livingRoom.addChild(livingRoomObject);
 objects.push(livingRoomObject);
 
 //kitchen
-let kitchenObjectTexture = Texture.from('/experiences/tobi/bottleBW.png');
+let kitchenObjectTexture = Texture.from('/media/experiences/tobi/bottleBW.png');
 let kitchenObject = new Sprite(kitchenObjectTexture);
 kitchenObject.width = width / 20;
 kitchenObject.height = height / 8;
@@ -193,7 +193,7 @@ kitchen.addChild(kitchenObject);
 objects.push(kitchenObject);
 
 //playroom
-let playroomObjectTexture = Texture.from('/experiences/tobi/bearBW.png');
+let playroomObjectTexture = Texture.from('/media/experiences/tobi/bearBW.png');
 let playroomObject = new Sprite(playroomObjectTexture);
 playroomObject.width = width / 14;
 playroomObject.height = height / 6;
@@ -203,7 +203,7 @@ playroom.addChild(playroomObject);
 objects.push(playroomObject);
 
 //crib
-let cribObjectTexture = Texture.from('/experiences/tobi/tobi.png');
+let cribObjectTexture = Texture.from('/media/experiences/tobi/tobi.png');
 let cribObject = new Sprite(cribObjectTexture);
 cribObject.anchor.set(0.5, 0.5);
 cribObject.width = 253;
@@ -221,7 +221,7 @@ for (let i = 0; i < objects.length; i++) {
 //Color items--these are the larger sprites displayed when the player finds the object
 //note that initial height and width are manually set so that general scaling can be done later.
 //living room
-let lrItemColorTexture = Texture.from('/experiences/tobi/bookColor.png');
+let lrItemColorTexture = Texture.from('/media/experiences/tobi/bookColor.png');
 let lrItemColor = new Sprite(lrItemColorTexture);
 lrItemColor.width = 626 * 0.7;
 lrItemColor.height = 456 * 0.7;
@@ -229,7 +229,7 @@ livingRoom.addChild(lrItemColor);
 colorObjects.push(lrItemColor);
 
 //kitchen
-let kitchenItemColorTexture = Texture.from('/experiences/tobi/bottleColor.png');
+let kitchenItemColorTexture = Texture.from('/media/experiences/tobi/bottleColor.png');
 let kitchenItemColor = new Sprite(kitchenItemColorTexture);
 kitchenItemColor.width = 253 * 0.7;
 kitchenItemColor.height = 439 * 0.7;
@@ -237,7 +237,7 @@ kitchen.addChild(kitchenItemColor);
 colorObjects.push(kitchenItemColor);
 
 //playroom
-let playroomItemColorTexture = Texture.from('/experiences/tobi/bearColor.png');
+let playroomItemColorTexture = Texture.from('/media/experiences/tobi/bearColor.png');
 let playroomItemColor = new Sprite(playroomItemColorTexture);
 playroomItemColor.width = 347 * 0.7;
 playroomItemColor.height = 467 * 0.7;
@@ -245,7 +245,7 @@ playroom.addChild(playroomItemColor);
 colorObjects.push(playroomItemColor);
 
 //crib
-let cribItemColorTexture = Texture.from('/experiences/tobi/tobi.png');
+let cribItemColorTexture = Texture.from('/media/experiences/tobi/tobi.png');
 let cribItemColor = new Sprite(cribItemColorTexture);
 cribItemColor.width = 253;
 cribItemColor.height = 439;
@@ -264,7 +264,7 @@ for (let i = 0; i < colorObjects.length; i++) {
 
 //Hints
 //icon to display hint
-let displayTexture = Texture.from('/experiences/tobi/hint.png');
+let displayTexture = Texture.from('/media/experiences/tobi/hint.png');
 let displayHintSprite = new Sprite(displayTexture);
 displayHintSprite.width = 127;
 displayHintSprite.height = 129;
@@ -275,25 +275,25 @@ displayHintSprite.on('pointerdown', displayHint);
 livingRoom.addChild(displayHintSprite);
 
 //living room
-let lrHintTexture = Texture.from('/experiences/tobi/lrHint.png');
+let lrHintTexture = Texture.from('/media/experiences/tobi/lrHint.png');
 let livingRoomHint = new Sprite(lrHintTexture);
 livingRoom.addChild(livingRoomHint);
 itemHints.push(livingRoomHint);
 
 //kitchen
-let kitchenHintTexture = Texture.from('/experiences/tobi/kitchenHint.png');
+let kitchenHintTexture = Texture.from('/media/experiences/tobi/kitchenHint.png');
 let kitchenHint = new Sprite(kitchenHintTexture);
 kitchen.addChild(kitchenHint);
 itemHints.push(kitchenHint);
 
 //playroom
-let playroomHintTexture = Texture.from('/experiences/tobi/playroomHint.png');
+let playroomHintTexture = Texture.from('/media/experiences/tobi/playroomHint.png');
 let playroomHint = new Sprite(playroomHintTexture);
 playroom.addChild(playroomHint);
 itemHints.push(playroomHint);
 
 //crib
-let cribHintTexture = Texture.from('/experiences/tobi/cribHint.png');
+let cribHintTexture = Texture.from('/media/experiences/tobi/cribHint.png');
 let cribHint = new Sprite(cribHintTexture);
 crib.addChild(cribHint);
 itemHints.push(cribHint);
@@ -308,25 +308,25 @@ for (let i = 0; i < itemHints.length; i++) {
 
 //Item Found Texts
 //living room
-let lrFoundTexture = Texture.from('/experiences/tobi/lrFound.png');
+let lrFoundTexture = Texture.from('/media/experiences/tobi/lrFound.png');
 let lrFound = new Sprite(lrFoundTexture);
 livingRoom.addChild(lrFound);
 foundTexts.push(lrFound);
 
 //kitchen
-let kitchenFoundTexture = Texture.from('/experiences/tobi/kitchenFound.png');
+let kitchenFoundTexture = Texture.from('/media/experiences/tobi/kitchenFound.png');
 let kitchenFound = new Sprite(kitchenFoundTexture);
 kitchen.addChild(kitchenFound);
 foundTexts.push(kitchenFound);
 
 //playroom
-let playroomFoundTexture = Texture.from('/experiences/tobi/playroomFound.png');
+let playroomFoundTexture = Texture.from('/media/experiences/tobi/playroomFound.png');
 let playroomFound = new Sprite(playroomFoundTexture);
 playroom.addChild(playroomFound);
 foundTexts.push(playroomFound);
 
 //crib
-let cribFoundTexture = Texture.from('/experiences/tobi/cribFound.png');
+let cribFoundTexture = Texture.from('/media/experiences/tobi/cribFound.png');
 let cribFound = new Sprite(cribFoundTexture);
 crib.addChild(cribFound);
 foundTexts.push(cribFound);
@@ -443,21 +443,21 @@ function nextScene() {
 function finalTrans(cF) {
   switch (cF) {
     case 0:
-      takenBG = new Sprite(Texture.from('/experiences/tobi/takenSecond.png'));
+      takenBG = new Sprite(Texture.from('/media/experiences/tobi/takenSecond.png'));
       takenBG.position.set(-width / 2, -height / 2);
       takenBG.width = width;
       takenBG.height = height;
       taken.addChild(takenBG);
       break;
     case 1:
-      takenBG = new Sprite(Texture.from('/experiences/tobi/takenThird.png'));
+      takenBG = new Sprite(Texture.from('/media/experiences/tobi/takenThird.png'));
       takenBG.position.set(-width / 2, -height / 2);
       takenBG.width = width;
       takenBG.height = height;
       taken.addChild(takenBG);
       break;
     case 4:
-      takenBG = new Sprite(Texture.from('/experiences/tobi/takenFinal.png'));
+      takenBG = new Sprite(Texture.from('/media/experiences/tobi/takenFinal.png'));
       takenBG.position.set(-width / 2, -height / 2);
       takenBG.width = width;
       takenBG.height = height;
@@ -465,7 +465,7 @@ function finalTrans(cF) {
       break;
     case 6:
       //Reset button--appears at the very end of the experience
-      let resetTexture = Texture.from('/experiences/tobi/replay.png');
+      let resetTexture = Texture.from('/media/experiences/tobi/replay.png');
       let resetButton = new Sprite(resetTexture);
       resetButton.anchor.set(0.5, 0.5);
       resetButton.width = 295;

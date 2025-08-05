@@ -19,7 +19,7 @@ const variants: Record<ButtonVariant, string> = {
 
 const baseStyles = [
   'flex items-center justify-center rounded-md px-4 py-2 font-semibold uppercase shadow-md',
-  'transition-[transform,background-color,color] duration-300 will-change-transform hover:scale-102 active:scale-95',
+  'transition-[transform,color] duration-150 active:scale-95',
 ];
 
 function isExternal(href: string) {
@@ -30,13 +30,7 @@ function isExternal(href: string) {
  * Custom Button component for navigation and actions.
  * Uses <a> for external links and Next.js Link for internal links.
  */
-export const Button: React.FC<ButtonProps> = ({
-  href,
-  variant = 'primary',
-  className,
-  children,
-  ...props
-}) => {
+export function Button({ href, variant = 'primary', className, children, ...props }: ButtonProps) {
   const classes = cn(...baseStyles, variants[variant] ?? variants.primary, className);
 
   if (isExternal(href)) {
@@ -52,4 +46,4 @@ export const Button: React.FC<ButtonProps> = ({
       {children}
     </Link>
   );
-};
+}

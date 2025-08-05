@@ -16,7 +16,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
       <aside className="relative z-5 flex flex-1 flex-col space-y-6 rounded-t-md bg-zinc-600/50 p-6 pt-20">
         <header className="absolute top-0 left-0 h-40 w-full">
           <Image
-            src="/background/outside_blurred.webp"
+            src="/media/background/outside_blurred.webp"
             alt="Profile background"
             fill
             className="rounded-t-md"
@@ -86,10 +86,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             <div className="flex flex-wrap gap-2" role="list" aria-label="Roles in the project">
               {user.roles.map((role) => (
                 <Badge key={role} role="listitem">
-                  {role
-                    .split(' ')
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
+                  {role}
                 </Badge>
               ))}
             </div>
@@ -102,10 +99,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
             <div className="flex flex-wrap gap-2" role="list" aria-label="Teams participated in">
               {user.teams.map((team) => (
                 <Badge key={team} role="listitem">
-                  {team
-                    .split(' ')
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ')}
+                  {team}
                 </Badge>
               ))}
             </div>
@@ -115,7 +109,7 @@ export function UserProfile({ user }: { user: FullProfile }) {
 
       <figure className="absolute right-6 bottom-6 opacity-25">
         <Image
-          src="/ChangelingSticker.png"
+          src="/high-res-logo.png"
           alt="Profile background"
           width={128}
           height={128}
@@ -147,9 +141,7 @@ function SocialLink({ profile, platform }: { profile: FullProfile; platform: str
     >
       <span className="flex flex-row items-center justify-center gap-2">
         {iconMap[link.platform]}
-        <span className="hidden md:block">
-          {link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
-        </span>
+        <span className="hidden capitalize md:block">{link.platform}</span>
       </span>
     </a>
   );
@@ -160,7 +152,10 @@ function Badge({
   ...props
 }: { children: React.ReactNode } & React.HTMLAttributes<HTMLSpanElement>) {
   return (
-    <span className="rounded-md bg-blue-100 px-2 py-1 text-sm font-medium text-black" {...props}>
+    <span
+      className="rounded-md bg-blue-100 px-2 py-1 text-sm font-medium text-black capitalize"
+      {...props}
+    >
       {children}
     </span>
   );

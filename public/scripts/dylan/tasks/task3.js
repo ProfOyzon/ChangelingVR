@@ -48,7 +48,7 @@ function initTask3(app, stats) {
   // Sprites for Dylan, Douglas, Ball
   // The background and catching circle are made here as well
   // Background is created here
-  const catchBackground = Texture.from('/experiences/dylan/catchBack.png');
+  const catchBackground = Texture.from('/media/experiences/dylan/catchBack.png');
   const catchSprite = new Sprite(catchBackground);
   catchSprite.width = app.screen.width;
   catchSprite.height = app.screen.height;
@@ -56,14 +56,14 @@ function initTask3(app, stats) {
   task.container.addChild(catchSprite);
 
   // Douglas's texture and sprite are created and placed
-  const douglas = Texture.from('/experiences/dylan/douglasCatch.png');
+  const douglas = Texture.from('/media/experiences/dylan/douglasCatch.png');
   const douglasSprite = new Sprite(douglas);
   douglasSprite.anchor.set(0.5);
   douglasSprite.position.set(app.screen.width / 2 - 250, 87);
   task.container.addChild(douglasSprite);
 
   // Dylan's texture and sprite are created and placed
-  const dylanTexture = Texture.from('/experiences/dylan/dylanCatch.png');
+  const dylanTexture = Texture.from('/media/experiences/dylan/dylanCatch.png');
   const dylanSprite = new Sprite(dylanTexture);
   dylanSprite.anchor.set(0.5);
   dylanSprite.position.set(-app.screen.width / 2 + 250, 0);
@@ -74,7 +74,7 @@ function initTask3(app, stats) {
   dylanSprite.on('pointerdown', onclick);
 
   // The balls's texture and sprite are created and placed
-  const ballTexture = Texture.from('/experiences/dylan/baseball.png');
+  const ballTexture = Texture.from('/media/experiences/dylan/baseball.png');
   const ballSprite = new Sprite(ballTexture);
   ballSprite.position.set(app.screen.width / 2 - 350, -150);
   ballSprite.anchor.set(0.5);

@@ -21,8 +21,8 @@ export default async function Page({
   const totalPages = await getProfilePages(query);
 
   return (
-    <div className="mx-auto mb-4 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center gap-6">
-      <h1 className="my-4 text-center text-3xl font-bold md:text-5xl">Meet the Team</h1>
+    <div className="mx-auto my-4 flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center gap-6 max-md:p-6">
+      <h1 className="text-center text-3xl font-bold md:text-5xl">Meet the Team</h1>
       <p className="mx-auto max-w-2xl text-center text-sm md:text-base">
         The Changeling VR game and website is created by students and faculty at the Rochester
         Institute of Technology&apos;s School of Interactive Games and Media, and College of Art and

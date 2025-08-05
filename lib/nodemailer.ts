@@ -12,17 +12,19 @@ const transporter = createTransport({
   },
 });
 
+type Mail = {
+  reciever: string;
+  subject: string;
+  plainText: string;
+  email: React.ReactNode;
+};
+
 export async function sendMail({
   reciever,
   subject,
   plainText,
   email,
-}: {
-  reciever: string;
-  subject: string;
-  plainText: string;
-  email: React.ReactNode;
-}): Promise<{ success: boolean; message: string }> {
+}: Mail): Promise<{ success: boolean; message: string }> {
   try {
     await transporter.sendMail({
       from: 'support@changelingvr.com',

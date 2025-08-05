@@ -37,9 +37,9 @@ const EmailLayout = ({ preview, children }: { preview: string; children: React.R
           <Container className="mx-auto w-full max-w-xl rounded-md border-2 border-gray-200 bg-sky-50 p-6 shadow-md">
             <Section className="mb-4 flex justify-center">
               <Img
-                src="https://changelingvr.vercel.app/logo.svg"
+                src="https://changelingvr.vercel.app/high-res-logo.png"
                 alt="Changeling VR Logo"
-                className="h-12 w-auto"
+                className="h-12 w-12"
               />
             </Section>
 

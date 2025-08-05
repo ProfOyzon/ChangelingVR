@@ -1,18 +1,26 @@
 import type { Metadata } from 'next';
 import Head from 'next/head';
+import { notFound } from 'next/navigation';
 import Script from 'next/script';
+import charactersData from '@/lib/data/characters.json';
+import type { Character } from '@/types';
 import './angela.css';
 
-export const metadata: Metadata = {
-  title: 'Angela',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const character = (charactersData as Character[]).find((c) => c.id === 'angela');
+  if (!character) return notFound();
+
+  return {
+    title: character.name,
+    description: character.bio,
+  };
+}
 
 export default function Angela() {
   return (
     <>
       <Head>
         {/* Link style sheets */}
-        <link rel="stylesheet" href="/styles/base.css" />
         <link rel="stylesheet" href="/styles/angela.css" />
       </Head>
 

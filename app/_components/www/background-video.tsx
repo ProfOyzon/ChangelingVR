@@ -31,7 +31,7 @@ export function BackgroundVideo() {
         'absolute h-full w-full object-cover brightness-50 transition-opacity duration-500',
         isLoaded ? 'opacity-100' : 'opacity-0',
       )}
-      poster="/background/outside_blurred.webp"
+      poster="/media/background/outside_blurred.webp"
       autoPlay
       loop
       muted

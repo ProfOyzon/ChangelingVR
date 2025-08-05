@@ -58,7 +58,7 @@ function initTask2(app, stats) {
 
   //Initialize graphics here
   //Background
-  const backgroundTexture = Texture.from('/experiences/dylan/task2bg.png');
+  const backgroundTexture = Texture.from('/media/experiences/dylan/task2bg.png');
   let bgSprite = new Sprite(backgroundTexture);
   task.container.addChild(bgSprite);
   bgSprite.width = app.screen.width;
@@ -66,7 +66,7 @@ function initTask2(app, stats) {
   bgSprite.position.set(-app.screen.width / 2, -app.screen.height / 2);
 
   //Wheel
-  const wheelTexture = Texture.from('/experiences/dylan/wheel.png');
+  const wheelTexture = Texture.from('/media/experiences/dylan/wheel.png');
   let wheelSprite = new Sprite(wheelTexture);
   task.container.addChild(wheelSprite);
   wheelSprite.anchor.set(0.5, 0.5);
@@ -75,7 +75,7 @@ function initTask2(app, stats) {
   wheelSprite.position.set(90, 75);
 
   //Wrench
-  const wrenchTexture = Texture.from('/experiences/dylan/wrench.png');
+  const wrenchTexture = Texture.from('/media/experiences/dylan/wrench.png');
   let wrenchSprite = new Sprite(wrenchTexture);
   task.container.addChild(wrenchSprite);
   wrenchSprite.x = 45;
@@ -94,11 +94,11 @@ function initTask2(app, stats) {
 
   //Icons for each key prompt
   //Textures
-  const fTexture = Texture.from('/experiences/dylan/fPrint.png');
-  const aTexture = Texture.from('/experiences/dylan/aPrint.png');
-  const sTexture = Texture.from('/experiences/dylan/sPrint.png');
-  const dTexture = Texture.from('/experiences/dylan/dPrint.png');
-  const incorrectTexture = Texture.from('/experiences/dylan/incorrect.png');
+  const fTexture = Texture.from('/media/experiences/dylan/fPrint.png');
+  const aTexture = Texture.from('/media/experiences/dylan/aPrint.png');
+  const sTexture = Texture.from('/media/experiences/dylan/sPrint.png');
+  const dTexture = Texture.from('/media/experiences/dylan/dPrint.png');
+  const incorrectTexture = Texture.from('/media/experiences/dylan/incorrect.png');
 
   //Sprites
   let fSprite = new Sprite(fTexture);

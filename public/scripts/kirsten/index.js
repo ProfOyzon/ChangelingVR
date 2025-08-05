@@ -72,12 +72,12 @@ const timeStep = 1 / 60;
 const sky = new THREE.CubeTextureLoader()
   .setPath('/assets/images')
   .load([
-    '/experiences/kirsten/skyDoodle2.png',
-    '/experiences/kirsten/skyDoodle2.png',
-    '/experiences/kirsten/skyDoodle2.png',
-    '/experiences/kirsten/skyDoodle2.png',
-    '/experiences/kirsten/skyDoodle2.png',
-    '/experiences/kirsten/skyDoodle2.png',
+    '/media/experiences/kirsten/skyDoodle2.png',
+    '/media/experiences/kirsten/skyDoodle2.png',
+    '/media/experiences/kirsten/skyDoodle2.png',
+    '/media/experiences/kirsten/skyDoodle2.png',
+    '/media/experiences/kirsten/skyDoodle2.png',
+    '/media/experiences/kirsten/skyDoodle2.png',
   ]);
 
 // Lights
@@ -977,7 +977,7 @@ function loadProps() {
         x,
         y,
         z,
-        '/experiences/kirsten/sky_prop_' + propIndex + '.png',
+        '/media/experiences/kirsten/sky_prop_' + propIndex + '.png',
         5,
         5,
       ),
@@ -1018,7 +1018,7 @@ function loadProps() {
         (lowerPropBounds.z - 500);
 
     // Import a new cloud.
-    ImportSpriteStill(scene, x, y, z, '/experiences/kirsten/skyCloud.png', 100, 100);
+    ImportSpriteStill(scene, x, y, z, '/media/experiences/kirsten/skyCloud.png', 100, 100);
   }
   //Top/Bottom clouds.
   for (let i = 0; i < 20; i++) {
@@ -1040,7 +1040,7 @@ function loadProps() {
         (lowerPropBounds.y - 500);
 
     // Import a new cloud.
-    ImportSpriteStill(scene, x, y, z, '/experiences/kirsten/skyCloud.png', 100, 100);
+    ImportSpriteStill(scene, x, y, z, '/media/experiences/kirsten/skyCloud.png', 100, 100);
   }
 }
 

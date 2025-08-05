@@ -544,7 +544,7 @@ class CustomButton extends Sprite {
   //Constructor with default named parameters to assist with readability and versatility.
   constructor({
     stage = '',
-    baseTexture = '/experiences/douglas/start.png',
+    baseTexture = '/media/experiences/douglas/start.png',
     x = 0,
     y = 0,
     unlocked = false,

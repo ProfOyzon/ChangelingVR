@@ -1,11 +1,19 @@
 import { Fragment } from 'react';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import Script from 'next/script';
+import charactersData from '@/lib/data/characters.json';
+import type { Character } from '@/types';
 
-export const metadata: Metadata = {
-  title: 'Tobi',
-  description: 'Find out what Tobi holds dear.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const character = (charactersData as Character[]).find((c) => c.id === 'tobi');
+  if (!character) return notFound();
+
+  return {
+    title: character.name,
+    description: character.bio,
+  };
+}
 
 export default function TobiPage() {
   return (

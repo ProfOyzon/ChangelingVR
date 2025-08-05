@@ -7,12 +7,13 @@ export default function manifest(): MetadataRoute.Manifest {
     description:
       'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
     lang: 'en-US',
+    id: '/',
     start_url: '/',
     scope: '/',
     display: 'standalone',
     orientation: 'portrait',
-    theme_color: '#ffcc66',
-    background_color: '#002033',
+    theme_color: '#313131',
+    background_color: '#313131',
     categories: ['games', 'narrative', 'mystery'],
     icons: [
       {

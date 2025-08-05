@@ -26,7 +26,7 @@ export function OverviewSection() {
 
       <figure className="w-full px-6 md:mask-l-from-50% md:p-0">
         <Image
-          src="/BannerImage.png"
+          src="/banner-image.png"
           alt="Wide shot of the family home"
           width={800}
           height={240}

@@ -49,7 +49,7 @@ export function Header() {
       >
         <Link href="/" aria-label="Home">
           <Image
-            src="/logo.svg"
+            src="/logo-with-name.svg"
             alt="Changeling logo"
             width={200}
             height={40}
