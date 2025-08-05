@@ -13,6 +13,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: character.name,
     description: character.bio,
+    openGraph: {
+      title: character.name,
+      description: character.bio,
+    },
+    twitter: {
+      card: 'summary',
+      title: character.name,
+      description: character.bio,
+    },
   };
 }
 

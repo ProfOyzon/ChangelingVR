@@ -39,27 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: character.name,
       description: character.bio,
-      images: [
-        {
-          url: `https://changelingvr.vercel.app/media/characters/${character.image}`,
-          width: 512,
-          height: 512,
-          alt: character.name,
-        },
-      ],
     },
     twitter: {
       card: 'summary',
       title: character.name,
       description: character.bio,
-      images: [
-        {
-          url: `https://changelingvr.vercel.app/media/characters/${character.image}`,
-          width: 512,
-          height: 512,
-          alt: character.name,
-        },
-      ],
     },
   };
 }
