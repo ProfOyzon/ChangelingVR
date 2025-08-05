@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FaEnvelope, FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa6';
 import { toast } from 'sonner';
-import { SubmitButton } from '@/components/submit-button';
+import { SubmitButton } from '@/app/_components/submit-button';
 import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';

@@ -1,4 +1,4 @@
-import { UserProfile } from '@/components/user-profile';
+import { UserProfile } from '@/app/_components/user-profile';
 import { getFullProfile } from '@/lib/db/queries';
 import type { FullProfile } from '@/lib/db/schema';
 

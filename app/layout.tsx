@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Lato } from 'next/font/google';
-import { Footer } from '@/components/footer';
-import { Header } from '@/components/header';
-import Providers from '@/components/query-provider';
+import { Footer } from '@/app/_components/footer';
+import { Header } from '@/app/_components/header';
+import Providers from '@/app/_components/query-provider';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';

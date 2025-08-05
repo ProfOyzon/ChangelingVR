@@ -1,6 +1,6 @@
 import { FaEnvelope, FaGithub, FaGlobe, FaLinkedin } from 'react-icons/fa6';
 import Image from 'next/image';
-import { CopyLink } from '@/components/copy-link';
+import { CopyLink } from '@/app/_components/copy-link';
 import type { FullProfile } from '@/lib/db/schema';
 
 const iconMap: Record<string, React.ReactNode> = {

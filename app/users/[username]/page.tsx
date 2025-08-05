@@ -2,9 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { UserProfile } from '@/components/user-profile';
+import { UserProfile } from '@/app/_components/user-profile';
 import { getProfileByUsername } from '@/lib/db/queries';
-import type { FullProfile } from '@/lib/db/schema';
 
 // Cache this page for 1 day since user profiles don't change frequently
 // This is invalidated when the updateProfile action in lib/auth/actions.ts is called

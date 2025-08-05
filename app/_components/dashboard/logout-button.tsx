@@ -1,5 +1,5 @@
 import { LogOut } from 'lucide-react';
-import { SubmitButton } from '@/components/submit-button';
+import { SubmitButton } from '@/app/_components/submit-button';
 import { logout } from '@/lib/auth/actions';
 
 export function LogoutButton() {

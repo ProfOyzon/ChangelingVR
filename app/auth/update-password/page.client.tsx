@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { FormMessage } from '@/components/form-message';
+import { FormMessage } from '@/app/_components/form-message';
 import { Button } from '@/components/ui/button';
 import { CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

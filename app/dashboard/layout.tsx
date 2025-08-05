@@ -1,9 +1,9 @@
 import { Fragment } from 'react';
+import { AppSidebar } from '@/app/_components/dashboard/app-sidebar';
+import { DashboardTitle } from '@/app/_components/dashboard/dashboard-title';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/sonner';
-import { AppSidebar } from '../_components/dashboard/app-sidebar';
-import { DashboardTitle } from '../_components/dashboard/dashboard-title';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (

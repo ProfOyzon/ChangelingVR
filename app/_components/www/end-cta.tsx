@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Button } from '@/components/button';
+import { Button } from '@/app/_components/button';
 import Aurelia from '@/public/aurelia.png';
 
 export function FinalCTASection() {

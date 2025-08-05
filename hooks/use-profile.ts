@@ -1,7 +1,7 @@
+import { updateProfile } from '@/lib/auth/actions';
+import type { ActionState } from '@/lib/auth/middleware';
+import { getProfile } from '@/lib/db/queries';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { updateProfile } from '../lib/auth/actions';
-import type { ActionState } from '../lib/auth/middleware';
-import { getProfile } from '../lib/db/queries';
 
 export function useProfileQuery() {
   return useQuery({

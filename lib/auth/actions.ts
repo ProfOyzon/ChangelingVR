@@ -5,7 +5,7 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { and, desc, eq } from 'drizzle-orm';
 import { createHash, randomUUID } from 'node:crypto';
-import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/components/email';
+import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/app/_components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
 import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
