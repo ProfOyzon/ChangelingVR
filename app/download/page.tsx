@@ -77,7 +77,7 @@ export default function DownloadPage() {
           </Button>
           <Button
             href="https://store.steampowered.com/app/3182270/Changeling_VR/"
-            className="border border-white/20 bg-linear-to-b from-[#171a21] via-[#1b2838] to-[#2a475e] opacity-50"
+            className="border border-white/20 bg-linear-to-b from-[#171a21] via-[#1b2838] to-[#2a475e]"
           >
             <FaSteam />
             Download on Steam
