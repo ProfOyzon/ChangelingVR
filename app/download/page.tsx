@@ -36,10 +36,10 @@ function SpecItem({ icon: Icon, title, spec }: { icon: any; title: string; spec:
   return (
     <div className="flex flex-col items-start gap-1 rounded-md bg-white/5 p-3 backdrop-blur-sm">
       <div className="flex items-center gap-2">
-        <Icon className="text-light-mustard" />
+        <Icon className="text-light-mustard size-4" />
         <p className="text-xs font-medium text-gray-300">{title}</p>
       </div>
-      <p className="text-xs text-gray-400">{spec}</p>
+      <p className="text-left text-xs text-gray-400">{spec}</p>
     </div>
   );
 }
@@ -76,17 +76,16 @@ export default function DownloadPage() {
             Download on Itch.io
           </Button>
           <Button
-            href="#"
-            className="cursor-not-allowed border border-white/20 bg-linear-to-b from-[#171a21] via-[#1b2838] to-[#2a475e] opacity-50"
-            aria-disabled
+            href="https://store.steampowered.com/app/3182270/Changeling_VR/"
+            className="border border-white/20 bg-linear-to-b from-[#171a21] via-[#1b2838] to-[#2a475e] opacity-50"
           >
             <FaSteam />
-            Coming Soon on Steam
+            Download on Steam
           </Button>
         </div>
 
         {/* Divider */}
-        <div className="h-px w-32 bg-white/20"></div>
+        <div className="h-px w-32 bg-white/20" aria-hidden />
 
         <div className="w-full max-w-2xl">
           <h2 className="mb-6 text-xl font-bold">System Requirements</h2>
@@ -94,11 +93,15 @@ export default function DownloadPage() {
             <div className="border-light-mustard/60 shadow-light-mustard/20 rounded-md border bg-white/5 shadow-md">
               <SpecItem icon={FaVrCardboard} title="VR Headset" spec="Meta Quest 2 or higher" />
             </div>
-            <SpecItem icon={FaDesktop} title="OS" spec="Windows 10/11" />
-            <SpecItem icon={FaMemory} title="Memory" spec="8 GB RAM minimum" />
-            <SpecItem icon={FaHardDrive} title="Storage" spec="5 GB available space" />
-            <SpecItem icon={FaVideo} title="Graphics" spec="GTX 1060 / RX 580 or better" />
-            <SpecItem icon={FaMicrochip} title="Processor" spec="Intel i5-4590 / AMD FX 8350" />
+            <SpecItem icon={FaDesktop} title="OS" spec="Windows 10" />
+            <SpecItem icon={FaMemory} title="Memory" spec="2 GB RAM minimum" />
+            <SpecItem icon={FaHardDrive} title="Storage" spec="10 GB available space" />
+            <SpecItem icon={FaVideo} title="Graphics" spec="NVIDIA GTX 970 or better" />
+            <SpecItem
+              icon={FaMicrochip}
+              title="Processor"
+              spec="Intel Core i5-4590 / AMD Ryzen 5 1500X"
+            />
           </div>
         </div>
       </div>

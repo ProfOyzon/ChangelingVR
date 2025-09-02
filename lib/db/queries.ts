@@ -267,3 +267,9 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
 
   return result;
 });
+
+export const getUsernames = cache(async () => {
+  const result = await db.select({ username: profiles.username }).from(profiles);
+
+  return result.map((profile) => profile.username);
+});

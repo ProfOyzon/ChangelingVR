@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { UserProfile } from '@/app/_components/user-profile';
-import { getProfileByUsername } from '@/lib/db/queries';
+import { getProfileByUsername, getUsernames } from '@/lib/db/queries';
 
 // Cache this page for 1 day since user profiles don't change frequently
 // This is invalidated when the updateProfile action in lib/auth/actions.ts is called
@@ -45,6 +45,11 @@ export async function generateMetadata({
       ],
     },
   };
+}
+
+export async function generateStaticParams() {
+  const usernames = await getUsernames();
+  return usernames.map((username) => ({ username }));
 }
 
 export default async function UserPage({ params }: { params: Promise<{ username: string }> }) {
