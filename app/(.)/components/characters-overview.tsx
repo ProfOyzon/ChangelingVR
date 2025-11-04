@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useCharacterRotation } from '@/hooks/useCharacterRotation';
+import { useCharacterRotation } from '@/app/(.)/components/use-character-rotation';
 import charactersData from '@/lib/data/characters.json';
 import { cn } from '@/lib/utils';
 

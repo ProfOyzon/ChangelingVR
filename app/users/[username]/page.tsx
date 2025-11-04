@@ -22,7 +22,7 @@ export async function generateMetadata({
       description: `View ${user.displayName || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     },
     twitter: {
-      card: 'summary',
+      card: 'summary_large_image',
       title: `${user.username} | Changeling VR`,
       description: `View ${user.displayName || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     },

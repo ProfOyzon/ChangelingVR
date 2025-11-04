@@ -4,7 +4,9 @@ import { ProfileTab } from '@/components/profile/profile-tab';
 import type { FullProfile } from '@/lib/db/schema';
 import { SocialLink } from './social-link';
 
-export function UserProfile({ user }: { user: FullProfile }) {
+export async function UserProfile({ user }: { user: FullProfile }) {
+  'use cache';
+
   return (
     <article className="bg-dune relative mx-auto flex w-full max-w-4xl flex-col rounded-md p-6 md:flex-row md:gap-6 md:p-12 md:pb-0">
       <aside className="relative flex flex-1 flex-col space-y-6 rounded-t-md bg-slate-500/25 p-6">
