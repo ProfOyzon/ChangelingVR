@@ -1,3 +1,4 @@
+import type { IconType } from 'react-icons';
 import {
   FaDesktop,
   FaHardDrive,
@@ -32,7 +33,7 @@ function Button({
   );
 }
 
-function SpecItem({ icon: Icon, title, spec }: { icon: any; title: string; spec: string }) {
+function SpecItem({ icon: Icon, title, spec }: { icon: IconType; title: string; spec: string }) {
   return (
     <div className="flex flex-col items-start gap-1 rounded-md bg-white/5 p-3 backdrop-blur-sm">
       <div className="flex items-center gap-2">

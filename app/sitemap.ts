@@ -20,8 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const legalPages: MetadataRoute.Sitemap[0][] = [
-    { url: `${baseUrl}/terms`, priority: 0.2, changeFrequency: 'never' },
-    { url: `${baseUrl}/privacy`, priority: 0.2, changeFrequency: 'never' },
+    { url: `${baseUrl}/terms-of-service`, priority: 0.2, changeFrequency: 'never' },
+    { url: `${baseUrl}/privacy-policy`, priority: 0.2, changeFrequency: 'never' },
   ];
 
   return [

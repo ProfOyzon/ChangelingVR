@@ -1,6 +1,6 @@
-# Project Overview
+# ChangelingVR Website
 
-This project uses a modern, domain-driven structure for scalability and maintainability, leveraging Next.js App Router, TanStack Query (React Query), and Supabase for data-driven features.
+Official website for the Changeling VR game. Built with Next.js, TypeScript, Tailwind CSS, Drizzle ORM, and Postgres.
 
 ---
 
@@ -8,54 +8,55 @@ This project uses a modern, domain-driven structure for scalability and maintain
 
 ```
 / (project root)
-├── app/
-│   ├── teams/                # Teams page (SSR/CSR, React Query, see app/teams/README.md)
-│   ├── components/           # App-wide UI components
-│   ├── api/                  # API routes
-│   ├── users/                # User profiles, settings, and management
-│   ├── auth/                 # Authentication flows (login, register, password reset)
-│   └── ...                   # Other routes and features
-├── hooks/                    # Custom React hooks
-├── lib/                      # Shared libraries (e.g., supabase client)
-├── public/                   # Static assets
-├── types/                    # Shared TypeScript types
-├── tsconfig.json
-├── next.config.ts
-└── ... (other config files)
+├── app/            # Routes (auth, dashboard, api, users)
+├── components/     # UI components
+├── lib/            # Auth, DB, utilities
+├── drizzle/        # Migrations & snapshots
+├── public/         # Static assets
+└── config files    # next.config.ts, vercel.json, etc.
 ```
 
 ---
 
-## Key Conventions
+## Requirements
 
-- **app/components/**: Shared UI components used across multiple pages/routes.
-- **app/teams/**: Implements the Teams page with SSR/CSR hydration, search, and pagination using TanStack Query and Supabase. See `app/teams/README.md` for details.
-- **app/hooks/**, **app/lib/**, **app/types/**: Shared hooks, libraries, and types for use throughout the app.
-- **public/**: Static files (images, icons, etc.).
-
----
-
-## Features
-
-- **Supabase Integration**: All data fetching and mutations are handled via Supabase.
-- **Modern Next.js**: Uses the App Router, server components, and best practices for scalable apps.
+- Node.js >= 22.15.0
+- pnpm >= 10.20.0
+- Postgres
 
 ---
 
-## Contributing
+## Quick Start
 
-- Place shared logic, types, and UI in the appropriate `app/components/`, `app/hooks/`, `app/lib/`, or `app/types/` folders.
-- Place feature-specific code in the relevant `app/[feature]/` subfolder (e.g., `app/teams/`).
-- See local `README.md` files in each folder (e.g., `app/teams/README.md`) for more details and conventions.
-
----
-
-## Getting Started
-
-1. Install dependencies: `pnpm install`
-2. Run the development server: `pnpm dev`
-3. Visit [http://localhost:3000](http://localhost:3000)
+1. `pnpm install`
+2. Create `.env.local` (see below)
+3. `pnpm dev` → http://localhost:3000
 
 ---
 
-For more information, see the README files in each major folder.
+## Scripts
+
+- `pnpm dev` — Dev server
+- `pnpm build` — Production build
+- `pnpm start` — Start production
+- `pnpm db:studio` - View DB
+
+---
+
+## Environment Variables
+
+```env
+NEXT_PUBLIC_SITE_URL=
+POSTGRES_URL=
+POSTGRES_URL_NON_POOLING=
+AUTH_ACCESS_CODE=
+JWT_ACCESS_SECRET=
+NODEMAILER_PASSWORD=
+BLOB_READ_WRITE_TOKEN=
+```
+
+---
+
+## License
+
+MIT © Changeling VR

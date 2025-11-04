@@ -3,11 +3,7 @@
 import { useActionState } from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { FormMessage } from '@/app/_components/form-message';
-import { Button } from '@/components/ui/button';
-import { CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormMessage } from '@/components/form-message';
 import { login } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
 
@@ -15,61 +11,63 @@ export default function LoginPageClient() {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(login, { error: '' });
 
   return (
-    <CardContent>
-      <form action={formAction}>
-        <div className="flex flex-col gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              defaultValue={state.email}
-              required
-            />
-          </div>
-
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                href="/auth/forgot-password"
-                className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-              >
-                Forgot your password?
-              </Link>
-            </div>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              defaultValue={state.password}
-              required
-            />
-          </div>
-
-          {state?.error && <FormMessage type="error" message={state.error} />}
-
-          <Button type="submit" className="w-full" disabled={pending}>
-            {pending ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="animate-spin" /> Logging in...
-              </span>
-            ) : (
-              'Login'
-            )}
-          </Button>
+    <form action={formAction}>
+      <div className="flex flex-col gap-6">
+        <div className="grid gap-2">
+          <label htmlFor="email" className="text-sm text-gray-200">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            defaultValue={state.email}
+            required
+            className="h-9 w-full min-w-0 rounded-md border border-gray-500/50 px-3 py-1 text-base shadow-xs outline-none md:text-sm"
+          />
         </div>
 
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{' '}
-          <Link href="/auth/register" className="underline underline-offset-4">
-            Sign up
-          </Link>
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <label htmlFor="password" className="text-sm text-gray-200">
+              Password
+            </label>
+            <Link
+              href="/auth/forgot-password"
+              className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            defaultValue={state.password}
+            required
+            className="h-9 w-full min-w-0 rounded-md border border-gray-500/50 px-3 py-1 text-base shadow-xs outline-none md:text-sm"
+          />
         </div>
-      </form>
-    </CardContent>
+
+        {state?.error && <FormMessage type="error" message={state.error} />}
+
+        <button
+          type="submit"
+          className="w-full cursor-pointer rounded-md border border-gray-500/50 bg-gray-300 px-3 py-2 text-sm font-bold text-black hover:bg-gray-400 [&_svg]:size-4"
+          disabled={pending}
+          aria-disabled={pending}
+        >
+          {pending ? (
+            <span className="flex items-center justify-center gap-2">
+              <Loader2 className="animate-spin" /> Logging in...
+            </span>
+          ) : (
+            'Login'
+          )}
+        </button>
+      </div>
+    </form>
   );
 }

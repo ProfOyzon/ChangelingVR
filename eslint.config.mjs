@@ -1,20 +1,20 @@
-import { FlatCompat } from '@eslint/eslintrc';
-import pluginQuery from '@tanstack/eslint-plugin-query';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-const compat = new FlatCompat({
-  baseDirectory: import.meta.dirname,
-});
-
-const eslintConfig = [
-  ...compat.config({
-    extends: ['next', 'next/typescript', 'prettier'],
-    rules: {
-      '@next/next/no-css-tags': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-    },
-  }),
-  ...pluginQuery.configs['flat/recommended'],
-];
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  eslintPluginPrettierRecommended,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
+]);
 
 export default eslintConfig;

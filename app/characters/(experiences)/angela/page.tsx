@@ -3,11 +3,10 @@ import Head from 'next/head';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import charactersData from '@/lib/data/characters.json';
-import type { Character } from '@/types';
 import './angela.css';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const character = (charactersData as Character[]).find((c) => c.id === 'angela');
+  const character = charactersData.find((c) => c.id === 'angela');
   if (!character) return notFound();
 
   return {

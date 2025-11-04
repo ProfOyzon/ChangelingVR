@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound, redirect } from 'next/navigation';
 import charactersData from '@/lib/data/characters.json';
-import type { Character } from '@/types';
 import AureliaClientPage from './page.client';
 
 const sidebarContactInfo = [
@@ -30,7 +29,7 @@ const sidebarContactInfo = [
 ];
 
 export async function generateMetadata(): Promise<Metadata> {
-  const character = (charactersData as Character[]).find((c) => c.id === 'aurelia');
+  const character = charactersData.find((c) => c.id === 'aurelia');
   if (!character) return notFound();
 
   return {

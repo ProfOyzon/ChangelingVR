@@ -1,13 +1,8 @@
 'use client';
 
 import { useActionState } from 'react';
-import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { FormMessage } from '@/app/_components/form-message';
-import { Button } from '@/components/ui/button';
-import { CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormMessage } from '@/components/form-message';
 import { forgotPassword } from '@/lib/auth/actions';
 import type { ActionState } from '@/lib/auth/middleware';
 
@@ -17,41 +12,40 @@ export default function ForgotPasswordPageClient() {
   });
 
   return (
-    <CardContent>
-      <form action={formAction}>
-        <div className="flex flex-col gap-6">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              defaultValue={state.email}
-              required
-            />
-          </div>
-
-          {state?.error && <FormMessage type="error" message={state.error} />}
-
-          <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? (
-              <span className="flex items-center gap-2">
-                <Loader2 className="animate-spin" /> Sending...
-              </span>
-            ) : (
-              'Send reset email'
-            )}
-          </Button>
+    <form action={formAction}>
+      <div className="flex flex-col gap-6">
+        <div className="grid gap-2">
+          <label htmlFor="email" className="text-sm text-gray-200">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            defaultValue={state.email}
+            required
+            className="h-9 w-full min-w-0 rounded-md border border-gray-500/50 px-3 py-1 text-base shadow-xs outline-none md:text-sm"
+          />
         </div>
 
-        <div className="mt-4 text-center text-sm">
-          Return to{' '}
-          <Link href="/auth/login" className="underline underline-offset-4">
-            Login
-          </Link>
-        </div>
-      </form>
-    </CardContent>
+        {state?.error && <FormMessage type="error" message={state.error} />}
+
+        <button
+          type="submit"
+          className="w-full cursor-pointer rounded-md border border-gray-500/50 bg-gray-300 px-3 py-2 text-sm font-bold text-black hover:bg-gray-400 [&_svg]:size-4"
+          disabled={isPending}
+          aria-disabled={isPending}
+        >
+          {isPending ? (
+            <span className="flex items-center justify-center gap-2">
+              <Loader2 className="animate-spin" /> Sending...
+            </span>
+          ) : (
+            'Send reset email'
+          )}
+        </button>
+      </div>
+    </form>
   );
 }

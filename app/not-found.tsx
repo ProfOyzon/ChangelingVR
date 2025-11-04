@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Button } from '@/app/_components/button';
+import { Button } from '@/components/button';
 
 export const metadata: Metadata = {
   title: '404 - Not Found',

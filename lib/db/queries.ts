@@ -1,7 +1,8 @@
 'use server';
 
 import { cache } from 'react';
-import { and, count, desc, eq, ilike, or, sql } from 'drizzle-orm';
+import { cacheTag } from 'next/cache';
+import { and, count, desc, eq, ilike, sql } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { activityLogs, members, profileLinks, profiles } from './schema';
@@ -22,13 +23,13 @@ export async function getProfile() {
   const profile = await db
     .select({
       username: profiles.username,
-      display_name: profiles.display_name,
-      avatar_url: profiles.avatar_url,
+      displayName: profiles.displayName,
+      avatarUrl: profiles.avatarUrl,
       bio: profiles.bio,
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bg_color: profiles.bg_color,
+      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(eq(profiles.uuid, session.user.id))
@@ -57,13 +58,13 @@ export async function getFullProfile() {
     .select({
       uuid: profiles.uuid,
       username: profiles.username,
-      display_name: profiles.display_name,
-      avatar_url: profiles.avatar_url,
+      displayName: profiles.displayName,
+      avatarUrl: profiles.avatarUrl,
       bio: profiles.bio,
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bg_color: profiles.bg_color,
+      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(eq(profiles.uuid, session.user.id))
@@ -82,7 +83,7 @@ export async function getFullProfile() {
       visible: profileLinks.visible,
     })
     .from(profileLinks)
-    .where(eq(profileLinks.uuid, session.user.id));
+    .where(eq(profileLinks.uuid, uuid));
 
   return { ...filtered, links };
 }
@@ -104,10 +105,10 @@ export async function getActivityLogs() {
       id: activityLogs.id,
       action: activityLogs.action,
       timestamp: activityLogs.timestamp,
-      ip_address: activityLogs.ip_address,
-      user_agent: activityLogs.user_agent,
+      ipAddress: activityLogs.ipAddress,
+      userAgent: activityLogs.userAgent,
       country: activityLogs.country,
-      country_code: activityLogs.country_code,
+      countryCode: activityLogs.countryCode,
       region: activityLogs.region,
       city: activityLogs.city,
       latitude: activityLogs.latitude,
@@ -121,19 +122,43 @@ export async function getActivityLogs() {
     .limit(10);
 }
 
+export async function getConnections() {
+  const session = await getSession();
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
+    return null;
+  }
+
+  return await db
+    .select({
+      platform: profileLinks.platform,
+      url: profileLinks.url,
+      visible: profileLinks.visible,
+    })
+    .from(profileLinks)
+    .where(eq(profileLinks.uuid, session.user.id));
+}
+
 // Fetches profile by username
 export const getProfileByUsername = cache(async (username: string) => {
+  'use cache';
+  cacheTag(`profile:${username}`);
+
   const profile = await db
     .select({
       uuid: profiles.uuid,
-      display_name: profiles.display_name,
+      displayName: profiles.displayName,
       username: profiles.username,
-      avatar_url: profiles.avatar_url,
+      avatarUrl: profiles.avatarUrl,
       bio: profiles.bio,
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bg_color: profiles.bg_color,
+      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(eq(profiles.username, username))
@@ -163,13 +188,13 @@ export async function getAllProfiles(): Promise<FullProfile[]> {
     .select({
       uuid: profiles.uuid,
       username: profiles.username,
-      display_name: profiles.display_name,
-      avatar_url: profiles.avatar_url,
+      displayName: profiles.displayName,
+      avatarUrl: profiles.avatarUrl,
       bio: profiles.bio,
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bg_color: profiles.bg_color,
+      bgColor: profiles.bgColor,
     })
     .from(profiles);
 
@@ -224,7 +249,7 @@ export const getProfilePages = cache(async (query: string) => {
   const result = await db
     .select({ value: count() })
     .from(profiles)
-    .where(ilike(profiles.display_name, `%${query}%`));
+    .where(ilike(profiles.displayName, `%${query}%`));
 
   return Math.ceil((result[0]?.value || 0) / PAGE_SIZE);
 });
@@ -239,28 +264,28 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
   const result = await db
     .select({
       username: profiles.username,
-      display_name: profiles.display_name,
-      avatar_url: profiles.avatar_url,
+      displayName: profiles.displayName,
+      avatarUrl: profiles.avatarUrl,
       bio: profiles.bio,
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bg_color: profiles.bg_color,
+      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(
       and(
         // Match display name
-        ilike(profiles.display_name, `%${query}%`),
+        ilike(profiles.displayName, `%${query}%`),
         // Ensure display name is not null or empty
-        sql`${profiles.display_name} IS NOT NULL AND ${profiles.display_name} != ''`,
+        sql`${profiles.displayName} IS NOT NULL AND ${profiles.displayName} != ''`,
       ),
     )
     .orderBy(
       // Prioritize profiles with the most terms
       sql`COALESCE((SELECT MAX(x) FROM unnest(${profiles.terms}) AS x), 0) DESC`,
       // Sort by display name alphabetically
-      profiles.display_name,
+      profiles.displayName,
     )
     .limit(PAGE_SIZE)
     .offset((page - 1) * PAGE_SIZE);
@@ -270,6 +295,5 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
 
 export const getUsernames = cache(async () => {
   const result = await db.select({ username: profiles.username }).from(profiles);
-
   return result.map((profile) => profile.username);
 });

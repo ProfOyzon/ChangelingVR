@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CharacterSection } from '@/app/_components/characters/character-section';
+import { CharacterSection } from '@/app/characters/character-section';
 import charactersData from '@/lib/data/characters.json';
 import { cn } from '@/lib/utils';
-import type { Character } from '@/types';
-
-const characters = charactersData as Character[];
 
 export const metadata: Metadata = {
   title: 'Characters',
@@ -14,7 +11,9 @@ export const metadata: Metadata = {
 };
 
 export default async function Characters() {
-  if (!characters?.length) {
+  'use cache';
+
+  if (!charactersData?.length) {
     return (
       <div className="flex min-h-svh items-center justify-center">
         <div className="text-center">
@@ -34,7 +33,7 @@ export default async function Characters() {
           '[&>a>img]:h-10 [&>a>img]:w-10 [&>a>img]:object-contain',
         )}
       >
-        {characters.map((character) => (
+        {charactersData.map((character) => (
           <Link
             href={`#${character.id}`}
             key={character.id}
@@ -53,7 +52,7 @@ export default async function Characters() {
         ))}
       </div>
 
-      {characters.map((character) => (
+      {charactersData.map((character) => (
         <section
           id={character.id}
           key={character.id}

@@ -3,6 +3,6 @@
   "printWidth": 100,
   "singleQuote": true,
   "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
-  "importOrder": ["^react", "^next", "<THIRD_PARTY_MODULES>", "^@", "^[./]"],
+  "importOrder": ["^react", "^@vercel", "^next", "<THIRD_PARTY_MODULES>", "^@", "^[./]"],
   "importOrderSortSpecifiers": true
 }

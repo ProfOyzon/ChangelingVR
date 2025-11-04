@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { unstable_cache } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { db } from '@/lib/db';
 import { profiles } from '@/lib/db/schema';
 
@@ -9,32 +9,31 @@ type CachedData<T> = {
   cachedAt: number;
 };
 
-export const getCachedUser = cache(
-  unstable_cache(
-    async () => {
-      const data = await db
-        .select({
-          username: profiles.username,
-          display_name: profiles.display_name,
-          avatar_url: profiles.avatar_url,
-          bio: profiles.bio,
-          terms: profiles.terms,
-          teams: profiles.teams,
-          roles: profiles.roles,
-          bg_color: profiles.bg_color,
-        })
-        .from(profiles);
+/**
+ * Gets the cached users from the database
+ * @returns {CachedData<typeof data>} The cached users
+ */
+export const getCachedUsers = cache(async () => {
+  'use cache';
+  cacheTag('users');
+  cacheLife('hours');
 
-      return {
-        status: 200,
-        data,
-        cachedAt: new Date().getTime(),
-      } as CachedData<typeof data>;
-    },
-    ['profiles'],
-    {
-      revalidate: 60 * 60 * 1, // 1 hour
-      tags: ['profiles'],
-    },
-  ),
-);
+  const data = await db
+    .select({
+      username: profiles.username,
+      displayName: profiles.displayName,
+      avatarUrl: profiles.avatarUrl,
+      bio: profiles.bio,
+      terms: profiles.terms,
+      teams: profiles.teams,
+      roles: profiles.roles,
+      bgColor: profiles.bgColor,
+    })
+    .from(profiles);
+
+  return {
+    status: 200,
+    data,
+    cachedAt: new Date().getTime(),
+  } as CachedData<typeof data>;
+});

@@ -1,5 +1,17 @@
 import { z } from 'zod/v4';
 
+// Helper: Coerce FormData entries into array or null via sentinel "__EMPTY__"
+const arrayOrNull = (item: z.ZodTypeAny, map?: (v: unknown) => unknown) =>
+  z.preprocess(
+    (val) => {
+      if (val === '__EMPTY__') return null;
+      if (val == null) return undefined;
+      const asArray = Array.isArray(val) ? (val as unknown[]) : [val];
+      return map ? asArray.map(map) : asArray;
+    },
+    z.union([z.array(item), z.null()]),
+  );
+
 /**
  * Processes a Zod error and returns a string of the error messages
  * @param error - The Zod error
@@ -76,7 +88,7 @@ export const zUsernameSchema = z.object({
 });
 
 export const zDisplayNameSchema = z.object({
-  display_name: z
+  displayName: z
     .string()
     .trim()
     .max(50, { error: 'Display name must be less than 50 characters' })
@@ -88,24 +100,15 @@ export const zBioSchema = z.object({
 });
 
 export const zTermsSchema = z.object({
-  terms: z
-    .string()
-    .trim()
-    .transform((val) => JSON.parse(val as string).map(Number)),
+  terms: arrayOrNull(z.number(), Number).optional(),
 });
 
 export const zRolesSchema = z.object({
-  roles: z
-    .string()
-    .trim()
-    .transform((val) => JSON.parse(val as string)),
+  roles: arrayOrNull(z.string()).optional(),
 });
 
 export const zTeamsSchema = z.object({
-  teams: z
-    .string()
-    .trim()
-    .transform((val) => JSON.parse(val as string)),
+  teams: arrayOrNull(z.string()).optional(),
 });
 
 export const zUpdateProfileSchema = z.object({
@@ -116,37 +119,28 @@ export const zUpdateProfileSchema = z.object({
     .max(15, { error: 'Username must be less than 15 characters' })
     .regex(/^[a-z0-9]+$/, { error: 'Username can only contain lowercase letters and numbers' })
     .optional(),
-  display_name: z
+  displayName: z
     .string()
     .trim()
     .max(50, { error: 'Display name must be less than 50 characters' })
     .optional(),
   bio: z.string().trim().max(500, { error: 'Bio must be less than 500 characters' }).optional(),
-  terms: z
-    .string()
-    .trim()
-    .transform((val) => JSON.parse(val as string).map(Number))
-    .optional(),
-  roles: z
-    .string()
-    .trim()
-    .transform((val) => JSON.parse(val as string))
-    .optional(),
-  teams: z
-    .string()
-    .trim()
-    .transform((val) => JSON.parse(val as string))
-    .optional(),
-  avatar_url: z.url().optional(),
-  bg_color: z.string().trim().optional(),
+  terms: arrayOrNull(z.number(), Number).optional(),
+  roles: arrayOrNull(z.string()).optional(),
+  teams: arrayOrNull(z.string()).optional(),
+  avatarUrl: z.url().optional(),
+  bgColor: z.string().trim().optional(),
 });
+
+// These are the platforms that are supported for profile links
+const platformEnum = ['github', 'linkedin', 'email', 'website', 'x', 'instagram'] as const;
 
 export const zPlatformSchema = z.object({
-  platform: z.enum(['github', 'linkedin', 'email', 'website']),
+  platform: z.enum(platformEnum),
 });
 
-export const zUpdateProfileLinkSchema = z.object({
-  platform: z.enum(['github', 'linkedin', 'email', 'website']),
+export const zProfileLinkSchema = z.object({
+  platform: z.enum(platformEnum),
   url: z.union([z.url({ message: 'Invalid URL' }), z.email({ message: 'Invalid email' })]),
   visible: z.string().transform((val) => val === 'true'),
 });

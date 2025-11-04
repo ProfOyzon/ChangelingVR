@@ -1,27 +1,28 @@
-import { Fragment } from 'react';
-import { AppSidebar } from '@/app/_components/dashboard/app-sidebar';
-import { DashboardTitle } from '@/app/_components/dashboard/dashboard-title';
-import { Separator } from '@/components/ui/separator';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Metadata } from 'next';
+import { LogoutButton } from '@/app/dashboard/logout-button';
+import { Submenu } from '@/app/dashboard/submenu';
 import { Toaster } from '@/components/ui/sonner';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Dashboard of your account on Changeling VR',
+};
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <Fragment>
-      <div className="text-primary">
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <header className="flex h-16 shrink-0 items-center gap-2 px-4 pr-4">
-              <SidebarTrigger className="-ml-1" />
-              <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-              <DashboardTitle />
-            </header>
-            <div className="p-4 pt-0">{children}</div>
-          </SidebarInset>
-        </SidebarProvider>
+    <>
+      <div className="bg-dune sticky top-16 z-100 flex flex-row items-center justify-between">
+        <div className="flex flex-initial touch-pan-x flex-row items-center justify-start overflow-x-scroll">
+          <Submenu />
+        </div>
+
+        <div className="bg-dune flex shrink-0 items-center justify-end border-gray-500 px-2 max-md:border-l md:px-4">
+          <LogoutButton />
+        </div>
       </div>
-      <Toaster position="top-center" richColors />
-    </Fragment>
+
+      {children}
+      <Toaster position="top-right" richColors />
+    </>
   );
 }

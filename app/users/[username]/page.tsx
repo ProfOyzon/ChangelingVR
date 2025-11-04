@@ -2,12 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
-import { UserProfile } from '@/app/_components/user-profile';
+import { UserProfile } from '@/components/profile/user-profile';
 import { getProfileByUsername, getUsernames } from '@/lib/db/queries';
-
-// Cache this page for 1 day since user profiles don't change frequently
-// This is invalidated when the updateProfile action in lib/auth/actions.ts is called
-export const revalidate = 86400;
 
 export async function generateMetadata({
   params,
@@ -20,29 +16,15 @@ export async function generateMetadata({
 
   return {
     title: user.username,
-    description: `View ${user.display_name || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
+    description: `View ${user.displayName || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     openGraph: {
       title: `${user.username} | Changeling VR`,
-      description: `View ${user.display_name || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
-      images: [
-        {
-          url: user.avatar_url ?? '',
-          width: 512,
-          height: 512,
-        },
-      ],
+      description: `View ${user.displayName || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     },
     twitter: {
       card: 'summary',
       title: `${user.username} | Changeling VR`,
-      description: `View ${user.display_name || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
-      images: [
-        {
-          url: user.avatar_url ?? '',
-          width: 512,
-          height: 512,
-        },
-      ],
+      description: `View ${user.displayName || user.username}'s profile on Changeling VR - Explore their contributions, activity, and role in the development of our immersive VR experience.`,
     },
   };
 }

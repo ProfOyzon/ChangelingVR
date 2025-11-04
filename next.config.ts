@@ -1,13 +1,19 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  reactCompiler: true,
+  cacheComponents: true,
   images: {
-    remotePatterns: [new URL('https://xkdlj9yxxa926ujy.public.blob.vercel-storage.com/**')],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'xkdlj9yxxa926ujy.public.blob.vercel-storage.com',
+        pathname: '/**',
+      },
+    ],
   },
   experimental: {
-    browserDebugInfoInTerminal: true,
-    clientSegmentCache: true,
-    devtoolSegmentExplorer: true,
+    optimizePackageImports: ['lucide-react', 'react-icons'],
   },
 };
 

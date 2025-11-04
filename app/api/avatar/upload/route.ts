@@ -1,14 +1,16 @@
+import { del, put } from '@vercel/blob';
+import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { logActivity } from '@/lib/auth/actions';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { ActivityType, profiles } from '@/lib/db/schema';
-import { del, put } from '@vercel/blob';
 
 export async function POST(request: Request): Promise<NextResponse> {
   const session = await getSession();
-  const filename = new URL(request.url).searchParams.get('filename');
+  const headersList = await headers();
+  const requestedBy = headersList.get('x-requested-by');
 
   // Invalid session
   if (
@@ -20,21 +22,19 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // No filename
-  if (!filename) {
-    return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
+  if (!requestedBy) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     // Get current avatar URL before updating
-    const username = filename.split('.')[0];
     const profile = await db
       .select({
         uuid: profiles.uuid,
-        avatar_url: profiles.avatar_url,
+        avatarUrl: profiles.avatarUrl,
       })
       .from(profiles)
-      .where(eq(profiles.username, username));
+      .where(eq(profiles.username, requestedBy));
 
     // Check if profile exists
     if (!profile || profile.length === 0) {
@@ -47,19 +47,22 @@ export async function POST(request: Request): Promise<NextResponse> {
     }
 
     // Delete old blob if it exists
-    if (profile[0]?.avatar_url) {
-      await del(profile[0].avatar_url);
+    if (profile[0]?.avatarUrl) {
+      await del(profile[0].avatarUrl);
     }
 
     // Upload new blob
-    const blob = await put(`avatars/${filename}`, request.body as ReadableStream, {
+    const blob = await put(`avatars/${requestedBy}.webp`, request.body as ReadableStream, {
       access: 'public',
       addRandomSuffix: true,
     });
 
     // Update user's avatar in the database
     await Promise.all([
-      db.update(profiles).set({ avatar_url: blob.url }).where(eq(profiles.uuid, profile[0].uuid)),
+      db
+        .update(profiles)
+        .set({ avatarUrl: blob.url as string })
+        .where(eq(profiles.uuid, profile[0].uuid)),
       logActivity(profile[0].uuid, ActivityType.UPDATE_ACCOUNT),
     ]);
 

@@ -5,16 +5,16 @@ import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { and, desc, eq } from 'drizzle-orm';
 import { createHash, randomUUID } from 'node:crypto';
-import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/app/_components/email';
+import { LoginEmail, PasswordResetEmail, WelcomeEmail } from '@/components/email';
 import { validatedAction, validatedActionWithUser } from '@/lib/auth/middleware';
 import { comparePassword, hashPassword, setSession } from '@/lib/auth/session';
 import {
   zForgotPasswordSchema,
   zLoginSchema,
   zPlatformSchema,
+  zProfileLinkSchema,
   zRegisterSchema,
   zUpdatePasswordSchema,
-  zUpdateProfileLinkSchema,
   zUpdateProfileSchema,
 } from '@/lib/auth/validator';
 import { db } from '@/lib/db';
@@ -24,6 +24,7 @@ import {
   type NewActivityLog,
   type NewMember,
   type NewProfile,
+  NewProfileLink,
   type Profile,
   activityLogs,
   members,
@@ -53,11 +54,13 @@ type GeoLocationData = {
  */
 export async function logActivity(userId: string, type: ActivityType) {
   const header = await headers();
+
+  // Get IP address and user agent; set to default if not found
   const ipAddress = (header.get('x-forwarded-for') ?? '::1').split(',')[0];
   const userAgent = header.get('user-agent') ?? 'unknown';
 
-  if (!userId) return;
-  if (ipAddress === '::1') return;
+  // If no user ID or IP address is localhost, return
+  if (!userId || ipAddress === '::1') return;
 
   // Get geolocation data
   let geolocationData: GeoLocationData | null = null;
@@ -68,7 +71,9 @@ export async function logActivity(userId: string, type: ActivityType) {
     // Do nothing
   }
 
+  // Sign in activity with geolocation data
   if (type === ActivityType.SIGN_IN && geolocationData) {
+    // Fetch email, username, and most recent 10 activity logs
     const [member, profile, activity] = await Promise.all([
       db.select({ email: members.email }).from(members).where(eq(members.uuid, userId)),
       db.select({ username: profiles.username }).from(profiles).where(eq(profiles.uuid, userId)),
@@ -79,8 +84,9 @@ export async function logActivity(userId: string, type: ActivityType) {
         .limit(10),
     ]);
 
-    // Check if this is a new location
+    // Check if this is a new location by comparing the most recent 10 activity logs with the current geolocation data
     const isNewLocation = !activity.some((log) => log.zip === geolocationData.zip);
+    // This is a new location, send email
     if (isNewLocation) {
       await sendMail({
         reciever: member[0].email,
@@ -108,19 +114,20 @@ export async function logActivity(userId: string, type: ActivityType) {
     // If the activity is within the last 10 minutes, do not log a new activity
     if (
       recentActivity.length > 0 &&
-      recentActivity[0].timestamp > new Date(Date.now() - 1000 * 60 * 10)
+      new Date(recentActivity[0].timestamp) > new Date(Date.now() - 1000 * 60 * 10)
     ) {
       return;
     }
   }
 
+  // Create new activity log
   const newActivity: NewActivityLog = {
     uuid: userId,
     action: type,
-    ip_address: ipAddress || '',
-    user_agent: userAgent,
+    ipAddress: ipAddress || '',
+    userAgent: userAgent,
     country: geolocationData?.country || null,
-    country_code: geolocationData?.countryCode || null,
+    countryCode: geolocationData?.countryCode || null,
     region: geolocationData?.regionName || null,
     city: geolocationData?.city || null,
     latitude: geolocationData?.lat?.toString() || null,
@@ -128,6 +135,7 @@ export async function logActivity(userId: string, type: ActivityType) {
     zip: geolocationData?.zip || null,
   };
 
+  // Insert new activity log into database
   await db.insert(activityLogs).values(newActivity);
 }
 
@@ -146,15 +154,13 @@ export const login = validatedAction(zLoginSchema, async (data) => {
 
   // Member not found, redirect back with error
   if (!member || member.length === 0) {
-    return { error: '✖ Invalid email or password.', email, password };
+    return { error: 'Invalid email or password.', email, password };
   }
 
   // Compare password
   const isPasswordValid = await comparePassword(password, member[0].password);
-
-  // Password is invalid, redirect back with error
   if (!isPasswordValid) {
-    return { error: '✖ Invalid email or password.', email, password };
+    return { error: 'Invalid email or password.', email, password };
   }
 
   // Set session and log activity
@@ -182,7 +188,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
 
   // Member already exists, redirect back with error
   if (member.length > 0) {
-    return { error: '✖ Failed to create user' };
+    return { error: 'Failed to create user' };
   }
 
   // Create new member
@@ -190,7 +196,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
   const newMember: NewMember = {
     email,
     password: hashedPassword,
-    created_at: new Date(),
+    createdAt: new Date().toISOString() as string,
   };
 
   // Create new member in database
@@ -199,7 +205,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
     .values(newMember)
     .returning({ uuid: members.uuid });
   if (!newMemberData || newMemberData.length === 0) {
-    return { error: '✖ Failed to create user' };
+    return { error: 'Failed to create user' };
   }
 
   // Create new profile
@@ -209,13 +215,13 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
     terms: [new Date().getFullYear()],
   };
 
-  // Create new profile in database
+  // Insert new profile into database
   const newProfileData = await db
     .insert(profiles)
     .values(newProfile)
     .returning({ username: profiles.username });
   if (!newProfileData || newProfileData.length === 0) {
-    return { error: '✖ Failed to create profile' };
+    return { error: 'Failed to create profile' };
   }
 
   // Set session, log activity, and send welcome email
@@ -251,28 +257,53 @@ export const updateProfile = validatedActionWithUser(
   zUpdateProfileSchema,
   async (data, session) => {
     try {
+      const updateData: Partial<typeof profiles.$inferInsert> = {
+        username: data.username,
+        displayName: data.displayName,
+        bio: data.bio,
+        terms: data.terms as number[] | null | undefined,
+        roles: data.roles as string[] | null | undefined,
+        teams: data.teams as string[] | null | undefined,
+        avatarUrl: data.avatarUrl,
+        bgColor: data.bgColor,
+      };
+
       const [profile] = await Promise.all([
         db
           .update(profiles)
-          .set(data)
+          .set(updateData)
           .where(eq(profiles.uuid, session.user.id))
           .returning({ username: profiles.username }),
         logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
       ]);
 
-      revalidateTag('profiles');
-      revalidatePath(`/users/${profile[0].username}`);
-    } catch {
-      // It failed, client will handle the error
+      revalidateTag(`profile:${profile[0].username}`, 'max');
+      revalidatePath('/dashboard/profile');
+      revalidatePath('/dashboard/settings');
+    } catch (error: any) {
+      // Check if it's a PostgreSQL unique constraint violation for the username
+      if (
+        error?.cause?.code === '23505' &&
+        error?.cause?.constraint_name === 'profiles_username_key'
+      ) {
+        return { error: `The username '${data.username}' is already taken` };
+      }
+
+      // It failed, return the error
+      return { error: 'Failed to update profile' };
     }
   },
 );
 
 export const updateProfileLink = validatedActionWithUser(
-  zUpdateProfileLinkSchema,
+  zProfileLinkSchema,
   async (data, session) => {
     try {
-      await Promise.all([
+      const [profile] = await Promise.all([
+        db
+          .select({ username: profiles.username })
+          .from(profiles)
+          .where(eq(profiles.uuid, session.user.id)),
         db
           .insert(profileLinks)
           .values({
@@ -291,17 +322,45 @@ export const updateProfileLink = validatedActionWithUser(
         logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
       ]);
 
-      revalidateTag('profiles');
-      revalidatePath('/dashboard/profile');
+      revalidateTag(`profile:${profile[0].username}`, 'max');
+      revalidatePath('/dashboard/connections');
     } catch {
-      // It failed, client will handle the error
+      throw new Error('Failed to update profile link');
     }
   },
 );
 
+export const addProfileLink = validatedActionWithUser(zProfileLinkSchema, async (data, session) => {
+  try {
+    const newProfileLink: NewProfileLink = {
+      uuid: session.user.id,
+      platform: data.platform,
+      url: data.url,
+      visible: data.visible,
+    };
+
+    const [profile] = await Promise.all([
+      db
+        .select({ username: profiles.username })
+        .from(profiles)
+        .where(eq(profiles.uuid, session.user.id)),
+      db.insert(profileLinks).values(newProfileLink),
+    ]);
+
+    revalidateTag(`profile:${profile[0].username}`, 'max');
+    revalidatePath('/dashboard/connections');
+  } catch {
+    throw new Error('Failed to add profile link');
+  }
+});
+
 export const deleteProfileLink = validatedActionWithUser(zPlatformSchema, async (data, session) => {
   try {
-    await Promise.all([
+    const [profile] = await Promise.all([
+      db
+        .select({ username: profiles.username })
+        .from(profiles)
+        .where(eq(profiles.uuid, session.user.id)),
       db
         .delete(profileLinks)
         .where(
@@ -310,8 +369,8 @@ export const deleteProfileLink = validatedActionWithUser(zPlatformSchema, async 
       logActivity(session.user.id, ActivityType.UPDATE_ACCOUNT),
     ]);
 
-    revalidateTag('profiles');
-    revalidatePath('/dashboard/profile');
+    revalidateTag(`profile:${profile[0].username}`, 'max');
+    revalidatePath('/dashboard/connections');
   } catch {
     // It failed, client will handle the error
   }
@@ -329,14 +388,14 @@ export const updatePassword = validatedAction(zUpdatePasswordSchema, async (data
 
   // Fetch stored token
   const storedToken = await db
-    .select({ uuid: resetTokens.uuid, expires_at: resetTokens.expires_at })
+    .select({ uuid: resetTokens.uuid, expiresAt: resetTokens.expiresAt })
     .from(resetTokens)
     .where(eq(resetTokens.token, hashedToken))
     .limit(1);
 
   // Ensure token exists and is not expired
-  if (storedToken.length === 0 || storedToken[0].expires_at < new Date()) {
-    return { error: '✖ Invalid token or token expired' };
+  if (storedToken.length === 0 || new Date(storedToken[0].expiresAt) < new Date()) {
+    return { error: 'Invalid token or token expired' };
   }
 
   // Update password and delete token
@@ -376,28 +435,21 @@ export const forgotPassword = validatedAction(zForgotPasswordSchema, async (data
 
   const TOKEN_EXPIRY_MS = 1000 * 60 * 30; // 30 minutes
 
-  await db.transaction(async (tx) => {
-    const existingToken = await tx
-      .select({ uuid: resetTokens.uuid })
-      .from(resetTokens)
-      .where(eq(resetTokens.uuid, member[0].uuid));
-
-    if (existingToken.length > 0) {
-      await tx
-        .update(resetTokens)
-        .set({
-          token: hashedToken,
-          expires_at: new Date(Date.now() + TOKEN_EXPIRY_MS),
-        })
-        .where(eq(resetTokens.uuid, member[0].uuid));
-    } else {
-      await tx.insert(resetTokens).values({
-        uuid: member[0].uuid,
+  await db
+    .insert(resetTokens)
+    .values({
+      uuid: member[0].uuid,
+      token: hashedToken,
+      expiresAt: new Date(Date.now() + TOKEN_EXPIRY_MS).toISOString() as string,
+    })
+    // Update previous token if it exists
+    .onConflictDoUpdate({
+      target: resetTokens.uuid,
+      set: {
         token: hashedToken,
-        expires_at: new Date(Date.now() + TOKEN_EXPIRY_MS),
-      });
-    }
-  });
+        expiresAt: new Date(Date.now() + TOKEN_EXPIRY_MS).toISOString() as string,
+      },
+    });
 
   await sendMail({
     reciever: email,

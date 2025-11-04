@@ -1,11 +1,15 @@
+import { Suspense } from 'react';
 import Image from 'next/image';
 import AuthClientPage from './page.client';
 
-export default function AuthPage() {
+export default async function AuthPage() {
+  'use cache';
   return (
     <div className="flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center p-6">
       <div className="flex w-sm flex-row items-center justify-between gap-4 rounded-md bg-gray-100 p-4 text-black">
-        <AuthClientPage />
+        <Suspense fallback={<div>Loading...</div>}>
+          <AuthClientPage />
+        </Suspense>
 
         <div className="flex flex-col items-center justify-center gap-1">
           <Image
