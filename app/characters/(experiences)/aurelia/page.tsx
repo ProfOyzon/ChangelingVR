@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import { notFound, redirect } from 'next/navigation';
 import charactersData from '@/lib/data/characters.json';
@@ -47,8 +48,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function Aurelia({ searchParams }: { searchParams: Promise<{ t: string }> }) {
-  const token = (await searchParams).t;
+export default async function Aurelia() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('x-session-token')?.value;
   if (!token) redirect('/characters/aurelia/auth');
 
   return (

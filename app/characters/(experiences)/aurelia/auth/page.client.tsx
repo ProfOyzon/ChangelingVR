@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { setCookie } from './actions';
 
 export default function AuthClientPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +21,7 @@ export default function AuthClientPage() {
     await new Promise((resolve) => setTimeout(resolve, randomDelay));
 
     // Redirect to the main aurelia page with the token
+    await setCookie(randomToken);
     router.push(`/characters/aurelia?t=${randomToken}`);
     setIsLoading(false);
   };
