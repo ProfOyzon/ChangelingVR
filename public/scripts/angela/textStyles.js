@@ -1,4 +1,11 @@
 import { TextStyle } from 'https://unpkg.com/pixi.js@7.4.0/dist/pixi.mjs';
+//import {widthForText} from './index.js'
+
+
+//values for getting the widthWordWrap for the soliloquy to fit better.. this solution sucks and should be changed later. 
+let alter = 0.00144927535;
+let wordWrapWidthCode = (170 * (window.innerWidth * alter) );  //this makes the width scale with the size of the window
+//console.log( "Window InnerWidth: "+ window.innerWidth + "\nWindow Alterd: "+  (window.innerWidth * alter) + "\nwordWrapWidth: " + wordWrapWidthCode);
 
 // Used for Onboarding "Click anywhere or space to continue"
 export const hintTextStyle = new TextStyle({
@@ -52,9 +59,12 @@ export const soliloquyTextStyle = new TextStyle({
   fontFamily: ['Helvetica', 'Arial', 'sans-serif'],
   fontSize: '3em',
   wordWrap: true,
-  wordWrapWidth: 560,
+  //wordWrapWidth: (560), //the original width
+  wordWrapWidth: wordWrapWidthCode,
   lineJoin: 'round',
   // fontWeight: 'bold'
 });
+
+
 
 // export each style

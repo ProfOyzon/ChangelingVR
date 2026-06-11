@@ -84,10 +84,37 @@ canvas {
   color: rgb(0, 0, 0);
 }
 
-#skipBtn {
+
+#startDayBtn {
   position: absolute;
   right: 38%;
   bottom: 38%;
+  width: max-content;
+  height: max-content;
+  border-radius: 20px;
+  font-size: 1.3rem;
+  padding-right: 2vw;
+  padding-left: 2vw;
+  background-color: #f7e2a0;
+  color: #598328;
+  border-color: #598328;
+  border-width: medium;
+  z-index: 10;
+}
+
+#startDayBtn:hover {
+  cursor: pointer;
+  background-color: #598328;
+  color: #f7e2a0;
+  border-width: medium;
+  border-color: #f7e2a0;
+}
+
+
+#skipBtn {
+  position: absolute;
+  right: 04%;
+  bottom: 04%;
   width: max-content;
   height: max-content;
   border-radius: 20px;

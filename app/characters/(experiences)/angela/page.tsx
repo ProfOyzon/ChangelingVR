@@ -41,6 +41,9 @@ export default function Angela() {
         <button id="playBtn" className="invisible">
           Play
         </button>
+        <button id="startDayBtn" className="invisible">
+          Start my day
+        </button>
         <button id="skipBtn" className="invisible">
           Skip Intro
         </button>
