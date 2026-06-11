@@ -19,6 +19,7 @@ const gameResult = document.querySelector('#game-result'); // texts that show up
 const restartBtn = document.querySelector('#restartBtn'); // brings to rules and resets the game
 const playBtn = document.querySelector('#playBtn'); // changes to game state
 const skipBtn = document.querySelector('#skipBtn'); // skips onboarding
+const continueBtn = document.querySelector('#continueBtn'); // does nothing/ is really just a label
 const startDayBtn = document.querySelector('#startDayBtn'); // does the same as skip button/ skips onboarding
 const currentTimeSlot = document.querySelector('.currentTime'); // slots are the data that will be updated and displayed at the end of the game
 const goodCompleteSlot = document.querySelector('.goodComplete'); // num of completed good tasks
@@ -94,6 +95,7 @@ let bgs = []; // array that stores all the background sprites
 let restartBtnActive = false; // restart button state
 let playBtnActive = false; // play button state
 let skipBtnActive = false; // skip button state
+let continueBtnActive = false; // skip button state
 let startDayBtnActive = false; // StartDay button state
 let round = 1; // will increase every time the play restarts
 let passedNoon = false; // used to indicate whether it's AM or PM to put after TIME NOW
@@ -209,6 +211,11 @@ if (!skipBtnActive) {
   helpers.toggleButton(skipBtn);
   skipBtnActive = true;
 }
+
+if (!continueBtnActive) {
+  helpers.toggleButton(continueBtn);
+  continueBtnActive = true;
+}
 /*
 if (!startDayBtnActive) {
   helpers.toggleButton(startDayBtn);
@@ -233,7 +240,9 @@ if (isMobile) {
   AngelaSoliloquy.style.wordWrapWidth = 200;
   AngelaSoliloquy.position.set(screenWidth / 2 + 27, screenHeight / 2 - 50);
 
+
   skipBtn.style.fontSize = '10px';
+  continueBtn.style.fontSize = '10px';
   startDayBtn.style.fontSize = '10px';
   playBtn.style.fontSize = '10px';
 }
@@ -306,6 +315,7 @@ restartBtn.addEventListener('click', restartGame);
 playBtn.addEventListener('click', changeGameState);
 startDayBtn.addEventListener('click', changeGameState);
 skipBtn.addEventListener('click', changeGameState);
+//continueBtn.addEventListener('click' );
 onboardingBg.eventMode = 'static';
 onboardingBg.on('pointerdown', (event) => clickSoliloquy());
 onboardingBg.cursor = 'pointer';
@@ -336,10 +346,15 @@ function clickSoliloquy() {
     //at the last soliloquy
     // disable the skip button
 
+    continueBtn.innerHTML = ' ';
     startDayBtn.innerHTML = 'Start my day';
     skipBtn.innerHTML = 'Start my day';
 
 
+		if (continueBtnActive) {
+			helpers.toggleButton(continueBtn);
+			continueBtnActive = false;
+		}
 
       
 		if (skipBtnActive) {
@@ -847,6 +862,16 @@ function gameLoop(delta) {
           playBtnActive = true;
         }
         // disable the skip button
+        if (skipBtnActive) {
+          helpers.toggleButton(skipBtn);
+          skipBtnActive = false;
+        }
+
+                if (continueBtnActive) {
+          helpers.toggleButton(continueBtn);
+          continueBtnActive = false;
+        }
+
         if (startDayBtnActive) {
           helpers.toggleButton(startDayBtn);
           startDayBtnActive = false;
@@ -892,6 +917,10 @@ function gameLoop(delta) {
           startDayBtnActive = false;
         }
 
+        if (continueBtnActive) {
+          helpers.toggleButton(continueBtn);
+          continueBtnActive = false;
+        }
 
         // update frequency according to the speed (slow speed with small number frequency so it's not boring; high speed with bigger number frequency so that the tasks won't overlap with the previous ones)
         if (gameSpeed >= 6 && !isMobile) {
