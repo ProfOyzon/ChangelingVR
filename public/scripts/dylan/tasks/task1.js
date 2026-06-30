@@ -155,12 +155,30 @@ function initTask1(app, stats) {
     responPos();
   }
 
+  // Create hintText
+  const hintText = new Text(
+    'Gather The Ingrediants!\n(drag and drop into pot with mouse)',
+    new TextStyle({
+      fontFamily: 'fira',
+      fontSize: 32,
+      fill: 0xc3868c,
+      align: 'center',
+    }),
+  );
+
+  // position it on screen
+  hintText.anchor.set(0.5);
+  hintText.x = app.screen.width / 2;
+  hintText.y = app.screen.height / 10;
+
   // Everything is added at the end to allow for changes in size and location due to
   // compatibility reasons
   task.container.addChild(backgroundSprite);
   task.container.addChild(potBottom);
   task.container.addChild(pot);
   task.container.addChild(recipeSprite);
+  // Add hintText container
+  task.container.addChild(hintText);
 
   // Add all ingredients to the container.
   for (let i = 0; i < ingredients.length; i++) {
@@ -174,6 +192,7 @@ function initTask1(app, stats) {
 
   // This is the task's game loop
   function update() {
+
     // Check for collision between ingredient and the bottom of the bot
     for (let i = 0; i < ingredients.length; i++) {
       if (testForAABB(ingredients[i], potBottom)) {

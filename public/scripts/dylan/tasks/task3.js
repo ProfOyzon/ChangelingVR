@@ -44,6 +44,22 @@ function initTask3(app, stats) {
   let beenCaught = false;
   let speedUpdated = false;
 
+  // Create hintText
+  const hintText = new Text(
+    'Catch The Ball!\n(Click on Dylans hand)',
+    new TextStyle({
+      fontFamily: 'fira',
+      fontSize: 32,
+      fill: 0xc3868c,
+      align: 'center',
+    }),
+  );
+
+  // position it on screen
+  hintText.anchor.set(0.5);
+  hintText.x = app.screen.width / 20;
+  hintText.y = app.screen.height / 6;
+
   // Initialize graphics here
   // Sprites for Dylan, Douglas, Ball
   // The background and catching circle are made here as well
@@ -81,6 +97,8 @@ function initTask3(app, stats) {
   ballSprite.width = 50;
   ballSprite.height = 50;
   task.container.addChild(ballSprite);
+
+  task.container.addChild(hintText);
 
   // catchCenter is the middle of the glove, used to detect if the player caught the ball
   let catchCenterX = -app.screen.width / 2 + 350;
