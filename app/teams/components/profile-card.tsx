@@ -14,7 +14,10 @@ export async function ProfileCard({ profile }: { profile: FullProfile }) {
           alt={profile.username}
           width={128}
           height={128}
-          className="w-full rounded-t-md bg-transparent mask-b-from-75% object-cover"
+          //altered profileimage      
+         /* className="w-full rounded-t-md bg-transparent mask-b-from-75% object-cover"
+          loading="lazy"*/
+          className="w-full rounded-t-md bg-transparent mask-b-from-75% object-contain"
           loading="lazy"
         />
 
