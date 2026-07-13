@@ -10,18 +10,39 @@ export async function resizeAndConvertToWebP(file: File, maxSize = 512): Promise
       const canvas = document.createElement('canvas');
       // Determine the size for a square crop (max 512x512)
       const size = Math.min(img.width, img.height, maxSize);
+      /*AVATAR SIZE CHANGES
       canvas.width = size;
       canvas.height = size;
+      */
       const ctx = canvas.getContext('2d');
       if (!ctx) {
         reject(new Error('Could not get canvas context'));
         return;
       }
+
+
+      /*AVATAR SIZE CHANGES
       // Calculate crop start point for center crop
       const sx = (img.width - size) / 2;
       const sy = (img.height - size) / 2;
       // Draw the cropped and resized image onto the canvas
       ctx.drawImage(img, sx, sy, size, size, 0, 0, size, size);
+      */
+
+
+      //Alt Test
+      const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+
+      const newWidth = img.width * scale;
+      const newHeight = img.height * scale;
+
+      canvas.width = Math.round(newWidth);
+      canvas.height = Math.round(newHeight);
+
+      
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      
       // Convert the canvas to a WebP blob
       canvas.toBlob(
         (blob) => {
