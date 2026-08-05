@@ -1,6 +1,6 @@
 # ChangelingVR Website
 
-Official website for the Changeling VR game. Built with Next.js, TypeScript, Tailwind CSS, Drizzle ORM, and Postgres.
+Official website for the Changeling VR game. Built with Next.js, TypeScript, Tailwind CSS, Drizzle ORM, and Postgres
 
 ---
 
