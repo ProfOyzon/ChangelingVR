@@ -29,7 +29,6 @@ export async function getProfile() {
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(eq(profiles.uuid, session.user.id))
@@ -64,7 +63,6 @@ export async function getFullProfile() {
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(eq(profiles.uuid, session.user.id))
@@ -104,7 +102,6 @@ export async function getActivityLogs() {
     .select({
       id: activityLogs.id,
       action: activityLogs.action,
-      timestamp: activityLogs.timestamp,
       ipAddress: activityLogs.ipAddress,
       userAgent: activityLogs.userAgent,
       country: activityLogs.country,
@@ -118,7 +115,7 @@ export async function getActivityLogs() {
     .from(activityLogs)
     .leftJoin(members, eq(activityLogs.uuid, members.uuid))
     .where(eq(activityLogs.uuid, session.user.id))
-    .orderBy(desc(activityLogs.timestamp))
+    .orderBy(desc(activityLogs.createdAt))
     .limit(10);
 }
 
@@ -158,7 +155,6 @@ export const getProfileByUsername = cache(async (username: string) => {
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(eq(profiles.username, username))
@@ -194,7 +190,6 @@ export async function getAllProfiles(): Promise<FullProfile[]> {
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bgColor: profiles.bgColor,
     })
     .from(profiles);
 
@@ -270,7 +265,6 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bgColor: profiles.bgColor,
     })
     .from(profiles)
     .where(

@@ -36,7 +36,6 @@ export const activityLogs = pgTable(
     }),
     uuid: uuid().notNull(),
     action: text().notNull(),
-    timestamp: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
     country: text(),
@@ -104,7 +103,6 @@ export const profiles = pgTable(
     terms: smallint().array(),
     teams: text().array(),
     roles: text().array(),
-    bgColor: text('bg_color').default('light-sky').notNull(),
     avatarUrl: text('avatar_url'),
   },
   (table) => [

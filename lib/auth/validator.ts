@@ -129,7 +129,6 @@ export const zUpdateProfileSchema = z.object({
   roles: arrayOrNull(z.string()).optional(),
   teams: arrayOrNull(z.string()).optional(),
   avatarUrl: z.url().optional(),
-  bgColor: z.string().trim().optional(),
 });
 
 // These are the platforms that are supported for profile links

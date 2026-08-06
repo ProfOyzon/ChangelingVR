@@ -92,7 +92,7 @@ async function ActivityLog() {
                   {formattedAction} {log.ipAddress && ` from ${log.city}, ${log.region}`}
                 </p>
                 <p className="text-muted-foreground text-xs">
-                  {getRelativeTime(new Date(log.timestamp))}
+                  {getRelativeTime(new Date(log.createdAt))}
                 </p>
               </div>
             </div>

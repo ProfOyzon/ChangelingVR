@@ -103,18 +103,18 @@ export async function logActivity(userId: string, type: ActivityType) {
   if (type === ActivityType.UPDATE_ACCOUNT) {
     // Get most recent UPDATE_ACCOUNT activity
     const recentActivity = await db
-      .select({ id: activityLogs.id, timestamp: activityLogs.timestamp })
+      .select({ id: activityLogs.id, createdAt: activityLogs.createdAt })
       .from(activityLogs)
       .where(
         and(eq(activityLogs.uuid, userId), eq(activityLogs.action, ActivityType.UPDATE_ACCOUNT)),
       )
-      .orderBy(desc(activityLogs.timestamp))
+      .orderBy(desc(activityLogs.createdAt))
       .limit(1);
 
     // If the activity is within the last 10 minutes, do not log a new activity
     if (
       recentActivity.length > 0 &&
-      new Date(recentActivity[0].timestamp) > new Date(Date.now() - 1000 * 60 * 10)
+      new Date(recentActivity[0].createdAt) > new Date(Date.now() - 1000 * 60 * 10)
     ) {
       return;
     }
@@ -265,7 +265,6 @@ export const updateProfile = validatedActionWithUser(
         roles: data.roles as string[] | null | undefined,
         teams: data.teams as string[] | null | undefined,
         avatarUrl: data.avatarUrl,
-        bgColor: data.bgColor,
       };
 
       const [profile] = await Promise.all([

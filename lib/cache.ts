@@ -27,7 +27,6 @@ export const getCachedUsers = cache(async () => {
       terms: profiles.terms,
       teams: profiles.teams,
       roles: profiles.roles,
-      bgColor: profiles.bgColor,
     })
     .from(profiles);
 
