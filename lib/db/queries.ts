@@ -111,6 +111,7 @@ export async function getActivityLogs() {
       latitude: activityLogs.latitude,
       longitude: activityLogs.longitude,
       zip: activityLogs.zip,
+      createdAt: activityLogs.createdAt,
     })
     .from(activityLogs)
     .leftJoin(members, eq(activityLogs.uuid, members.uuid))
