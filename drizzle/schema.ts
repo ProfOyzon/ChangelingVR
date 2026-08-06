@@ -45,7 +45,9 @@ export const activityLogs = pgTable(
     latitude: text(),
     longitude: text(),
     zip: text(),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
     foreignKey({
