@@ -49,7 +49,11 @@ export function PaginationArrow({
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link className={className} href={href}>
+    <Link
+      id={direction === 'left' ? 'pagination-prev' : 'pagination-next'}
+      href={href}
+      className={className}
+    >
       {icon}
     </Link>
   );

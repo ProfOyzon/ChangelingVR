@@ -4,6 +4,7 @@ import { useId, useRef, useTransition } from 'react';
 import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
+import { useShortcutListener } from '@/app/teams/hooks/use-shortcut-listener';
 import { useSyncInputToParam } from '@/app/teams/hooks/use-sync-input-to-param';
 import { SeedFromParam } from '@/app/teams/scripts/seed-from-param';
 
@@ -15,6 +16,7 @@ export function Search({ children }: { children: React.ReactNode }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useSyncInputToParam(inputRef, 'query');
+  useShortcutListener(inputRef);
 
   const handleSearch = useDebouncedCallback((value: string) => {
     startTransition(() => {
