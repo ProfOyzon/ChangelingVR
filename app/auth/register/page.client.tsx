@@ -8,7 +8,6 @@ import type { ActionState } from '@/lib/auth/middleware';
 
 export default function RegisterPageClient() {
   const [state, formAction, pending] = useActionState<ActionState, FormData>(register, {});
-  console.log('RegisterPageClient state:', state);
 
   return (
     <form action={formAction}>
@@ -37,7 +36,6 @@ export default function RegisterPageClient() {
             name="password"
             type="password"
             autoComplete="new-password"
-            defaultValue={state.password}
             required
             className="h-9 w-full min-w-0 rounded-md border border-gray-500/50 px-3 py-1 text-base shadow-xs outline-none md:text-sm"
           />

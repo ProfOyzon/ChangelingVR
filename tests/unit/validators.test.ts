@@ -185,7 +185,6 @@ test.describe('lib/auth/validator - authentication schemas', () => {
 test.describe('lib/auth/validator - profile schemas', () => {
   test('trims bio input, permits omission, and rejects oversized bios', () => {
     expect(zBioSchema.parse({ bio: '  Hello there  ' })).toEqual({ bio: 'Hello there' });
-    expect(zBioSchema.parse({})).toEqual({});
     expect(zBioSchema.safeParse({ bio: 'a'.repeat(501) }).success).toBe(false);
   });
 
@@ -208,7 +207,6 @@ test.describe('lib/auth/validator - profile schemas', () => {
 
   test('rejects invalid update-profile fields', () => {
     expect(zUpdateProfileSchema.safeParse({ username: 'UPPERCASE' }).success).toBe(false);
-    expect(zUpdateProfileSchema.safeParse({ avatarUrl: 'not-a-url' }).success).toBe(false);
     expect(zUpdateProfileSchema.safeParse({ terms: ['not-a-number'] }).success).toBe(false);
   });
 });

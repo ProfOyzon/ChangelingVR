@@ -1,9 +1,6 @@
 import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
-import { eq } from 'drizzle-orm';
 import { createHash } from 'node:crypto';
 import { db } from '@/lib/db';
-import { resetTokens } from '@/lib/db/schema';
 import UpdatePasswordPageClient from './page.client';
 
 export default function Page(props: PageProps<'/auth/update-password'>) {
@@ -16,7 +13,6 @@ export default function Page(props: PageProps<'/auth/update-password'>) {
       <Suspense>
         {props.searchParams.then((sp) => {
           const token = sp.token;
-          if (!token || typeof token !== 'string') return notFound();
           return <Modal token={token} />;
         })}
       </Suspense>
@@ -24,21 +20,30 @@ export default function Page(props: PageProps<'/auth/update-password'>) {
   );
 }
 
-async function Modal({ token }: { token: string }) {
-  const hashedToken = createHash('sha256').update(token).digest('hex');
-  const storedToken = await db
-    .select({ expiresAt: resetTokens.expiresAt })
-    .from(resetTokens)
-    .where(eq(resetTokens.token, hashedToken))
-    .limit(1);
+async function Modal({ token }: { token: string | string[] | undefined }) {
+  let error: string | null = '✖ Invalid or expired token.';
+  if (!token || Array.isArray(token)) {
+    return (
+      <Suspense fallback={<UpdatePasswordSkeleton />}>
+        <UpdatePasswordPageClient token="" error={error} />
+      </Suspense>
+    );
+  }
 
-  if (storedToken.length === 0 || new Date(storedToken[0].expiresAt) < new Date()) {
-    return notFound();
+  const hashedToken = createHash('sha256').update(token).digest('hex');
+  const storedToken = await db.query.resetTokens.findFirst({
+    where: { token: hashedToken },
+    columns: { expiresAt: true },
+  });
+
+  // Token exists and not expired, clear error
+  if (storedToken && new Date(storedToken.expiresAt) > new Date()) {
+    error = null;
   }
 
   return (
     <Suspense fallback={<UpdatePasswordSkeleton />}>
-      <UpdatePasswordPageClient token={token} />
+      <UpdatePasswordPageClient token={token} error={error} />
     </Suspense>
   );
 }

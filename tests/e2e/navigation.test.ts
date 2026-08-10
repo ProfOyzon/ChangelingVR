@@ -16,6 +16,7 @@ test.describe('Instant navigation', () => {
 
   test('navigates instantly from a team member to their user page', async ({ page }) => {
     await page.goto('/teams');
+    await page.getByPlaceholder('Search for a team member').fill('elouiseoyzon');
 
     await instant(page, async () => {
       await page.click('a[href="/users/elouiseoyzon"]');

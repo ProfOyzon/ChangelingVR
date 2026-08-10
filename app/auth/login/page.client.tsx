@@ -45,7 +45,6 @@ export default function LoginPageClient() {
             name="password"
             type="password"
             autoComplete="current-password"
-            defaultValue={state.password}
             required
             className="h-9 w-full min-w-0 rounded-md border border-gray-500/50 px-3 py-1 text-base shadow-xs outline-none md:text-sm"
           />

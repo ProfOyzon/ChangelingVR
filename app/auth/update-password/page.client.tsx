@@ -6,9 +6,15 @@ import { FormMessage } from '@/components/form-message';
 import { updatePassword } from '@/lib/actions/update-password';
 import type { ActionState } from '@/lib/auth/middleware';
 
-export default function UpdatePasswordPageClient({ token }: { token: string }) {
+export default function UpdatePasswordPageClient({
+  token,
+  error,
+}: {
+  token: string;
+  error: string | null;
+}) {
   const [state, formAction, isPending] = useActionState<ActionState, FormData>(updatePassword, {
-    error: '',
+    error: error || '',
   });
 
   return (

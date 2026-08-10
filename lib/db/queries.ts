@@ -1,7 +1,7 @@
 import 'server-only';
 import { cache } from 'react';
 import { cacheLife, cacheTag } from 'next/cache';
-import { and, count, ilike, isNotNull, ne, or, sql } from 'drizzle-orm';
+import { count, ilike, or, sql } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { profiles } from './schema';

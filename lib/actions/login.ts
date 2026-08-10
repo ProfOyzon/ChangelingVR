@@ -22,13 +22,13 @@ export const login = validatedAction(zLoginSchema, async (data) => {
 
   // Member not found, redirect back with error
   if (!member) {
-    return { error: '✖ Invalid email or password.', email, password };
+    return { error: '✖ Invalid email or password.', email };
   }
 
   // Compare password
   const isPasswordValid = await comparePassword(password, member.password);
   if (!isPasswordValid) {
-    return { error: '✖ Invalid email or password.', email, password };
+    return { error: '✖ Invalid email or password.', email };
   }
 
   // Set session and log activity

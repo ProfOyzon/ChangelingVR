@@ -24,7 +24,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
 
   // Member already exists, redirect back with error
   if (member) {
-    return { error: '✖ Failed to create user' };
+    return { error: '✖ Failed to create user', email };
   }
 
   // Create new member in database
@@ -39,7 +39,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
     .returning({ uuid: members.uuid });
 
   if (newMember.length === 0) {
-    return { error: '✖ Failed to create user' };
+    return { error: '✖ Failed to create user', email };
   }
 
   // Create new profile in database
@@ -54,7 +54,7 @@ export const register = validatedAction(zRegisterSchema, async (data) => {
     .returning({ username: profiles.username });
 
   if (newProfile.length === 0) {
-    return { error: '✖ Failed to create profile' };
+    return { error: '✖ Failed to create profile', email };
   }
 
   // Set session, log activity, and send welcome email

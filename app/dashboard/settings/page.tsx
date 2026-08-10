@@ -48,7 +48,7 @@ async function ProfileEditor() {
 function ProfileEditorSkeleton() {
   return (
     <>
-      <div className="h-56 w-full animate-pulse rounded-md bg-slate-800" />
+      <div className="h-52 w-full animate-pulse rounded-md bg-slate-800" />
       <div className="h-60.5 w-full animate-pulse rounded-md bg-slate-800" />
     </>
   );
