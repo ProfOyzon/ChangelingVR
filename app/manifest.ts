@@ -2,10 +2,10 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Changeling VR',
+    name: 'ChangelingVR',
     short_name: 'ChangelingVR',
     description:
-      'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
+      'ChangelingVR, a narrative mystery game by students in the school of interactive games and media.',
     lang: 'en-US',
     id: '/',
     start_url: '/',
@@ -34,37 +34,37 @@ export default function manifest(): MetadataRoute.Manifest {
         src: '/media/press/PressKitScreenshot_01.jpg',
         sizes: '1920x1080',
         type: 'image/png',
-        label: 'Changeling VR Screenshot 1',
+        label: 'ChangelingVR Screenshot 1',
       },
       {
         src: '/media/press/PressKitScreenshot_02.jpg',
         sizes: '1920x1080',
         type: 'image/png',
-        label: 'Changeling VR Screenshot 2',
+        label: 'ChangelingVR Screenshot 2',
       },
       {
         src: '/media/press/PressKitScreenshot_03.jpg',
         sizes: '1920x1080',
         type: 'image/png',
-        label: 'Changeling VR Screenshot 3',
+        label: 'ChangelingVR Screenshot 3',
       },
       {
         src: '/media/press/PressKitScreenshot_04.jpg',
         sizes: '1920x1080',
         type: 'image/png',
-        label: 'Changeling VR Screenshot 4',
+        label: 'ChangelingVR Screenshot 4',
       },
       {
         src: '/media/press/PressKitScreenshot_05.jpg',
         sizes: '1920x1080',
         type: 'image/png',
-        label: 'Changeling VR Screenshot 5',
+        label: 'ChangelingVR Screenshot 5',
       },
       {
         src: '/media/press/PressKitScreenshot_06.jpg',
         sizes: '1920x1080',
         type: 'image/png',
-        label: 'Changeling VR Screenshot 6',
+        label: 'ChangelingVR Screenshot 6',
       },
     ],
     shortcuts: [
@@ -75,12 +75,12 @@ export default function manifest(): MetadataRoute.Manifest {
       },
       {
         name: 'Characters',
-        description: 'Meet the characters of Changeling VR',
+        description: 'Meet the characters of ChangelingVR',
         url: '/characters',
       },
       {
         name: 'Team',
-        description: 'Meet the team behind Changeling VR',
+        description: 'Meet the team behind ChangelingVR',
         url: '/teams',
       },
     ],

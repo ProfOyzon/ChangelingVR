@@ -3,13 +3,12 @@
 import { useActionState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { FormMessage } from '@/components/form-message';
-import { register } from '@/lib/auth/actions';
+import { register } from '@/lib/actions/register';
 import type { ActionState } from '@/lib/auth/middleware';
 
 export default function RegisterPageClient() {
-  const [state, formAction, pending] = useActionState<ActionState, FormData>(register, {
-    error: '',
-  });
+  const [state, formAction, pending] = useActionState<ActionState, FormData>(register, {});
+  console.log('RegisterPageClient state:', state);
 
   return (
     <form action={formAction}>
@@ -58,7 +57,7 @@ export default function RegisterPageClient() {
           />
         </div>
 
-        {state.error && <FormMessage type="error" message={state.error} />}
+        {state?.error && <FormMessage type="error" message={state.error} />}
 
         <button
           type="submit"

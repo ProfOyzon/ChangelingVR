@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 // Helper: Coerce FormData entries into array or null via sentinel "__EMPTY__"
 const arrayOrNull = (item: z.ZodTypeAny, map?: (v: unknown) => unknown) =>
@@ -31,9 +31,9 @@ export function processZodError(error: z.ZodError) {
  * @returns A record of the data
  */
 export function processFormData(formData: FormData) {
-  const data: Record<string, any> = {};
+  const data: Record<string, FormDataEntryValue | FormDataEntryValue[]> = {};
   for (const [key, value] of formData.entries()) {
-    if (data[key]) {
+    if (key in data) {
       if (!Array.isArray(data[key])) {
         data[key] = [data[key]];
       }
@@ -78,6 +78,10 @@ export const zUpdatePasswordSchema = z.object({
     .regex(/[^A-Za-z0-9]/, { error: 'Password must contain at least one special character' }),
 });
 
+export const zDisplayNameSchema = z.object({
+  displayName: z.string().trim().max(50, { error: 'Display name must be less than 50 characters' }),
+});
+
 export const zUsernameSchema = z.object({
   username: z
     .string()
@@ -87,28 +91,12 @@ export const zUsernameSchema = z.object({
     .regex(/^[a-z0-9]+$/, { error: 'Username can only contain lowercase letters and numbers' }),
 });
 
-export const zDisplayNameSchema = z.object({
-  displayName: z
-    .string()
-    .trim()
-    .max(50, { error: 'Display name must be less than 50 characters' })
-    .optional(),
-});
-
 export const zBioSchema = z.object({
-  bio: z.string().trim().max(500, { error: 'Bio must be less than 500 characters' }).optional(),
-});
-
-export const zTermsSchema = z.object({
-  terms: arrayOrNull(z.number(), Number).optional(),
+  bio: z.string().trim().max(500, { error: 'Bio must be less than 500 characters' }),
 });
 
 export const zRolesSchema = z.object({
-  roles: arrayOrNull(z.string()).optional(),
-});
-
-export const zTeamsSchema = z.object({
-  teams: arrayOrNull(z.string()).optional(),
+  roles: arrayOrNull(z.string()),
 });
 
 export const zUpdateProfileSchema = z.object({
@@ -123,25 +111,36 @@ export const zUpdateProfileSchema = z.object({
     .string()
     .trim()
     .max(50, { error: 'Display name must be less than 50 characters' })
+    .transform((value) => value || null)
     .optional(),
-  bio: z.string().trim().max(500, { error: 'Bio must be less than 500 characters' }).optional(),
+  bio: z
+    .string()
+    .trim()
+    .max(500, { error: 'Bio must be less than 500 characters' })
+    .transform((value) => value || null)
+    .optional(),
   terms: arrayOrNull(z.number(), Number).optional(),
   roles: arrayOrNull(z.string()).optional(),
   teams: arrayOrNull(z.string()).optional(),
-  avatarUrl: z.url().optional(),
+  avatarUrl: z
+    .string()
+    .transform((value) => value || null)
+    .optional(),
 });
 
 // These are the platforms that are supported for profile links
 const platformEnum = ['github', 'linkedin', 'email', 'website', 'x', 'instagram'] as const;
 
-export const zPlatformSchema = z.object({
-  platform: z.enum(platformEnum),
-});
-
 export const zProfileLinkSchema = z.object({
   platform: z.enum(platformEnum),
-  url: z.union([z.url({ message: 'Invalid URL' }), z.email({ message: 'Invalid email' })]),
-  visible: z.string().transform((val) => val === 'true'),
+  url: z.preprocess(
+    (value) => (value === '' ? null : value),
+    z.union([z.url({ message: 'Invalid URL' }), z.email({ message: 'Invalid email' })]).nullable(),
+  ),
+  visible: z
+    .string()
+    .transform((val) => val === 'true')
+    .default(true),
 });
 
 export type RegisterInput = z.infer<typeof zRegisterSchema>;

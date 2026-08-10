@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { FormMessage } from '@/components/form-message';
-import { forgotPassword } from '@/lib/auth/actions';
+import { forgotPassword } from '@/lib/actions/forgot-password';
 import type { ActionState } from '@/lib/auth/middleware';
 
 export default function ForgotPasswordPageClient() {

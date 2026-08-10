@@ -22,7 +22,7 @@ export default function AuthClientPage() {
 
     // Redirect to the main aurelia page with the token
     await setCookie(randomToken);
-    router.push(`/characters/aurelia?t=${randomToken}`);
+    router.push(`/characters/aurelia`);
     setIsLoading(false);
   };
 

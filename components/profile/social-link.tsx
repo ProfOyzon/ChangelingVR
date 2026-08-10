@@ -19,7 +19,7 @@ const iconMap: Record<string, ReactNode> = {
 };
 
 export function SocialLink({ profile, platform }: { profile: FullProfile; platform: string }) {
-  const link = profile.links.find((link) => link.platform === platform);
+  const link = profile.profileLinks.find((link) => link.platform === platform);
   if (!link) return null;
 
   const isEmail = platform === 'email';
@@ -28,7 +28,7 @@ export function SocialLink({ profile, platform }: { profile: FullProfile; platfo
     <a
       href={isEmail ? `mailto:${link.url}` : link.url}
       target={isEmail ? undefined : '_blank'}
-      rel={isEmail ? undefined : 'noopener noreferrer'}
+      rel={isEmail ? undefined : 'noopener'}
       className="flex flex-1 flex-col items-center justify-center rounded-md bg-zinc-900/50 p-2 transition-colors hover:bg-zinc-900/75"
       aria-label={
         isEmail

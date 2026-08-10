@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import charactersData from '@/lib/data/characters.json';
 import { Button } from './button';
 import type { ButtonVariant } from './button';
 import { MobileMenu } from './mobile-menu';
@@ -11,38 +12,23 @@ export type NavItem = {
   variant?: ButtonVariant;
 };
 
-type CharacterLink = {
-  href: string;
-  label: string;
-  id: string;
-};
-
-const CHARACTER_LINKS: CharacterLink[] = [
-  { href: '/characters#aurelia', label: 'Aurelia Walker', id: 'aurelia' },
-  { href: '/characters#angela', label: 'Angela Summers', id: 'angela' },
-  { href: '/characters#dylan', label: 'Dylan Monelo', id: 'dylan' },
-  { href: '/characters#douglas', label: 'Douglas Summers-Monelo', id: 'douglas' },
-  { href: '/characters#kirsten', label: 'Kirsten Summers-Monelo', id: 'kirsten' },
-  { href: '/characters#tobi', label: 'Tobi Summers-Monelo', id: 'tobi' },
-];
-
 const NAV_ITEMS: NavItem[] = [
   {
     href: '/teams',
     label: 'Team',
-    ariaLabel: 'View the Changeling VR team',
+    ariaLabel: 'View the ChangelingVR team',
     variant: 'link',
   },
   {
     href: '/download',
     label: 'Play Now',
-    ariaLabel: 'Download Changeling VR',
+    ariaLabel: 'Download ChangelingVR',
   },
 ];
 
 export function Header() {
   return (
-    <header className="bg-dune fixed inset-x-0 top-0 z-100 uppercase shadow-md">
+    <header className="bg-dune fixed top-0 z-100 w-full uppercase shadow-md">
       <nav
         className="flex h-16 items-center justify-between gap-4 px-4"
         aria-label="Main Navigation"
@@ -50,10 +36,9 @@ export function Header() {
         <Link href="/" aria-label="Home">
           <Image
             src="/logo-with-name.svg"
-            alt="Changeling logo"
+            alt="ChangelingVR logo"
             width={200}
             height={40}
-            sizes="200px"
             className="h-10 w-auto"
             priority
           />
@@ -67,7 +52,7 @@ export function Header() {
             </Button>
 
             <div
-              className="absolute left-1/2 hidden w-[300px] -translate-x-1/2 pt-4 group-hover:block"
+              className="absolute left-1/2 hidden w-75 -translate-x-1/2 pt-4 group-hover:block"
               role="menu"
               aria-label="Character selection"
             >
@@ -76,14 +61,14 @@ export function Header() {
               </div>
 
               <div className="bg-dune/80 [&>a]:hover:bg-midnight/40 [&>a]:hover:text-light-mustard flex flex-col gap-1 rounded-md p-2 shadow-md backdrop-blur-sm [&>a]:block [&>a]:rounded-md [&>a]:px-3 [&>a]:py-2 [&>a]:text-center">
-                {CHARACTER_LINKS.map(({ href, label, id }) => (
+                {charactersData.map(({ name, id }) => (
                   <Button
                     key={id}
-                    href={href}
+                    href={`/characters?c=${id}`}
                     variant="link"
-                    aria-label={`View ${label}'s profile`}
+                    aria-label={`View ${name}'s profile`}
                   >
-                    {label}
+                    {name}
                   </Button>
                 ))}
               </div>

@@ -1,14 +1,15 @@
-'use server';
-
+import 'server-only';
 import { cache } from 'react';
-import { cacheTag } from 'next/cache';
-import { and, count, desc, eq, ilike, sql } from 'drizzle-orm';
+import { cacheLife, cacheTag } from 'next/cache';
+import { and, count, ilike, isNotNull, ne, or, sql } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
-import { activityLogs, members, profileLinks, profiles } from './schema';
-import type { FullProfile } from './schema';
+import { profiles } from './schema';
 
-// Fetches profile table; requires session cookie
+/**
+ * Fetches the profile of the currently logged-in user
+ * @requires session
+ */
 export async function getProfile() {
   const session = await getSession();
   if (
@@ -20,28 +21,28 @@ export async function getProfile() {
     return null;
   }
 
-  const profile = await db
-    .select({
-      username: profiles.username,
-      displayName: profiles.displayName,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-      terms: profiles.terms,
-      teams: profiles.teams,
-      roles: profiles.roles,
-    })
-    .from(profiles)
-    .where(eq(profiles.uuid, session.user.id))
-    .limit(1);
+  const profile = await db.query.profiles.findFirst({
+    where: { uuid: session.user.id },
+    columns: {
+      uuid: true,
+      username: true,
+      displayName: true,
+      avatarUrl: true,
+      bio: true,
+      terms: true,
+      teams: true,
+      roles: true,
+    },
+  });
 
-  if (profile.length === 0) {
-    return null;
-  }
-
-  return profile[0];
+  if (!profile) return null;
+  return profile;
 }
 
-// Fetches full profile table; requires session cookie
+/**
+ * Fetches the full profile of the currently logged-in user, including profile links
+ * @requires session
+ */
 export async function getFullProfile() {
   const session = await getSession();
   if (
@@ -53,40 +54,33 @@ export async function getFullProfile() {
     return null;
   }
 
-  const profile = await db
-    .select({
-      uuid: profiles.uuid,
-      username: profiles.username,
-      displayName: profiles.displayName,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-      terms: profiles.terms,
-      teams: profiles.teams,
-      roles: profiles.roles,
-    })
-    .from(profiles)
-    .where(eq(profiles.uuid, session.user.id))
-    .limit(1);
+  const profile = await db.query.profiles.findFirst({
+    where: { uuid: session.user.id },
+    columns: {
+      username: true,
+      displayName: true,
+      avatarUrl: true,
+      bio: true,
+      terms: true,
+      teams: true,
+      roles: true,
+    },
+    with: {
+      profileLinks: {
+        where: { visible: true },
+        columns: { platform: true, url: true },
+      },
+    },
+  });
 
-  if (!profile || profile.length === 0) {
-    return null;
-  }
-
-  const { uuid, ...filtered } = profile[0];
-
-  const links = await db
-    .select({
-      platform: profileLinks.platform,
-      url: profileLinks.url,
-      visible: profileLinks.visible,
-    })
-    .from(profileLinks)
-    .where(eq(profileLinks.uuid, uuid));
-
-  return { ...filtered, links };
+  if (!profile) return null;
+  return profile;
 }
 
-// Fetches activity logs table; requires session cookie
+/**
+ * Fetches the activity logs of the currently logged-in user
+ * @requires session
+ */
 export async function getActivityLogs() {
   const session = await getSession();
   if (
@@ -98,26 +92,11 @@ export async function getActivityLogs() {
     return null;
   }
 
-  return await db
-    .select({
-      id: activityLogs.id,
-      action: activityLogs.action,
-      ipAddress: activityLogs.ipAddress,
-      userAgent: activityLogs.userAgent,
-      country: activityLogs.country,
-      countryCode: activityLogs.countryCode,
-      region: activityLogs.region,
-      city: activityLogs.city,
-      latitude: activityLogs.latitude,
-      longitude: activityLogs.longitude,
-      zip: activityLogs.zip,
-      createdAt: activityLogs.createdAt,
-    })
-    .from(activityLogs)
-    .leftJoin(members, eq(activityLogs.uuid, members.uuid))
-    .where(eq(activityLogs.uuid, session.user.id))
-    .orderBy(desc(activityLogs.createdAt))
-    .limit(10);
+  return await db.query.activityLogs.findMany({
+    where: { uuid: session.user.id },
+    orderBy: { createdAt: 'desc' },
+    limit: 10,
+  });
 }
 
 export async function getConnections() {
@@ -131,107 +110,50 @@ export async function getConnections() {
     return null;
   }
 
-  return await db
-    .select({
-      platform: profileLinks.platform,
-      url: profileLinks.url,
-      visible: profileLinks.visible,
-    })
-    .from(profileLinks)
-    .where(eq(profileLinks.uuid, session.user.id));
+  return await db.query.profileLinks.findMany({
+    where: { uuid: session.user.id },
+    columns: { platform: true, url: true, visible: true },
+    orderBy: { platform: 'asc' },
+  });
 }
 
-// Fetches profile by username
+/**
+ * Fetches the profile of a user by their username
+ * @param username - The username of the user to fetch
+ */
 export const getProfileByUsername = cache(async (username: string) => {
   'use cache';
   cacheTag(`profile:${username}`);
+  cacheLife('max');
 
-  const profile = await db
-    .select({
-      uuid: profiles.uuid,
-      displayName: profiles.displayName,
-      username: profiles.username,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-      terms: profiles.terms,
-      teams: profiles.teams,
-      roles: profiles.roles,
-    })
-    .from(profiles)
-    .where(eq(profiles.username, username))
-    .limit(1);
-
-  if (profile.length === 0) {
-    return null;
-  }
-
-  const { uuid, ...filtered } = profile[0];
-
-  const links = await db
-    .select({
-      platform: profileLinks.platform,
-      url: profileLinks.url,
-      visible: profileLinks.visible,
-    })
-    .from(profileLinks)
-    .where(and(eq(profileLinks.uuid, uuid), eq(profileLinks.visible, true)));
-
-  return { ...filtered, links };
-});
-
-// Fetches complete profiles table
-export async function getAllProfiles(): Promise<FullProfile[]> {
-  const profilesData = await db
-    .select({
-      uuid: profiles.uuid,
-      username: profiles.username,
-      displayName: profiles.displayName,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-      terms: profiles.terms,
-      teams: profiles.teams,
-      roles: profiles.roles,
-    })
-    .from(profiles);
-
-  if (!profilesData || profilesData.length === 0) return [];
-
-  // Get all profile links for all profiles
-  const allLinks = await db
-    .select({
-      uuid: profileLinks.uuid,
-      platform: profileLinks.platform,
-      url: profileLinks.url,
-      visible: profileLinks.visible,
-    })
-    .from(profileLinks)
-    .where(eq(profileLinks.visible, true));
-
-  // Group links by profile UUID
-  const linksByProfile = allLinks.reduce(
-    (acc, link) => {
-      if (!acc[link.uuid]) {
-        acc[link.uuid] = [];
-      }
-      acc[link.uuid].push({
-        platform: link.platform,
-        url: link.url,
-        visible: link.visible,
-      });
-      return acc;
+  const profile = await db.query.profiles.findFirst({
+    where: { username: username },
+    columns: {
+      displayName: true,
+      username: true,
+      avatarUrl: true,
+      bio: true,
+      terms: true,
+      teams: true,
+      roles: true,
     },
-    {} as Record<string, { platform: string; url: string; visible: boolean }[]>,
-  );
-
-  // Map profiles to FullProfile objects
-  return profilesData.map((profile) => {
-    const { uuid, ...profileData } = profile;
-    return {
-      ...profileData,
-      links: linksByProfile[uuid] || [],
-    };
+    with: {
+      member: {
+        columns: {
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      profileLinks: {
+        where: { visible: true },
+        columns: { platform: true, url: true },
+      },
+    },
   });
-}
+
+  if (!profile) return null;
+  return profile;
+});
 
 // 4 columns in a 1440px screen (according to Thaw Thaw, this is standard)
 const PAGE_SIZE = 28;
@@ -254,7 +176,7 @@ export const getProfilePages = cache(async (query: string) => {
  * Returns the profiles for a given query and page
  * @param query - The query to search for
  * @param page - The page number
- * @returns The profiles
+ * @returns Matching profiles ordered by recent terms, then display name.
  */
 export const getFilteredProfiles = cache(async (query: string, page: number) => {
   const result = await db
@@ -269,15 +191,13 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
     })
     .from(profiles)
     .where(
-      and(
-        // Match display name
-        ilike(profiles.displayName, `%${query}%`),
-        // Ensure display name is not null or empty
-        sql`${profiles.displayName} IS NOT NULL AND ${profiles.displayName} != ''`,
+      or(
+        ilike(profiles.displayName, `%${query}%`), // matches query to displayName
+        ilike(profiles.username, `%${query}%`), // matches query to username, last resort
       ),
     )
     .orderBy(
-      // Prioritize profiles with the most terms
+      // Prioritize profiles with the most recent (highest) terms
       sql`COALESCE((SELECT MAX(x) FROM unnest(${profiles.terms}) AS x), 0) DESC`,
       // Sort by display name alphabetically
       profiles.displayName,
@@ -289,6 +209,7 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
 });
 
 export const getUsernames = cache(async () => {
-  const result = await db.select({ username: profiles.username }).from(profiles);
-  return result.map((profile) => profile.username);
+  return await db.query.profiles.findMany({
+    columns: { username: true },
+  });
 });

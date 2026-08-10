@@ -1,37 +1,35 @@
-import { relations } from 'drizzle-orm/relations';
-import { activityLogs, members, profileLinks, profiles, resetTokens } from './schema';
+import { defineRelations } from 'drizzle-orm';
+import * as schema from './schema';
 
-export const activityLogsRelations = relations(activityLogs, ({ one }) => ({
-  member: one(members, {
-    fields: [activityLogs.uuid],
-    references: [members.uuid],
-  }),
-}));
-
-export const membersRelations = relations(members, ({ many }) => ({
-  activityLogs: many(activityLogs),
-  profiles: many(profiles),
-  resetTokens: many(resetTokens),
-}));
-
-export const profilesRelations = relations(profiles, ({ one, many }) => ({
-  member: one(members, {
-    fields: [profiles.uuid],
-    references: [members.uuid],
-  }),
-  profileLinks: many(profileLinks),
-}));
-
-export const resetTokensRelations = relations(resetTokens, ({ one }) => ({
-  member: one(members, {
-    fields: [resetTokens.uuid],
-    references: [members.uuid],
-  }),
-}));
-
-export const profileLinksRelations = relations(profileLinks, ({ one }) => ({
-  profile: one(profiles, {
-    fields: [profileLinks.uuid],
-    references: [profiles.uuid],
-  }),
+export const relations = defineRelations(schema, (r) => ({
+  activityLogs: {
+    member: r.one.members({
+      from: r.activityLogs.uuid,
+      to: r.members.uuid,
+    }),
+  },
+  members: {
+    activityLogs: r.many.activityLogs(),
+    profiles: r.many.profiles(),
+    resetTokens: r.many.resetTokens(),
+  },
+  profileLinks: {
+    profile: r.one.profiles({
+      from: r.profileLinks.uuid,
+      to: r.profiles.uuid,
+    }),
+  },
+  profiles: {
+    profileLinks: r.many.profileLinks(),
+    member: r.one.members({
+      from: r.profiles.uuid,
+      to: r.members.uuid,
+    }),
+  },
+  resetTokens: {
+    member: r.one.members({
+      from: r.resetTokens.uuid,
+      to: r.members.uuid,
+    }),
+  },
 }));

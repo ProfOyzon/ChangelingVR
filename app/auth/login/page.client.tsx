@@ -4,11 +4,11 @@ import { useActionState } from 'react';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import { FormMessage } from '@/components/form-message';
-import { login } from '@/lib/auth/actions';
+import { login } from '@/lib/actions/login';
 import type { ActionState } from '@/lib/auth/middleware';
 
 export default function LoginPageClient() {
-  const [state, formAction, pending] = useActionState<ActionState, FormData>(login, { error: '' });
+  const [state, formAction, pending] = useActionState<ActionState, FormData>(login, {});
 
   return (
     <form action={formAction}>

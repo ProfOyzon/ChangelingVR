@@ -26,37 +26,21 @@ const CHARACTER_ATTRIBUTES = [
 export function CharacterSection({ character }: { character: Character }) {
   return (
     <>
-      <div className="hidden w-full items-center justify-center md:flex md:w-1/2">
+      <div className="flex w-full items-center justify-center md:w-1/2">
         <Image
           src={`/media/characters/${character.image}`}
           alt={`${character.name}'s portrait`}
           width={320}
           height={320}
-          className="object-contain"
+          className="object-contain max-md:size-64"
         />
       </div>
 
-      {Array.isArray(character.prop) && character.prop.length > 0 && (
-        <div className="flex w-full items-center justify-center md:hidden">
-          {character.prop.map((prop: string) => (
-            <div key={prop} className="flex items-center justify-center">
-              <Image
-                src={`/media/characters/${prop}`}
-                alt={prop}
-                width={72}
-                height={72}
-                className="h-12 w-12 object-contain"
-              />
-            </div>
-          ))}
-        </div>
-      )}
-
       <div className="flex h-auto w-full md:w-1/2 md:items-center md:justify-center">
-        <div className="bg-steel/30 border-steel/40 w-full max-w-xl rounded-md border p-4 shadow-lg backdrop-blur-sm">
-          <h1 className="mb-4 text-2xl font-bold tracking-tight md:text-4xl">{character.name}</h1>
+        <div className="bg-steel/30 border-steel/40 w-full max-w-xl space-y-4 rounded-md border p-6 shadow-lg backdrop-blur-sm">
+          <h1 className="text-2xl font-bold tracking-tight md:text-4xl">{character.name}</h1>
 
-          <ul className="mb-4 space-y-0.5 text-xs md:text-sm">
+          <ul className="space-y-0.5 text-xs md:text-sm">
             {CHARACTER_ATTRIBUTES.map(({ key, label }) => (
               <li key={key} className="flex items-center gap-2">
                 <span className="font-semibold text-gray-100">{label}:</span>
@@ -69,12 +53,12 @@ export function CharacterSection({ character }: { character: Character }) {
             ))}
           </ul>
 
-          <p className="mb-6 text-sm leading-relaxed text-gray-200 md:text-base">{character.bio}</p>
+          <p className="text-sm leading-relaxed text-gray-200 md:text-base">{character.bio}</p>
 
           <Button
             href={`/characters/${character.id}`}
             aria-label={`Enter ${character.name}'s experience`}
-            className="mt-2 w-full"
+            className="w-full"
           >
             Enter Experience
           </Button>

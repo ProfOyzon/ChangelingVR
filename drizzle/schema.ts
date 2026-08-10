@@ -1,9 +1,8 @@
+import { sql } from 'drizzle-orm';
 import {
   bigint,
   boolean,
-  foreignKey,
   index,
-  pgSequence,
   pgTable,
   primaryKey,
   smallint,
@@ -13,28 +12,13 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 
-export const usersIdSeq = pgSequence('users_id_seq', {
-  startWith: '1',
-  increment: '1',
-  minValue: '1',
-  maxValue: '9223372036854775807',
-  cache: '1',
-  cycle: false,
-});
-
-export const activityLogs = pgTable(
+export const activityLogs = pgTable.withRLS(
   'activity_logs',
   {
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'number' }).generatedByDefaultAsIdentity({
-      name: 'activity_logs_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9223372036854775807,
-      cache: 1,
-    }),
-    uuid: uuid().notNull(),
+    id: bigint({ mode: 'number' }).generatedByDefaultAsIdentity(),
+    uuid: uuid()
+      .notNull()
+      .references(() => members.uuid, { onDelete: 'cascade' }),
     action: text().notNull(),
     ipAddress: text('ip_address'),
     userAgent: text('user_agent'),
@@ -45,60 +29,59 @@ export const activityLogs = pgTable(
     latitude: text(),
     longitude: text(),
     zip: text(),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
-      .defaultNow()
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .default(sql`now()`)
       .notNull(),
   },
+  (table) => [unique('activity_logs_id_key').on(table.id)],
+);
+
+export const cron = pgTable.withRLS('cron', {
+  id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .default(sql`now()`)
+    .notNull(),
+});
+
+export const members = pgTable.withRLS(
+  'members',
+  {
+    uuid: uuid().defaultRandom().primaryKey(),
+    id: bigint({ mode: 'number' }).generatedByDefaultAsIdentity(),
+    email: text().notNull(),
+    password: text().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .default(sql`now()`)
+      .notNull(),
+  },
+  (table) => [unique('members_email_key').on(table.email), unique('members_id_key').on(table.id)],
+);
+
+export const profileLinks = pgTable.withRLS(
+  'profile_links',
+  {
+    uuid: uuid()
+      .notNull()
+      .references(() => profiles.uuid, { onDelete: 'cascade' }),
+    platform: text().notNull(),
+    url: text().notNull(),
+    visible: boolean().default(false).notNull(),
+  },
   (table) => [
-    foreignKey({
-      columns: [table.uuid],
-      foreignColumns: [members.uuid],
-      name: 'activity_logs_uuid_fkey',
-    }).onDelete('cascade'),
-    unique('activity_logs_id_key').on(table.id),
+    primaryKey({ columns: [table.uuid, table.platform], name: 'profile_links_pkey' }),
+    index('profile_links_uuid_idx').using('btree', table.uuid.asc().nullsLast()),
   ],
 );
 
-export const cron = pgTable('cron', {
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  id: bigint({ mode: 'number' }).primaryKey().generatedByDefaultAsIdentity({
-    name: 'cron_id_seq',
-    startWith: 1,
-    increment: 1,
-    minValue: 1,
-    maxValue: 9223372036854775807,
-    cache: 1,
-  }),
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-});
-
-export const members = pgTable(
-  'members',
-  {
-    uuid: uuid().defaultRandom().primaryKey().notNull(),
-    // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-    id: bigint({ mode: 'number' }).generatedByDefaultAsIdentity({
-      name: 'members_id_seq',
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 9223372036854775807,
-      cache: 1,
-    }),
-    email: text().notNull(),
-    password: text().notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
-      .defaultNow()
-      .notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }),
-  },
-  (table) => [unique('members_id_key').on(table.id), unique('members_email_key').on(table.email)],
-);
-
-export const profiles = pgTable(
+export const profiles = pgTable.withRLS(
   'profiles',
   {
-    uuid: uuid().primaryKey().notNull(),
+    uuid: uuid()
+      .primaryKey()
+      .references(() => members.uuid, { onDelete: 'cascade' }),
     username: text().notNull(),
     displayName: text('display_name'),
     bio: text(),
@@ -108,47 +91,15 @@ export const profiles = pgTable(
     avatarUrl: text('avatar_url'),
   },
   (table) => [
-    index('profiles_uuid_idx').using('btree', table.uuid.asc().nullsLast().op('uuid_ops')),
-    foreignKey({
-      columns: [table.uuid],
-      foreignColumns: [members.uuid],
-      name: 'profiles_uuid_fkey',
-    }).onDelete('cascade'),
+    index('profiles_uuid_idx').using('btree', table.uuid.asc().nullsLast()),
     unique('profiles_username_key').on(table.username),
   ],
 );
 
-export const resetTokens = pgTable(
-  'reset_tokens',
-  {
-    uuid: uuid().primaryKey().notNull(),
-    token: text().notNull(),
-    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'string' }).notNull(),
-  },
-  (table) => [
-    foreignKey({
-      columns: [table.uuid],
-      foreignColumns: [members.uuid],
-      name: 'reset_tokens_uuid_fkey',
-    }).onDelete('cascade'),
-  ],
-);
-
-export const profileLinks = pgTable(
-  'profile_links',
-  {
-    uuid: uuid().notNull(),
-    platform: text().notNull(),
-    url: text().notNull(),
-    visible: boolean().default(false).notNull(),
-  },
-  (table) => [
-    index('profile_links_uuid_idx').using('btree', table.uuid.asc().nullsLast().op('uuid_ops')),
-    foreignKey({
-      columns: [table.uuid],
-      foreignColumns: [profiles.uuid],
-      name: 'profile_links_uuid_fkey',
-    }).onDelete('cascade'),
-    primaryKey({ columns: [table.uuid, table.platform], name: 'profile_links_pkey' }),
-  ],
-);
+export const resetTokens = pgTable.withRLS('reset_tokens', {
+  uuid: uuid()
+    .primaryKey()
+    .references(() => members.uuid, { onDelete: 'cascade' }),
+  token: text().notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+});

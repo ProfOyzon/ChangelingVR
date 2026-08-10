@@ -10,9 +10,11 @@ Official website for the Changeling VR game. Built with Next.js, TypeScript, Tai
 / (project root)
 ├── app/            # Routes (auth, dashboard, api, users)
 ├── components/     # UI components
-├── lib/            # Auth, DB, utilities
 ├── drizzle/        # Migrations & snapshots
+├── emails/         # Emails
+├── lib/            # Auth, DB, utilities
 ├── public/         # Static assets
+├── tests/          # Tests
 └── config files    # next.config.ts, vercel.json, etc.
 ```
 
@@ -40,6 +42,7 @@ Official website for the Changeling VR game. Built with Next.js, TypeScript, Tai
 - `pnpm build` — Production build
 - `pnpm start` — Start production
 - `pnpm db:studio` - View DB
+- `email:dev` - Email dev server
 
 ---
 

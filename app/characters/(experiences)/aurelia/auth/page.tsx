@@ -17,7 +17,7 @@ export default async function AuthPage() {
 
   return (
     <div className="flex min-h-[calc(100svh-4rem)] flex-col items-center justify-center p-6">
-      <div className="flex w-sm flex-row items-center justify-between gap-4 rounded-md bg-gray-100 p-4 text-black">
+      <div className="flex w-sm flex-row items-center justify-between gap-4 rounded-md bg-gray-100 p-6 text-black">
         <Suspense fallback={<div>Loading...</div>}>
           <AuthClientPage />
         </Suspense>

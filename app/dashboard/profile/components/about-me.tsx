@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { updateProfile } from '@/lib/auth/actions';
+import { updateProfile } from '@/lib/actions/update-profile';
 import { processFormData, processZodError, zBioSchema } from '@/lib/auth/validator';
 
 export function AboutMeSection({ bio }: { bio: string }) {
@@ -27,14 +27,14 @@ export function AboutMeSection({ bio }: { bio: string }) {
 
   return (
     <form action={handleBioSubmit} className="rounded-md bg-slate-800">
-      <div className="space-y-4 rounded-t-md bg-slate-700 p-4">
+      <div className="space-y-4 rounded-t-md bg-slate-700 p-6">
         <h1 className="text-2xl font-bold">About Me</h1>
         <textarea
           name="bio"
           maxLength={500}
           defaultValue={bio}
-          placeholder="Share your role and experience working on Changeling VR..."
           rows={4}
+          placeholder="Share your experience working on ChangelingVR..."
           className="field-sizing-content w-full resize-none rounded-md border border-gray-500/50 bg-slate-600 p-2"
         />
         <p className="text-sm text-gray-400">

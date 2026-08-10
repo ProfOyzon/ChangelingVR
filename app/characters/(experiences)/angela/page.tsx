@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Head from 'next/head';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
+import type { Person, WithContext } from 'schema-dts';
 import charactersData from '@/lib/data/characters.json';
 import './angela.css';
 
@@ -25,14 +25,59 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Angela() {
+  const angela = charactersData.find((c) => c.id === 'angela')!;
+  const jsonLd: WithContext<Person> = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `https://changelingvr.com/characters/${angela.id}`,
+    name: angela.name,
+    url: `https://changelingvr.com/characters/${angela.id}`,
+    description: angela.bio,
+    image: `https://changelingvr.com/media/characters/${angela.image}`,
+    gender: 'Female',
+    height: {
+      '@type': 'QuantitativeValue',
+      value: 173,
+      unitCode: 'CMT',
+    },
+    spouse: {
+      '@type': 'Person',
+      '@id': 'https://changelingvr.com/characters/dylan',
+      name: 'Dylan Monelo',
+      url: 'https://changelingvr.com/characters/dylan',
+    },
+    children: [
+      {
+        '@type': 'Person',
+        '@id': 'https://changelingvr.com/characters/douglas',
+        name: 'Douglas Summers-Monelo',
+        url: 'https://changelingvr.com/characters/douglas',
+      },
+      {
+        '@type': 'Person',
+        '@id': 'https://changelingvr.com/characters/kirsten',
+        name: 'Kirsten Summers-Monelo',
+        url: 'https://changelingvr.com/characters/kirsten',
+      },
+      {
+        '@type': 'Person',
+        '@id': 'https://changelingvr.com/characters/tobi',
+        name: 'Tobi Summers-Monelo',
+        url: 'https://changelingvr.com/characters/tobi',
+      },
+    ],
+  };
+
   return (
     <>
-      <Head>
-        {/* Link style sheets */}
-        <link rel="stylesheet" href="/styles/angela.css" />
-      </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replaceAll('<', '\\u003c'),
+        }}
+      />
 
-      <div className="gameContainer">
+      <div className="relative mx-auto flex w-fit flex-1 items-center justify-center">
         <button id="restartBtn" className="invisible">
           Start a New Day
           <br />

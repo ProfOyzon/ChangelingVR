@@ -9,6 +9,7 @@ import {
   FaLinkedin,
   FaXTwitter,
 } from 'react-icons/fa6';
+import { Link2Icon } from 'lucide-react';
 import { getConnections } from '@/lib/db/queries';
 import { ConnectionCard } from './components/connection-card';
 import { ConnectionIcon } from './components/connection-icon';
@@ -21,6 +22,18 @@ const platformMap: Record<string, React.ReactNode> = {
   email: <FaEnvelope className="size-6" />,
   website: <FaGlobe className="size-6" />,
 };
+
+export default function ConnectionsPage() {
+  return (
+    <main className="min-h-[calc(100dvh-7.5rem)] bg-slate-900 text-gray-100">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
+        <Suspense fallback={<ConnectionSkeleton />}>
+          <Connections />
+        </Suspense>
+      </div>
+    </main>
+  );
+}
 
 async function Connections() {
   const connections = await getConnections();
@@ -39,11 +52,23 @@ async function Connections() {
         ))}
       </div>
 
-      <div className="border border-gray-500/50" />
-
-      {connections.map((c) => (
-        <ConnectionCard key={c.platform} connection={c} />
-      ))}
+      {connections.length > 0 ? (
+        <>
+          <div className="border border-gray-500/50" />
+          {connections.map((c) => (
+            <ConnectionCard key={c.platform} connection={c} />
+          ))}
+        </>
+      ) : (
+        <div className="flex h-96 flex-col items-center justify-center rounded-sm bg-slate-800 text-center">
+          <Link2Icon className="text-light-mustard mb-4 h-12 w-12" />
+          <h3 className="mb-2 text-lg font-semibold">No connections configured</h3>
+          <p className="text-muted-foreground max-w-sm text-sm">
+            You haven&apos;t connected any social media accounts or websites yet. Use the buttons
+            above to add your connections and showcase them on your profile.
+          </p>
+        </div>
+      )}
     </>
   );
 }
@@ -52,7 +77,7 @@ function ConnectionSkeleton() {
   return (
     <>
       <div className="flex flex-row flex-wrap items-center gap-4">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {Array.from({ length: 6 }).map((_, index) => (
           <div key={index} className="size-10.5 animate-pulse rounded-md bg-gray-700" />
         ))}
       </div>
@@ -63,24 +88,5 @@ function ConnectionSkeleton() {
         <div key={index} className="h-35.5 w-full animate-pulse rounded-md bg-gray-700" />
       ))}
     </>
-  );
-}
-
-export default async function ConnectionsPage() {
-  return (
-    <main className="min-h-[calc(100dvh-7.5rem)] bg-slate-900 text-gray-100">
-      <header className="border-b border-gray-500/50">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8">
-          <h1 className="text-4xl font-bold">Connections</h1>
-          <p className="text-gray-400">Manage your connections to other services.</p>
-        </div>
-      </header>
-
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 space-y-6 px-4 py-8">
-        <Suspense fallback={<ConnectionSkeleton />}>
-          <Connections />
-        </Suspense>
-      </div>
-    </main>
   );
 }

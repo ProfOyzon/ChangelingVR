@@ -35,8 +35,6 @@ const app = new Application({
   width: window.innerWidth * 0.87,
   height: window.innerHeight - 60, // full height minus the a little more than the height of the nav bar (58)
   view: canvas,
-
- 
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,7 +47,7 @@ const GAME_STATE = Object.freeze({
   Playing: 'playing',
   Finished: 'finished',
 });
- export let widthForText = window.innerWidth * 0.87;
+export let widthForText = window.innerWidth * 0.87;
 
 let allTimeHighScore = 0; // all time high score
 let highScore = 0; // high score
@@ -240,7 +238,6 @@ if (isMobile) {
   AngelaSoliloquy.style.wordWrapWidth = 200;
   AngelaSoliloquy.position.set(screenWidth / 2 + 27, screenHeight / 2 - 50);
 
-
   skipBtn.style.fontSize = '10px';
   continueBtn.style.fontSize = '10px';
   startDayBtn.style.fontSize = '10px';
@@ -350,24 +347,20 @@ function clickSoliloquy() {
     startDayBtn.innerHTML = 'Start my day';
     skipBtn.innerHTML = 'Start my day';
 
+    if (continueBtnActive) {
+      helpers.toggleButton(continueBtn);
+      continueBtnActive = false;
+    }
 
-		if (continueBtnActive) {
-			helpers.toggleButton(continueBtn);
-			continueBtnActive = false;
-		}
-
-      
-		if (skipBtnActive) {
-			helpers.toggleButton(skipBtn);
-			skipBtnActive = false;
-		}
-		// enable the play button so that the player can proceed to the playing state
-		if (!startDayBtnActive) {
-			helpers.toggleButton(startDayBtn);
-			startDayBtnActive = true;
-		}
-		
-
+    if (skipBtnActive) {
+      helpers.toggleButton(skipBtn);
+      skipBtnActive = false;
+    }
+    // enable the play button so that the player can proceed to the playing state
+    if (!startDayBtnActive) {
+      helpers.toggleButton(startDayBtn);
+      startDayBtnActive = true;
+    }
 
     /*
 		if (skipBtnActive) {
@@ -867,7 +860,7 @@ function gameLoop(delta) {
           skipBtnActive = false;
         }
 
-                if (continueBtnActive) {
+        if (continueBtnActive) {
           helpers.toggleButton(continueBtn);
           continueBtnActive = false;
         }
@@ -876,8 +869,6 @@ function gameLoop(delta) {
           helpers.toggleButton(startDayBtn);
           startDayBtnActive = false;
         }
-
-
 
         // reset the game
         resetGame();

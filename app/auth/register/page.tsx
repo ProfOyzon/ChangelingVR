@@ -2,6 +2,28 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import RegisterPageClient from './page.client';
 
+export default function RegisterPage() {
+  return (
+    <>
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl font-bold">Sign up</h1>
+        <p className="text-sm text-gray-400">Create a new account</p>
+      </div>
+
+      <Suspense fallback={<RegisterSkeleton />}>
+        <RegisterPageClient />
+      </Suspense>
+
+      <div className="text-center text-sm">
+        Already have an account?{' '}
+        <Link href="/auth/login" className="underline underline-offset-4">
+          Login
+        </Link>
+      </div>
+    </>
+  );
+}
+
 function RegisterSkeleton() {
   return (
     <div className="flex flex-col gap-6">
@@ -22,27 +44,5 @@ function RegisterSkeleton() {
 
       <div className="h-10 w-full animate-pulse rounded-md bg-gray-500/50" />
     </div>
-  );
-}
-
-export default async function RegisterPage() {
-  return (
-    <>
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold">Sign up</h1>
-        <p className="text-sm text-gray-400">Create a new account</p>
-      </div>
-
-      <Suspense fallback={<RegisterSkeleton />}>
-        <RegisterPageClient />
-      </Suspense>
-
-      <div className="text-center text-sm">
-        Already have an account?{' '}
-        <Link href="/auth/login" className="underline underline-offset-4">
-          Login
-        </Link>
-      </div>
-    </>
   );
 }

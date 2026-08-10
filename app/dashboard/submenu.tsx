@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const NAV_LABELS: Record<string, string> = {
-  '/dashboard': 'Overview',
   '/dashboard/profile': 'Profile',
   '/dashboard/activity': 'Activity',
   '/dashboard/preview': 'Preview',

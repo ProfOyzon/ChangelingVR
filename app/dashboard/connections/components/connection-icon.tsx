@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { addProfileLink } from '@/lib/auth/actions';
+import { updateProfileLink } from '@/lib/actions/update-profile-link';
 import { processFormData, processZodError, zProfileLinkSchema } from '@/lib/auth/validator';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +48,7 @@ export function ConnectionIcon({
       return;
     }
 
-    toast.promise(addProfileLink({}, formData), {
+    toast.promise(updateProfileLink({}, formData), {
       loading: `Adding ${platformMap[platform]} link...`,
       success: `${platformMap[platform]} link added successfully`,
       error: `Failed to add ${platformMap[platform]} link`,
@@ -65,7 +65,7 @@ export function ConnectionIcon({
         aria-label={platformMap[platform]}
         aria-disabled={disabled}
         className={cn(
-          'cursor-pointer rounded-md border border-gray-500/50 p-2',
+          'hover:text-light-mustard cursor-pointer rounded-md border border-gray-500/50 p-2',
           disabled && 'cursor-not-allowed opacity-50',
         )}
         disabled={disabled}
@@ -76,12 +76,12 @@ export function ConnectionIcon({
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-500 flex items-center justify-center bg-black/50 px-4">
+        <div className="fixed inset-0 z-500 flex items-center justify-center bg-black/50 p-6">
           <form
             action={handleConnectionAdd}
-            className="mx-auto w-full max-w-sm space-y-6 rounded-md border border-gray-500/50 bg-slate-900 p-4"
+            className="mx-auto w-full max-w-sm space-y-6 rounded-md border border-gray-500/50 bg-slate-900 p-6"
           >
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-2">
               <h2 className="text-xl font-bold">{platformMap[platform]}</h2>
               <p className="text-sm text-gray-400">
                 Add your {platformMap[platform]} to your profile.

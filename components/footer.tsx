@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { IconType } from 'react-icons';
 import { FaDiscord, FaInstagram, FaXTwitter, FaYoutube } from 'react-icons/fa6';
 import Image from 'next/image';
@@ -14,7 +15,6 @@ type NavSection = {
   links: {
     href: string;
     label: string;
-    prefetch?: boolean;
   }[];
 };
 
@@ -45,34 +45,40 @@ const NAV_SECTIONS: NavSection[] = [
   {
     title: 'Explore',
     links: [
+      { href: '/download', label: 'Download' },
       { href: '/characters', label: 'Characters' },
-      { href: '/teams', label: 'Developers' },
+      { href: '/teams', label: 'Contributors' },
     ],
   },
   {
     title: 'Legal',
     links: [
-      { href: '/terms-of-service', label: 'Terms of Service', prefetch: false },
-      { href: '/privacy-policy', label: 'Privacy Policy', prefetch: false },
+      { href: '/terms-of-service', label: 'Terms of Service' },
+      { href: '/privacy-policy', label: 'Privacy Policy' },
     ],
   },
 ];
 
-const linkClass = 'hover:text-light-mustard transition-colors duration-300';
+const linkClass = 'hover:text-light-mustard transition-colors duration-200';
 
-export async function Footer() {
-  'use cache';
+export function Footer() {
   return (
     <footer className="bg-dune px-6 py-12 md:px-12" role="contentinfo">
       <div className="mx-auto flex flex-col gap-8">
         <div className="flex flex-col md:flex-row md:gap-8">
           <section className="mb-8 flex-1 space-y-4 md:mb-0">
             <Link href="/" className="inline-block" aria-label="Home">
-              <Image src="/logo-with-name.svg" alt="Changeling VR Logo" width={200} height={200} />
+              <Image
+                src="/logo-with-name.svg"
+                alt="ChangelingVR Logo"
+                width={200}
+                height={200}
+                className="h-12 w-auto"
+              />
             </Link>
 
             <p className="text-base leading-relaxed">
-              Changeling VR is an experimental narrative mystery game created by artists, designers,
+              ChangelingVR is an experimental narrative mystery game created by artists, designers,
               and developers studying at the Rochester Institute of Technology School of Interactive
               Games and Media and College of Art and Design.
             </p>
@@ -94,7 +100,7 @@ export async function Footer() {
                 <ul className="space-y-2 text-center">
                   {section.links.map((link) => (
                     <li key={link.href}>
-                      <Link href={link.href} className={linkClass} prefetch={link.prefetch}>
+                      <Link href={link.href} className={linkClass}>
                         {link.label}
                       </Link>
                     </li>
@@ -130,14 +136,17 @@ export async function Footer() {
         </div>
 
         <section className="border-t border-gray-400 pt-6 text-center text-sm">
-          <Copyright />
+          <Suspense>
+            <Copyright />
+          </Suspense>
         </section>
       </div>
     </footer>
   );
 }
 
-function Copyright() {
+async function Copyright() {
+  'use cache';
   const currentYear = new Date().getFullYear();
-  return <p>&copy; {currentYear} Changeling VR. All rights reserved.</p>;
+  return <p>&copy; {currentYear} ChangelingVR. All rights reserved.</p>;
 }

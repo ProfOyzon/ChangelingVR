@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { updateProfile } from '@/lib/auth/actions';
+import { updateProfile } from '@/lib/actions/update-profile';
 import { processFormData, processZodError, zUsernameSchema } from '@/lib/auth/validator';
 
 export function UsernameSection({ username }: { username: string }) {
@@ -21,15 +21,17 @@ export function UsernameSection({ username }: { username: string }) {
     toast.promise(updateProfile(result.data, formData), {
       loading: 'Updating username...',
       success: 'Username updated successfully',
-      error: 'Failed to update username',
+      error: (err) => {
+        return err instanceof Error ? err.message : 'Failed to update username';
+      },
     });
   }
 
   return (
     <form action={handleUsernameSubmit} className="rounded-md bg-slate-800">
-      <div className="space-y-4 rounded-t-md bg-slate-700 p-4">
+      <div className="space-y-4 rounded-t-md bg-slate-700 p-6">
         <h1 className="text-2xl font-bold">Username</h1>
-        <p className="text-gray-400">This is your URL namespace within Changeling VR.</p>
+        <p className="text-gray-400">This is your URL namespace within ChangelingVR.</p>
 
         <div className="flex items-center">
           <span className="rounded-l-md border border-gray-500/50 bg-slate-700 p-2 text-gray-400">

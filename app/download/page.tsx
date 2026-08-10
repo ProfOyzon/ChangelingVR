@@ -12,53 +12,20 @@ import {
 import type { Metadata } from 'next';
 import { cn } from '@/lib/utils';
 
-function Button({
-  children,
-  className,
-  ...props
-}: {
-  children: React.ReactNode;
-  className?: string;
-} & React.ComponentProps<'a'>) {
-  return (
-    <a
-      className={cn(
-        'flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-xl backdrop-blur-sm transition-colors hover:bg-white/20',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </a>
-  );
-}
-
-function SpecItem({ icon: Icon, title, spec }: { icon: IconType; title: string; spec: string }) {
-  return (
-    <div className="flex flex-col items-start gap-1 rounded-md bg-white/5 p-3 backdrop-blur-sm">
-      <div className="flex items-center gap-2">
-        <Icon className="text-light-mustard size-4" />
-        <p className="text-xs font-medium text-gray-300">{title}</p>
-      </div>
-      <p className="text-left text-xs text-gray-400">{spec}</p>
-    </div>
-  );
-}
-
 export const metadata: Metadata = {
   title: 'Play Now',
-  description: 'Download Changeling VR - A VR Narrative Mystery',
+  description: 'Download ChangelingVR - A VR Narrative Mystery',
 };
 
 export default function DownloadPage() {
   return (
     <div className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-4xl items-center justify-center p-6">
       <div className="flex flex-col items-center gap-12 text-center">
-        <div>
-          <h1 className="mb-6 text-4xl font-bold md:text-5xl">
+        <div className="space-y-6">
+          <h1 className="text-4xl font-bold md:text-5xl">
             Download{' '}
             <span className="to-light-mustard bg-radial from-[#ffdd99] bg-clip-text text-transparent">
-              Changeling VR
+              ChangelingVR
             </span>{' '}
             Now
           </h1>
@@ -88,8 +55,8 @@ export default function DownloadPage() {
         {/* Divider */}
         <div className="h-px w-32 bg-white/20" aria-hidden />
 
-        <div className="w-full max-w-2xl">
-          <h2 className="mb-6 text-xl font-bold">System Requirements</h2>
+        <div className="w-full max-w-2xl space-y-6">
+          <h2 className="text-xl font-bold">System Requirements</h2>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             <div className="border-light-mustard/60 shadow-light-mustard/20 rounded-md border bg-white/5 shadow-md">
               <SpecItem icon={FaVrCardboard} title="VR Headset" spec="Meta Quest 2 or higher" />
@@ -106,6 +73,39 @@ export default function DownloadPage() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Button({
+  children,
+  className,
+  ...props
+}: {
+  children: React.ReactNode;
+  className?: string;
+} & React.ComponentProps<'a'>) {
+  return (
+    <a
+      className={cn(
+        'flex items-center gap-2 rounded-md bg-white/10 px-4 py-2 text-xl backdrop-blur-sm transition-colors hover:bg-white/20',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </a>
+  );
+}
+
+function SpecItem({ icon: Icon, title, spec }: { icon: IconType; title: string; spec: string }) {
+  return (
+    <div className="flex flex-col items-start gap-1 rounded-md bg-white/5 p-3 backdrop-blur-sm">
+      <div className="flex items-center gap-2">
+        <Icon className="text-light-mustard size-4" />
+        <p className="text-xs font-medium text-gray-300">{title}</p>
+      </div>
+      <p className="text-left text-xs text-gray-400">{spec}</p>
     </div>
   );
 }

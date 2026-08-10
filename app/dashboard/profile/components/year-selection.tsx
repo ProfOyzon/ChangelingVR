@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { updateProfile } from '@/lib/auth/actions';
+import { updateProfile } from '@/lib/actions/update-profile';
 import { processFormData, processZodError, zUpdateProfileSchema } from '@/lib/auth/validator';
 
 const YEARS = [...Array(new Date().getFullYear() - 2019)]
@@ -32,7 +32,7 @@ export function YearSelection({ years }: { years: number[] }) {
 
   return (
     <form action={handleYearSubmit} className="rounded-md bg-slate-800">
-      <div className="space-y-4 rounded-t-md bg-slate-700 p-4">
+      <div className="space-y-4 rounded-t-md bg-slate-700 p-6">
         <h1 className="text-2xl font-bold">Year Selection</h1>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {YEARS.map((y) => (

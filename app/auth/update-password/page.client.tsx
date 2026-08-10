@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { FormMessage } from '@/components/form-message';
-import { updatePassword } from '@/lib/auth/actions';
+import { updatePassword } from '@/lib/actions/update-password';
 import type { ActionState } from '@/lib/auth/middleware';
 
 export default function UpdatePasswordPageClient({ token }: { token: string }) {

@@ -4,10 +4,16 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
+enum CaseFileStatus {
+  Ongoing = 'Ongoing',
+  Resolved = 'Resolved',
+  Pending = 'Pending',
+}
+
 type CaseFile = {
   title: string;
   name: string;
-  status: 'Ongoing' | 'Resolved' | 'Pending';
+  status: CaseFileStatus;
   image: string;
   background: string;
   summary: string;
@@ -18,7 +24,7 @@ const caseFileData: CaseFile[] = [
   {
     title: 'Case No. 1',
     name: 'A Standard Boogeyman',
-    status: 'Resolved',
+    status: CaseFileStatus.Resolved,
     image: '/media/experiences/aurelia/polaroid_flat1.png',
     background:
       "A police investigation hit a dead end in a case of repeated break-ins with no signs of entry. The break-ins occurred in the home of a family of three, and the perpetrator always entered the child's room. After several unsuccessful attempts to catch the perpetrator, the parents contacted me, believing the break-ins to be the work of a magical creature. I was brought in to identify the creature and find a method to capture or repel it.",
@@ -30,7 +36,7 @@ const caseFileData: CaseFile[] = [
   {
     title: 'Case No. 2',
     name: 'The Neuro-Carnivorous Plant',
-    status: 'Resolved',
+    status: CaseFileStatus.Resolved,
     image: '/media/experiences/aurelia/polaroid_flat2.png',
     background:
       'I was contacted by a nursery owner who was suffering from intense nightmares. After a few of his employees started noticing the same effects, he suspected magical interference. I was hired to find and put an end to the source of the nightmares.',
@@ -42,7 +48,7 @@ const caseFileData: CaseFile[] = [
   {
     title: 'Case No. 3',
     name: 'The Shape Shifter',
-    status: 'Resolved',
+    status: CaseFileStatus.Resolved,
     image: '/media/experiences/aurelia/polaroid_flat3.png',
     background:
       'I was hired by a pharmaceutical company intern to investigate a strange occurrence at their lab. Security cameras recorded a newly hired intern entering the facility after-hours. When questioned about why they entered, the intern claimed they did not, and no logs in the computer system show them entering the facility. The intern believes some kind of shapeshifter is framing her to prevent anyone from discovering it.',

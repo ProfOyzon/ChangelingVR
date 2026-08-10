@@ -1,7 +1,6 @@
 import { cache } from 'react';
 import { cacheLife, cacheTag } from 'next/cache';
 import { db } from '@/lib/db';
-import { profiles } from '@/lib/db/schema';
 
 type CachedData<T> = {
   status: number;
@@ -18,17 +17,23 @@ export const getCachedUsers = cache(async () => {
   cacheTag('users');
   cacheLife('hours');
 
-  const data = await db
-    .select({
-      username: profiles.username,
-      displayName: profiles.displayName,
-      avatarUrl: profiles.avatarUrl,
-      bio: profiles.bio,
-      terms: profiles.terms,
-      teams: profiles.teams,
-      roles: profiles.roles,
-    })
-    .from(profiles);
+  const data = await db.query.profiles.findMany({
+    columns: {
+      username: true,
+      displayName: true,
+      avatarUrl: true,
+      bio: true,
+      terms: true,
+      teams: true,
+      roles: true,
+    },
+    with: {
+      profileLinks: {
+        where: { visible: true },
+        columns: { platform: true, url: true },
+      },
+    },
+  });
 
   return {
     status: 200,

@@ -4,10 +4,9 @@ export const metadata: Metadata = {
   title: 'Privacy',
 };
 
-export default async function Privacy() {
-  'use cache';
+export default function Privacy() {
   return (
-    <div className="flex h-screen w-screen flex-col items-center justify-center">
+    <div className="flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center">
       <h1>Privacy Policy</h1>
     </div>
   );

@@ -56,8 +56,7 @@ function initTask2(app, stats) {
     mobileGame = true;
   }
 
-
-    // Create hintText
+  // Create hintText
   const hintText = new Text(
     'Fix The Bike!\n(Press The Corresponding Letters)',
     new TextStyle({
@@ -72,7 +71,6 @@ function initTask2(app, stats) {
   hintText.anchor.set(0.5);
   hintText.x = app.screen.width / 2;
   hintText.y = app.screen.height / 2;
-
 
   //Initialize graphics here
   //Background
@@ -109,7 +107,7 @@ function initTask2(app, stats) {
     wheelSprite.position.set(90, 0);
     wrenchSprite.position.set(75, -32);
 
-     task.container.addChild(hintText);
+    task.container.addChild(hintText);
   }
 
   //Icons for each key prompt

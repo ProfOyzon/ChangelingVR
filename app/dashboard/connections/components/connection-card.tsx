@@ -10,8 +10,8 @@ import {
   FaXTwitter,
 } from 'react-icons/fa6';
 import { toast } from 'sonner';
-import { deleteProfileLink, updateProfileLink } from '@/lib/auth/actions';
-import type { ProfileLink } from '@/lib/db/schema';
+import { updateProfileLink } from '@/lib/actions/update-profile-link';
+import type { PublicProfileLink } from '@/lib/db/schema';
 import { cn } from '@/lib/utils';
 
 const platformMap: Record<string, React.ReactNode> = {
@@ -23,7 +23,7 @@ const platformMap: Record<string, React.ReactNode> = {
   website: <FaGlobe className="size-6" />,
 };
 
-export function ConnectionCard({ connection }: { connection: Omit<ProfileLink, 'uuid'> }) {
+export function ConnectionCard({ connection }: { connection: PublicProfileLink }) {
   const [isPending, startTransition] = useTransition();
 
   // Helper variables
@@ -31,16 +31,14 @@ export function ConnectionCard({ connection }: { connection: Omit<ProfileLink, '
   const capitalizedPlatform =
     connection.platform.charAt(0).toUpperCase() + connection.platform.slice(1);
 
-  // Form data for the delete and visibility toggle actions
-  const formData = new FormData();
-  formData.append('platform', connection.platform);
-  formData.append('url', connection.url);
-  formData.append('visible', String(!isVisible));
-
   // Handle the delete action
   function handleDelete() {
+    const formData = new FormData();
+    formData.append('platform', connection.platform);
+    formData.append('url', ''); // empty to indicate deletion
+
     startTransition(async () => {
-      toast.promise(deleteProfileLink({}, formData), {
+      toast.promise(updateProfileLink({}, formData), {
         loading: `Deleting ${capitalizedPlatform} link...`,
         success: `${capitalizedPlatform} link deleted successfully`,
         error: `Failed to delete ${capitalizedPlatform} link`,
@@ -50,6 +48,11 @@ export function ConnectionCard({ connection }: { connection: Omit<ProfileLink, '
 
   // Handle the visibility toggle action
   function handleVisibilityToggle() {
+    const formData = new FormData();
+    formData.append('platform', connection.platform);
+    formData.append('url', connection.url);
+    formData.append('visible', String(!isVisible));
+
     startTransition(async () => {
       toast.promise(updateProfileLink({}, formData), {
         loading: `Updating ${capitalizedPlatform} visibility...`,
@@ -82,7 +85,7 @@ export function ConnectionCard({ connection }: { connection: Omit<ProfileLink, '
           disabled={isPending}
           className="cursor-pointer rounded-sm bg-red-500 px-3 py-1 font-bold text-white hover:bg-red-600"
         >
-          Delete
+          Remove
         </button>
       </div>
 

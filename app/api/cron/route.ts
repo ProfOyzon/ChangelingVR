@@ -18,9 +18,7 @@ export async function GET(request: NextRequest) {
   // FOR NOW WE'RE ONLY CLEANING UP `reset_tokens` TABLE
   try {
     // Delete all expired reset tokens
-    await db
-      .delete(resetTokens)
-      .where(lt(resetTokens.expiresAt, new Date().toISOString() as string));
+    await db.delete(resetTokens).where(lt(resetTokens.expiresAt, new Date()));
 
     // Success response
     return NextResponse.json({ success: 'Cleanup complete' }, { status: 200 });

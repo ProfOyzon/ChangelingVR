@@ -192,7 +192,6 @@ function initTask1(app, stats) {
 
   // This is the task's game loop
   function update() {
-
     // Check for collision between ingredient and the bottom of the bot
     for (let i = 0; i < ingredients.length; i++) {
       if (testForAABB(ingredients[i], potBottom)) {

@@ -17,4 +17,5 @@ export default defineConfig({
     url: process.env.POSTGRES_URL_NON_POOLING,
   },
   tablesFilter: ['activity_logs', 'cron', 'profile_links', 'profiles', 'reset_tokens', 'members'],
+  schemaFilter: ['public'],
 });

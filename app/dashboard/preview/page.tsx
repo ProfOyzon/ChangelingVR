@@ -11,21 +11,13 @@ function PreviewSkeleton() {
 async function Preview() {
   const profile = (await getFullProfile()) as FullProfile;
   if (!profile) return;
-
   return <UserProfile user={profile} />;
 }
 
-export default async function PreviewPage() {
+export default function PreviewPage() {
   return (
     <main className="min-h-[calc(100dvh-7.5rem)] bg-slate-900 text-gray-100">
-      <header className="border-b border-gray-500/50">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8">
-          <h1 className="text-4xl font-bold">Preview</h1>
-          <p className="text-gray-400">Preview your profile as it will appear on the site.</p>
-        </div>
-      </header>
-
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 p-6">
         <Suspense fallback={<PreviewSkeleton />}>
           <Preview />
         </Suspense>

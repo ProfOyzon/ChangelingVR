@@ -1,13 +1,13 @@
 'use client';
 
 import Markdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
+import Image from 'next/image';
 import remarkGfm from 'remark-gfm';
 
 export function ParseMarkdown({ text }: { text: string }) {
   return (
     <Markdown
-      rehypePlugins={[rehypeRaw, remarkGfm]}
+      rehypePlugins={[remarkGfm]}
       components={{
         strong: ({ children }) => <strong className="font-bold">{children}</strong>,
         em: ({ children }) => <em className="italic">{children}</em>,
@@ -28,10 +28,13 @@ export function ParseMarkdown({ text }: { text: string }) {
           </a>
         ),
         img: ({ src, alt }) => (
-          <img
-            src={src}
-            alt={alt}
-            className="my-2 h-52 w-full rounded-md bg-gray-500/50 object-cover"
+          <Image
+            src={typeof src === 'string' ? src : '/placeholder.png'}
+            alt={alt || 'Decorative Image'}
+            width={364}
+            height={208}
+            unoptimized
+            className="my-2 h-52 w-auto rounded-md bg-gray-500/50 object-cover"
           />
         ),
       }}
@@ -39,35 +42,4 @@ export function ParseMarkdown({ text }: { text: string }) {
       {text}
     </Markdown>
   );
-}
-
-export function StringifyMarkdown({ text }: { text: string }) {
-  const strippedText = text
-    // Remove headers
-    .replace(/^#{1,6}\s+/gm, '')
-    // Remove bold
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/__([^_]+)__/g, '$1')
-    // Remove italic
-    .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/_([^_]+)_/g, '$1')
-    // Remove strikethrough
-    .replace(/~~([^~]+)~~/g, '$1')
-    // Remove links
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    // Remove images
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
-    // Remove code blocks
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`([^`]+)`/g, '$1')
-    // Remove blockquotes
-    .replace(/^>\s+/gm, '')
-    // Remove list markers
-    .replace(/^[\s]*[-*+]\s+/gm, '')
-    .replace(/^[\s]*\d+\.\s+/gm, '')
-    // Clean up extra whitespace
-    .replace(/\n\n+/g, '\n\n')
-    .trim();
-
-  return <>{strippedText}</>;
 }

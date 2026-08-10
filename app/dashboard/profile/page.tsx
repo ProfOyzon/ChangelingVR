@@ -2,19 +2,21 @@
 // This includes the bio, terms, roles, and teams
 import { Suspense } from 'react';
 import { AboutMeSection } from '@/app/dashboard/profile/components/about-me';
+import { DisplayNameSection } from '@/app/dashboard/profile/components/display-name';
 import { RoleSelection } from '@/app/dashboard/profile/components/role-selection';
 import { TeamSelection } from '@/app/dashboard/profile/components/team-selection';
 import { YearSelection } from '@/app/dashboard/profile/components/year-selection';
 import { getProfile } from '@/lib/db/queries';
 
-function ProfileSkeleton() {
+export default function ProfilePage() {
   return (
-    <>
-      <div className="h-49 w-full animate-pulse rounded-md bg-slate-800" />
-      <div className="h-49 w-full animate-pulse rounded-md bg-slate-800" />
-      <div className="h-49 w-full animate-pulse rounded-md bg-slate-800" />
-      <div className="h-49 w-full animate-pulse rounded-md bg-slate-800" />
-    </>
+    <main className="min-h-[calc(100dvh-7.5rem)] bg-slate-900 text-gray-100">
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 p-6">
+        <Suspense fallback={<ProfileSkeleton />}>
+          <ProfileEditor />
+        </Suspense>
+      </div>
+    </main>
   );
 }
 
@@ -24,6 +26,7 @@ async function ProfileEditor() {
 
   return (
     <div className="flex flex-col gap-6">
+      <DisplayNameSection displayName={profile.displayName || ''} />
       <AboutMeSection bio={profile.bio || ''} />
       <YearSelection years={profile.terms || []} />
       <TeamSelection teams={profile.teams || []} />
@@ -32,21 +35,13 @@ async function ProfileEditor() {
   );
 }
 
-export default function ProfilePage() {
+function ProfileSkeleton() {
   return (
-    <main className="min-h-[calc(100dvh-7.5rem)] bg-slate-900 text-gray-100">
-      <header className="border-b border-gray-500/50">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-2 py-8 md:px-4">
-          <h1 className="text-4xl font-bold">Profile</h1>
-          <p className="text-gray-400">Manage your profile and settings.</p>
-        </div>
-      </header>
-
-      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-2 py-8 md:px-4">
-        <Suspense fallback={<ProfileSkeleton />}>
-          <ProfileEditor />
-        </Suspense>
-      </div>
-    </main>
+    <>
+      <div className="h-60.5 w-full animate-pulse rounded-md bg-slate-800" />
+      <div className="h-73 w-full animate-pulse rounded-md bg-slate-800" />
+      <div className="h-64 w-full animate-pulse rounded-md bg-slate-800" />
+      <div className="h-64 w-full animate-pulse rounded-md bg-slate-800" />
+    </>
   );
 }

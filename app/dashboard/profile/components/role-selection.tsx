@@ -1,7 +1,7 @@
 'use client';
 
 import { toast } from 'sonner';
-import { updateProfile } from '@/lib/auth/actions';
+import { updateProfile } from '@/lib/actions/update-profile';
 import { processFormData, processZodError, zRolesSchema } from '@/lib/auth/validator';
 
 const ROLES = [
@@ -47,7 +47,7 @@ export function RoleSelection({ roles }: { roles: string[] }) {
 
   return (
     <form action={handleRoleSubmit} className="rounded-md bg-slate-800">
-      <div className="space-y-4 rounded-t-md bg-slate-700 p-4">
+      <div className="space-y-4 rounded-t-md bg-slate-700 p-6">
         <h1 className="text-2xl font-bold">Role Selection</h1>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
           {ROLES.map((r) => (

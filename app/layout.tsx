@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { Lato } from 'next/font/google';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
+import { OfflineBanner } from '@/components/offline-banner';
 import './globals.css';
 
 const latoSans = Lato({
@@ -14,25 +15,25 @@ const latoSans = Lato({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Changeling VR',
-    default: 'Changeling VR - A Narrative Mystery',
+    template: '%s | ChangelingVR',
+    default: 'ChangelingVR - A Narrative Mystery',
   },
   description:
-    'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
+    'ChangelingVR, a narrative mystery game by students in the school of interactive games and media.',
   keywords: ['changeling', 'vr', 'game', 'narrative', 'mystery', 'interactive', 'games', 'media'],
   metadataBase: new URL('https://changelingvr.vercel.app'),
   openGraph: {
-    title: 'Changeling VR - A Narrative Mystery',
+    title: 'ChangelingVR - A Narrative Mystery',
     description:
-      'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
-    siteName: 'Changeling VR',
+      'ChangelingVR, a narrative mystery game by students in the school of interactive games and media.',
+    siteName: 'ChangelingVR',
     url: 'https://changelingvr.vercel.app',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Changeling VR - A Narrative Mystery',
+    title: 'ChangelingVR - A Narrative Mystery',
     description:
-      'Changeling VR, a narrative mystery game by students in the school of interactive games and media.',
+      'ChangelingVR, a narrative mystery game by students in the school of interactive games and media.',
   },
 };
 
@@ -46,13 +47,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${latoSans.className} antialiased`} suppressHydrationWarning>
-      <body className="bg-midnight w-screen overflow-x-hidden text-gray-100">
+    <html lang="en" suppressHydrationWarning className={`${latoSans.className} antialiased`}>
+      <body className="bg-midnight min-dvh flex flex-col overflow-x-hidden text-gray-100">
         <Header />
-        <div className="h-16" aria-hidden="true"></div>
-        <main className="min-h-[calc(100svh-4rem)] w-full items-center">{children}</main>
+        <div className="h-16 shrink-0" />
+        <main className="min-h-0 flex-1">{children}</main>
         <Footer />
 
+        <OfflineBanner />
         <Analytics />
         <SpeedInsights />
       </body>
