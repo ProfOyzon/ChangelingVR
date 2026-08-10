@@ -1,7 +1,7 @@
 import 'server-only';
 import { cache } from 'react';
 import { cacheLife, cacheTag } from 'next/cache';
-import { count, ilike, or, sql } from 'drizzle-orm';
+import { and, count, ilike, isNotNull, or, sql } from 'drizzle-orm';
 import { getSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { profiles } from './schema';
@@ -167,7 +167,7 @@ export const getProfilePages = cache(async (query: string) => {
   const result = await db
     .select({ value: count() })
     .from(profiles)
-    .where(ilike(profiles.displayName, `%${query}%`));
+    .where(or(ilike(profiles.displayName, `%${query}%`), ilike(profiles.username, `%${query}%`)));
 
   return Math.ceil((result[0]?.value || 0) / PAGE_SIZE);
 });
@@ -191,16 +191,28 @@ export const getFilteredProfiles = cache(async (query: string, page: number) => 
     })
     .from(profiles)
     .where(
-      or(
-        ilike(profiles.displayName, `%${query}%`), // matches query to displayName
-        ilike(profiles.username, `%${query}%`), // matches query to username, last resort
-      ),
+      // Filter by display name or username, case-insensitive
+      or(ilike(profiles.displayName, `%${query}%`), ilike(profiles.username, `%${query}%`)),
     )
     .orderBy(
-      // Prioritize profiles with the most recent (highest) terms
-      sql`COALESCE((SELECT MAX(x) FROM unnest(${profiles.terms}) AS x), 0) DESC`,
-      // Sort by display name alphabetically
-      profiles.displayName,
+      // Profiles with a display name or bio come first.
+      // Completely empty profiles are always pushed to the bottom,
+      // regardless of their `terms` value.
+      sql`CASE
+        WHEN ${profiles.displayName} IS NULL
+          AND ${profiles.bio} IS NULL
+        THEN 1
+        ELSE 0
+      END ASC`,
+      // Among profiles with actual profile information,
+      // prioritize the highest/latest term.
+      sql`COALESCE(
+        (SELECT MAX(x) FROM unnest(${profiles.terms}) AS x),
+        0
+      ) DESC`,
+      // Finally, sort alphabetically by display name.
+      // Profiles without a display name go last.
+      sql`${profiles.displayName} NULLS LAST`,
     )
     .limit(PAGE_SIZE)
     .offset((page - 1) * PAGE_SIZE);
