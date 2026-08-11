@@ -54,3 +54,20 @@ export async function setSession(uuid: string) {
     expires: expiresInOneDay,
   });
 }
+
+type AuthenticatedSessionResult =
+  | { success: true; session: SessionData }
+  | { success: false; error: string };
+
+export async function getAuthenticatedSession(): Promise<AuthenticatedSessionResult> {
+  const session = await getSession();
+  if (
+    !session ||
+    !session.user ||
+    typeof session.user.id !== 'string' ||
+    new Date(session.expires) < new Date()
+  ) {
+    return { success: false, error: 'You are not authenticated' };
+  }
+  return { success: true, session };
+}

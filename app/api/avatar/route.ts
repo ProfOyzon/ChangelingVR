@@ -2,27 +2,20 @@ import { del, put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { eq } from 'drizzle-orm';
 import { logActivity } from '@/lib/actions/log-activity';
-import { getSession } from '@/lib/auth/session';
+import { getAuthenticatedSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { ActivityType, profiles } from '@/lib/db/schema';
 
 export async function POST(request: Request) {
-  const session = await getSession();
-
-  // Invalid session
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
+  const auth = await getAuthenticatedSession();
+  if (!auth || !auth.success) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     // Get current avatar URL before updating
     const profile = await db.query.profiles.findFirst({
-      where: { uuid: session.user.id },
+      where: { uuid: auth.session.user.id },
       columns: { uuid: true, username: true, avatarUrl: true },
     });
 
@@ -32,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     // UUID mismatch
-    if (profile.uuid !== session.user.id) {
+    if (profile.uuid !== auth.session.user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -57,28 +50,20 @@ export async function POST(request: Request) {
 
     return NextResponse.json(blob);
   } catch (error) {
-    console.error('Error uploading avatar', error);
     return NextResponse.json({ error: 'Failed to upload file' }, { status: 500 });
   }
 }
 
 export async function DELETE() {
-  const session = await getSession();
-
-  // Invalid session
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
+  const auth = await getAuthenticatedSession();
+  if (!auth || !auth.success) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
     // Get current avatar URL before deleting
     const profile = await db.query.profiles.findFirst({
-      where: { uuid: session.user.id },
+      where: { uuid: auth.session.user.id },
       columns: { uuid: true, username: true, avatarUrl: true },
     });
 
@@ -100,7 +85,6 @@ export async function DELETE() {
 
     return NextResponse.json({ message: 'Avatar deleted successfully' }, { status: 200 });
   } catch (error) {
-    console.error('Error deleting avatar:', error);
     return NextResponse.json({ error: 'Failed to delete avatar' }, { status: 500 });
   }
 }

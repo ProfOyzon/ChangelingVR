@@ -18,13 +18,17 @@ export function DisplayNameSection({ displayName }: { displayName: string }) {
     }
 
     // Update the display name
-    toast.promise(updateProfile(result.data, formData), {
-      loading: 'Updating display name...',
-      success: 'Display name updated successfully',
-      error: (err) => {
-        return err instanceof Error ? err.message : 'Failed to update display name';
+    toast.promise(
+      updateProfile(result.data, formData).then((res) => {
+        if (!res.success) throw new Error(res.error);
+        return res;
+      }),
+      {
+        loading: 'Updating display name...',
+        success: 'Display name updated successfully',
+        error: (err) => err?.message ?? 'Failed to update display name',
       },
-    });
+    );
   }
 
   return (

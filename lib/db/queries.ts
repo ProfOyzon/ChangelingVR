@@ -1,8 +1,8 @@
 import 'server-only';
 import { cache } from 'react';
 import { cacheLife, cacheTag } from 'next/cache';
-import { and, count, ilike, isNotNull, or, sql } from 'drizzle-orm';
-import { getSession } from '@/lib/auth/session';
+import { count, ilike, or, sql } from 'drizzle-orm';
+import { getAuthenticatedSession } from '@/lib/auth/session';
 import { db } from '@/lib/db';
 import { profiles } from './schema';
 
@@ -11,18 +11,11 @@ import { profiles } from './schema';
  * @requires session
  */
 export async function getProfile() {
-  const session = await getSession();
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
-    return null;
-  }
+  const auth = await getAuthenticatedSession();
+  if (!auth || !auth.success) return null;
 
   const profile = await db.query.profiles.findFirst({
-    where: { uuid: session.user.id },
+    where: { uuid: auth.session.user.id },
     columns: {
       uuid: true,
       username: true,
@@ -44,18 +37,11 @@ export async function getProfile() {
  * @requires session
  */
 export async function getFullProfile() {
-  const session = await getSession();
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
-    return null;
-  }
+  const auth = await getAuthenticatedSession();
+  if (!auth || !auth.success) return null;
 
   const profile = await db.query.profiles.findFirst({
-    where: { uuid: session.user.id },
+    where: { uuid: auth.session.user.id },
     columns: {
       username: true,
       displayName: true,
@@ -82,36 +68,22 @@ export async function getFullProfile() {
  * @requires session
  */
 export async function getActivityLogs() {
-  const session = await getSession();
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
-    return null;
-  }
+  const auth = await getAuthenticatedSession();
+  if (!auth || !auth.success) return null;
 
   return await db.query.activityLogs.findMany({
-    where: { uuid: session.user.id },
+    where: { uuid: auth.session.user.id },
     orderBy: { createdAt: 'desc' },
     limit: 10,
   });
 }
 
 export async function getConnections() {
-  const session = await getSession();
-  if (
-    !session ||
-    !session.user ||
-    typeof session.user.id !== 'string' ||
-    new Date(session.expires) < new Date()
-  ) {
-    return null;
-  }
+  const auth = await getAuthenticatedSession();
+  if (!auth || !auth.success) return null;
 
   return await db.query.profileLinks.findMany({
-    where: { uuid: session.user.id },
+    where: { uuid: auth.session.user.id },
     columns: { platform: true, url: true, visible: true },
     orderBy: { platform: 'asc' },
   });

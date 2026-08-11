@@ -23,11 +23,17 @@ export function YearSelection({ years }: { years: number[] }) {
       return;
     }
 
-    toast.promise(updateProfile(result.data, formData), {
-      loading: 'Updating years...',
-      success: 'Years updated successfully',
-      error: 'Failed to update years',
-    });
+    toast.promise(
+      updateProfile(result.data, formData).then((res) => {
+        if (!res.success) throw new Error(res.error);
+        return res;
+      }),
+      {
+        loading: 'Updating years...',
+        success: 'Years updated successfully',
+        error: (err) => err?.message ?? 'Failed to update years',
+      },
+    );
   }
 
   return (

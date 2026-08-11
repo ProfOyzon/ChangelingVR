@@ -18,11 +18,17 @@ export function AboutMeSection({ bio }: { bio: string }) {
     }
 
     // Update the bio
-    toast.promise(updateProfile(result.data, formData), {
-      loading: 'Updating bio...',
-      success: 'Bio updated successfully',
-      error: 'Failed to update bio',
-    });
+    toast.promise(
+      updateProfile(result.data, formData).then((res) => {
+        if (!res.success) throw new Error(res.error);
+        return res;
+      }),
+      {
+        loading: 'Updating bio...',
+        success: 'Bio updated successfully',
+        error: (err) => err?.message ?? 'Failed to update bio',
+      },
+    );
   }
 
   return (

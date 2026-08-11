@@ -30,11 +30,17 @@ export function TeamSelection({ teams }: { teams: string[] }) {
       return;
     }
 
-    toast.promise(updateProfile(result.data, formData), {
-      loading: 'Updating teams...',
-      success: 'Teams updated successfully',
-      error: 'Failed to update teams',
-    });
+    toast.promise(
+      updateProfile(result.data, formData).then((res) => {
+        if (!res.success) throw new Error(res.error);
+        return res;
+      }),
+      {
+        loading: 'Updating teams...',
+        success: 'Teams updated successfully',
+        error: (err) => err?.message ?? 'Failed to update teams',
+      },
+    );
   }
 
   return (

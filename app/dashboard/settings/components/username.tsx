@@ -18,13 +18,17 @@ export function UsernameSection({ username }: { username: string }) {
     }
 
     // Update the username
-    toast.promise(updateProfile(result.data, formData), {
-      loading: 'Updating username...',
-      success: 'Username updated successfully',
-      error: (err) => {
-        return err instanceof Error ? err.message : 'Failed to update username';
+    toast.promise(
+      updateProfile(result.data, formData).then((res) => {
+        if (!res.success) throw new Error(res.error);
+        return res;
+      }),
+      {
+        loading: 'Updating username...',
+        success: 'Username updated successfully',
+        error: (err) => err?.message ?? 'Failed to update username',
       },
-    });
+    );
   }
 
   return (

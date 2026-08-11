@@ -38,11 +38,17 @@ export function RoleSelection({ roles }: { roles: string[] }) {
       return;
     }
 
-    toast.promise(updateProfile(result.data, formData), {
-      loading: 'Updating roles...',
-      success: 'Roles updated successfully',
-      error: 'Failed to update roles',
-    });
+    toast.promise(
+      updateProfile(result.data, formData).then((res) => {
+        if (!res.success) throw new Error(res.error);
+        return res;
+      }),
+      {
+        loading: 'Updating roles...',
+        success: 'Roles updated successfully',
+        error: (err) => err?.message ?? 'Failed to update roles',
+      },
+    );
   }
 
   return (

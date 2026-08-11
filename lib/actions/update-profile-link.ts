@@ -50,8 +50,10 @@ export const updateProfileLink = validatedActionWithUser(
 
       updateTag(`profile:${profile[0].username}`);
       revalidatePath('/dashboard/connections');
+
+      return { success: true, username: profile[0].username };
     } catch {
-      throw new Error('Failed to update profile link');
+      return { success: false, error: 'Failed to update profile link' };
     }
   },
 );

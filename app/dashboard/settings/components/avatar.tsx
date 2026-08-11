@@ -66,7 +66,7 @@ export function AvatarSection({
       {
         loading: 'Updating avatar...',
         success: 'Avatar updated successfully',
-        error: 'Failed to update avatar',
+        error: (err) => err?.message ?? 'Failed to update avatar',
       },
     );
   }
@@ -89,7 +89,7 @@ export function AvatarSection({
       {
         loading: 'Removing avatar...',
         success: 'Avatar removed successfully',
-        error: 'Failed to delete avatar',
+        error: (err) => err?.message ?? 'Failed to delete avatar',
       },
     );
   }

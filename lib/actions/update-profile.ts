@@ -37,6 +37,8 @@ export const updateProfile = validatedActionWithUser(
       updateTag(`profile:${profile[0].username}`);
       revalidatePath('/dashboard/profile');
       revalidatePath('/dashboard/settings');
+
+      return { success: true, username: profile[0].username };
     } catch (error: unknown) {
       const cause = error instanceof Error ? error.cause : undefined;
       // Check if it's a PostgreSQL unique constraint violation for the username
@@ -48,11 +50,11 @@ export const updateProfile = validatedActionWithUser(
         cause.code === '23505' &&
         cause.constraint_name === 'profiles_username_key'
       ) {
-        throw new Error(`The username '${data.username}' is already taken`);
+        return { success: false, error: `The username '${data.username}' is already taken` };
       }
 
       // It failed, return the error
-      throw new Error('Failed to update profile');
+      return { success: false, error: 'Failed to update profile' };
     }
   },
 );

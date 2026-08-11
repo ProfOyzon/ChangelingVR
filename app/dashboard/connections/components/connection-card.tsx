@@ -38,11 +38,17 @@ export function ConnectionCard({ connection }: { connection: PublicProfileLink }
     formData.append('url', ''); // empty to indicate deletion
 
     startTransition(async () => {
-      toast.promise(updateProfileLink({}, formData), {
-        loading: `Deleting ${capitalizedPlatform} link...`,
-        success: `${capitalizedPlatform} link deleted successfully`,
-        error: `Failed to delete ${capitalizedPlatform} link`,
-      });
+      toast.promise(
+        updateProfileLink({}, formData).then((res) => {
+          if (!res.success) throw new Error(res.error);
+          return res;
+        }),
+        {
+          loading: `Deleting ${capitalizedPlatform} link...`,
+          success: `${capitalizedPlatform} link deleted successfully`,
+          error: (err) => err?.message ?? `Failed to delete ${capitalizedPlatform} link`,
+        },
+      );
     });
   }
 
@@ -54,11 +60,19 @@ export function ConnectionCard({ connection }: { connection: PublicProfileLink }
     formData.append('visible', String(!isVisible));
 
     startTransition(async () => {
-      toast.promise(updateProfileLink({}, formData), {
-        loading: `Updating ${capitalizedPlatform} visibility...`,
-        success: `${capitalizedPlatform} ${isVisible ? 'hidden from' : 'displayed to'} profile.`,
-        error: `Failed to ${isVisible ? 'hide' : 'show'} ${capitalizedPlatform} on profile.`,
-      });
+      toast.promise(
+        updateProfileLink({}, formData).then((res) => {
+          if (!res.success) throw new Error(res.error);
+          return res;
+        }),
+        {
+          loading: `Updating ${capitalizedPlatform} visibility...`,
+          success: `${capitalizedPlatform} ${isVisible ? 'hidden from' : 'displayed to'} profile.`,
+          error: (err) =>
+            err?.message ??
+            `Failed to ${isVisible ? 'hide' : 'show'} ${capitalizedPlatform} on profile.`,
+        },
+      );
     });
   }
 

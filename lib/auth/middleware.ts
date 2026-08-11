@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { type SessionData, getSession } from './session';
+import { type SessionData, getAuthenticatedSession } from './session';
 import { processFormData, processZodError } from './validator';
 
 export type ActionState = {
@@ -24,7 +24,7 @@ export function validatedAction<S extends z.ZodType, T>(
     const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
       // returns error object for client
-      return { error: processZodError(result.error) };
+      return { success: false, error: processZodError(result.error) };
     }
 
     return action(result.data);
@@ -47,23 +47,16 @@ export function validatedActionWithUser<S extends z.ZodType, T>(
   action: ValidatedActionWithUserFunction<S, T>,
 ) {
   return async (_prevState: ActionState, formData: FormData) => {
-    const session = await getSession();
-    if (
-      !session ||
-      !session.user ||
-      typeof session.user.id !== 'string' ||
-      new Date(session.expires) < new Date()
-    ) {
-      // throws error for toast to pick up
-      throw new Error('You are not authenticated');
+    const auth = await getAuthenticatedSession();
+    if (!auth || !auth.success) {
+      return { success: false, error: auth.error };
     }
 
     const result = schema.safeParse(processFormData(formData));
     if (!result.success) {
-      // throws error for toast to pick up
-      throw new Error(processZodError(result.error));
+      return { success: false, error: processZodError(result.error) };
     }
 
-    return action(result.data, session);
+    return action(result.data, auth.session);
   };
 }

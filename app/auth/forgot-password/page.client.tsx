@@ -7,9 +7,7 @@ import { forgotPassword } from '@/lib/actions/forgot-password';
 import type { ActionState } from '@/lib/auth/middleware';
 
 export default function ForgotPasswordPageClient() {
-  const [state, formAction, isPending] = useActionState<ActionState, FormData>(forgotPassword, {
-    error: '',
-  });
+  const [state, formAction, isPending] = useActionState<ActionState, FormData>(forgotPassword, {});
 
   return (
     <form action={formAction}>
